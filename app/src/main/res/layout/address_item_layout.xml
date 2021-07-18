@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:background="#ffffff"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/name"
+        android:textSize="14sp"
+        android:textColor="#2B2B2B"
+        android:text=""
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="10dp"
+        android:maxLength="8"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/phone"
+        android:textColor="#2B2B2B"
+        android:textSize="13sp"
+        android:text=""
+        android:maxLength="11"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="80dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/address"
+        android:textSize="13sp"
+        android:textColor="#9A9A9A"
+        android:text=""
+        android:layout_below="@id/phone"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginTop="5dp"
+        android:maxLines="2"
+        android:ellipsize="end"/>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/selectImg"
+        android:src="@mipmap/address_select_yes"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="11dp"/>
+
+    <ImageButton
+        android:id="@+id/delAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/address_del"
+        android:background="@null"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:foreground="?android:attr/selectableItemBackground"/>
+
+    <ImageButton
+        android:id="@+id/modifyAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/address_mod"
+        android:background="@null"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/delAddress"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:foreground="?android:attr/selectableItemBackground"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#f3f3f3"
+        android:layout_alignParentBottom="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/defaultAddress"
+        android:textSize="10sp"
+        android:textColor="#FFFFFE"
+        android:text="默认"
+        android:background="@drawable/normal_bg"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:layout_below="@id/name"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"/>
+</RelativeLayout>

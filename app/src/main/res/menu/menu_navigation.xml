@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:checked="true"
+        android:icon="@drawable/home"
+        android:title="首页" />
+
+    <item
+        android:id="@+id/beauty"
+        android:icon="@drawable/beauty"
+        android:title="珍好看" />
+
+    <item
+        android:id="@+id/circle"
+        android:icon="@drawable/circle"
+        android:title="圈子" />
+
+    <item
+        android:id="@+id/store"
+        android:icon="@drawable/store"
+        android:title="员工商城" />
+
+    <item
+        android:id="@+id/mine"
+        android:icon="@drawable/mine"
+        android:title="我的" />
+</menu>

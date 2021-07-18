@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/button">
+
+    <ImageView
+        android:layout_width="138dp"
+        android:layout_height="55dp"
+        android:id="@+id/image"
+        android:scaleType="fitXY"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="13dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="17dp"
+        android:background="#eeeeee"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:textSize="13sp"
+        android:textColor="#333333"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:maxLines="2"
+        android:minLines="2"
+        android:ellipsize="end"
+        android:layout_toStartOf="@id/image"
+        android:layout_marginEnd="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/time"
+        app:drawableStartCompat="@mipmap/clock"
+        android:layout_below="@id/title"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:drawablePadding="5dp"
+        android:textColor="#949494"
+        android:textSize="10sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/num"
+        android:layout_toEndOf="@id/time"
+        app:drawableStartCompat="@mipmap/eye"
+        android:layout_below="@id/title"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="5dp"
+        android:drawablePadding="5dp"
+        android:textColor="#949494"
+        android:textSize="10sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_below="@id/image"
+        />
+</RelativeLayout>

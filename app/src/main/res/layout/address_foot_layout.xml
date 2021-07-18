@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/add_address_bg"
+        android:id="@+id/addBtn"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_marginTop="100dp"
+        android:text="+ 添加地址"
+        android:textColor="#D3A952"
+        android:textSize="15sp"/>
+</LinearLayout>

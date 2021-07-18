@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/pay_dialog_bg">
+
+    <ImageButton
+        android:id="@+id/close"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@mipmap/close"
+        android:background="@null"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="5dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择支付方式"
+        android:textColor="#747474"
+        android:textSize="14sp"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="13dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="57dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#ffffff"
+            android:foreground="?android:attr/selectableItemBackground">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="支付宝"
+                android:textSize="14sp"
+                android:textColor="#3C3C3C"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="17dp"
+                app:drawableStartCompat="@mipmap/ali_pay"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/cart_select"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="珍币选择"
+            android:textColor="#747474"
+            android:textSize="14sp"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="13dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#ffffff"
+            android:layout_marginTop="20dp"
+            android:foreground="?android:attr/selectableItemBackground">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="使用珍币（本单最多可使用珍币159，当前用户剩余珍币999）"
+                android:textSize="13sp"
+                android:textColor="#333333"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="17dp"
+                app:drawableStartCompat="@mipmap/z_coin"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="63dp"/>
+            <ImageView
+                android:id="@+id/selectImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/cart_not_select"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"/>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="#ffffff"
+            android:layout_marginTop="85dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:layout_marginStart="15dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="合计:"
+                    android:textColor="#747474"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/price"
+                    android:textSize="12sp"
+                    android:textColor="#D3A952"
+                    android:text="￥89.00+200积分"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/submitBtn"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:background="@drawable/submit_bg"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="15dp"
+                android:layout_centerVertical="true"
+                android:text="确认支付"
+                android:textColor="#ffffff"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.confirm.PaySuccessActivity"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="#f5f5f5">
+
+    <RelativeLayout
+        android:id="@+id/headLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:id="@+id/backBtn"
+                android:background="@null"
+                android:src="@mipmap/back_icon"
+                android:foreground="?android:attr/selectableItemBackground"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/title"
+                android:text="支付成功"
+                android:textColor="#333333"
+                android:textSize="18sp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/pay_success_img"
+        android:layout_marginTop="22dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="支付成功"
+        android:textColor="#D3A952"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:layout_width="160dp"
+        android:layout_height="45dp"
+        android:id="@+id/seeOrder"
+        android:layout_marginTop="41dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:background="@drawable/see_order_bg"
+        android:textSize="18sp"
+        android:textColor="#D3A952"
+        android:text="查看订单"/>
+</LinearLayout>

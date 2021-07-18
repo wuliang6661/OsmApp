@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.team.TeamDetailActivity"
+    android:background="#f3f3f3">
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:orientation="vertical"
+                app:elevation="0dp">
+                <RelativeLayout
+                    android:id="@+id/scrollLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+                    android:background="@mipmap/team_bg"
+                    android:minHeight="75dp">
+                    <RelativeLayout
+                        android:id="@+id/headerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:id="@+id/image"
+                            app:shapeAppearanceOverlay="@style/circleImageStyle"
+                            android:layout_marginTop="20dp"
+                            android:scaleType="centerCrop"
+                            android:background="#f3f3f3"
+                            android:layout_centerHorizontal="true"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/teamName"
+                            android:textSize="15sp"
+                            android:textColor="#FFFFFF"
+                            android:text="欧晓曼"
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@id/image"
+                            android:layout_centerHorizontal="true"/>
+
+                        <LinearLayout
+                            android:layout_below="@id/teamName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="36dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/coinNum"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:text="0"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="珍币"
+                                    android:textSize="11sp"
+                                    android:textColor="#FFFFFF"
+                                    android:gravity="center_vertical"
+                                    android:drawablePadding="2dp"
+                                    android:layout_marginTop="8dp"
+                                    app:drawableStartCompat="@mipmap/tz_icon" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="36dp"
+                                android:background="#FFFFFF"/>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/sendNum"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:text="0"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="转发量"
+                                    android:textSize="11sp"
+                                    android:textColor="#FFFFFF"
+                                    android:gravity="center_vertical"
+                                    android:drawablePadding="2dp"
+                                    android:layout_marginTop="8dp"
+                                    app:drawableStartCompat="@mipmap/tran_icon" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="36dp"
+                                android:background="#FFFFFF"/>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/viewNum"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:text="0"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="浏览量"
+                                    android:textSize="11sp"
+                                    android:textColor="#FFFFFF"
+                                    android:gravity="center_vertical"
+                                    android:drawablePadding="2dp"
+                                    android:layout_marginTop="8dp"
+                                    app:drawableStartCompat="@mipmap/view_icon" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/titleLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#ffffff"
+                            android:layout_below="@id/teamName"
+                            android:layout_marginTop="39dp"
+                            android:visibility="gone">
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp">
+                                <ImageButton
+                                    android:layout_width="50dp"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/backBtn2"
+                                    android:background="@null"
+                                    android:src="@mipmap/back_icon"
+                                    android:foreground="?android:attr/selectableItemBackground"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/teamTitleName"
+                                    android:text="我的团队"
+                                    android:textColor="#333333"
+                                    android:textSize="18sp"
+                                    android:layout_centerInParent="true"/>
+                            </RelativeLayout>
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+            <!-- 列表布局 -->
+            <LinearLayout
+                android:id="@+id/llProdect"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f0f0f0"
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvRight"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#ffffff"/>
+
+                        <FrameLayout
+                            android:id="@+id/stick_header"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:background="#F5F5F5"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvHeader"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="15dp"
+                                android:textColor="#888888"
+                                android:textSize="13sp"
+                                android:singleLine="true"
+                                android:ellipsize="end"/>
+
+                        </FrameLayout>
+
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+        <com.scwang.smartrefresh.layout.footer.FalsifyFooter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+    <ImageButton
+        android:id="@+id/backBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/back_icon"
+        android:background="@null"
+        android:layout_marginTop="55dp"
+        android:layout_marginStart="20dp"/>
+
+
+</RelativeLayout>

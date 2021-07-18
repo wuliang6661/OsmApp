@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.main.store.StoreFragment"
+    android:id="@+id/parentLayout">
+
+    <RelativeLayout
+        android:id="@+id/headLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:background="@drawable/search_bg"
+                android:layout_marginStart="12dp"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/searchTxt"
+                    android:textSize="12sp"
+                    android:textColor="#888888"
+                    android:text="搜索商品"
+                    app:drawableStartCompat="@mipmap/search_img2"
+                    android:drawablePadding="5dp"
+                    android:layout_marginStart="10dp"/>
+                <Button
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/search_btn_bg"
+                    android:layout_margin="3dp"
+                    android:text="搜索"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:focusable="true"/>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/cartBtn"
+                android:layout_width="33dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="13dp"
+                android:layout_marginStart="23dp"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/cart_img"
+                    android:scaleType="centerCrop"/>
+                <TextView
+                    android:id="@+id/cartNum"
+                    android:layout_width="11dp"
+                    android:layout_height="11dp"
+                    android:text="1"
+                    android:textSize="8sp"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/image_oval"
+                    android:gravity="center"
+                    android:layout_alignParentEnd="true"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/headLayout">
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:orientation="vertical"
+                app:elevation="0dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
+                    <com.stx.xhb.androidx.XBanner
+                        android:id="@+id/banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#00000000"
+                        app:AutoPlayTime="4000"
+                        app:isAutoPlay="true"
+                        app:isHandLoop="true"
+                        app:isShowIndicatorOnlyOne="true"
+                        app:isShowNumberIndicator="false"
+                        app:pageChangeDuration="800"
+                        app:pointsContainerBackground="@android:color/transparent"
+                        app:layout_scrollFlags="scroll|snap"/>
+
+                </LinearLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+            <!-- 商品布局 -->
+            <LinearLayout
+                android:id="@+id/llProdect"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f0f0f0"
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvLeft"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent" />
+
+
+                    <FrameLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvRight"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <FrameLayout
+                            android:id="@+id/stick_header"
+                            android:layout_width="match_parent"
+                            android:layout_height="39dp"
+                            android:background="@color/colorfff"
+                            android:orientation="vertical">
+
+                            <View
+                                android:layout_width="2dp"
+                                android:layout_height="13dp"
+                                android:background="#D3A952"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="14dp"/>
+                            <TextView
+                                android:id="@+id/tvHeader"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="25dp"
+                                android:textColor="#333333"
+                                android:textSize="13sp"
+                                android:singleLine="true"
+                                android:ellipsize="end"/>
+
+                        </FrameLayout>
+
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+        <com.scwang.smartrefresh.layout.footer.FalsifyFooter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+</RelativeLayout>

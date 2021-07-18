@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.address.AddAddressActivity"
+    android:orientation="vertical"
+    android:background="#f3f3f3">
+
+    <RelativeLayout
+        android:id="@+id/headLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:id="@+id/backBtn"
+                android:background="@null"
+                android:src="@mipmap/back_icon"
+                android:foreground="?android:attr/selectableItemBackground"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/title"
+                android:text="添加地址"
+                android:textColor="#333333"
+                android:textSize="18sp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="#ffffff"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="姓名"
+            android:textColor="#2B2B2B"
+            android:textSize="14sp"
+            android:layout_marginStart="15dp"
+            android:layout_centerVertical="true"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/nameInput"
+            android:background="@null"
+            android:text=""
+            android:textColor="#2B2B2B"
+            android:textSize="14sp"
+            android:layout_marginStart="90dp"
+            android:layout_marginEnd="20dp"
+            android:maxLength="10"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="#ffffff"
+        android:layout_marginTop="1dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="联系电话"
+            android:textColor="#2B2B2B"
+            android:textSize="14sp"
+            android:layout_marginStart="15dp"
+            android:layout_centerVertical="true"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/phoneInput"
+            android:background="@null"
+            android:text=""
+            android:textColor="#2B2B2B"
+            android:textSize="14sp"
+            android:layout_marginStart="90dp"
+            android:layout_marginEnd="20dp"
+            android:maxLength="11"
+            android:inputType="phone"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/selectAddressBtn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="#ffffff"
+        android:layout_marginTop="1dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择地址"
+            android:textColor="#2B2B2B"
+            android:textSize="14sp"
+            android:layout_marginStart="15dp"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:id="@+id/addressSelect"
+            android:text=""
+            android:textColor="#2B2B2B"
+            android:textSize="14sp"
+            android:layout_marginStart="90dp"
+            android:layout_marginEnd="20dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="#ffffff"
+        android:layout_marginTop="1dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="详细地址"
+            android:textColor="#2B2B2B"
+            android:textSize="14sp"
+            android:layout_marginStart="15dp"
+            android:layout_centerVertical="true"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/detailAddressInput"
+            android:background="@null"
+            android:text=""
+            android:textColor="#2B2B2B"
+            android:textSize="14sp"
+            android:layout_marginStart="90dp"
+            android:layout_marginEnd="20dp"
+            android:maxLines="2"
+            android:ellipsize="end"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="#ffffff"
+        android:layout_marginTop="1dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="邮政编码"
+            android:textColor="#2B2B2B"
+            android:textSize="14sp"
+            android:layout_marginStart="15dp"
+            android:layout_centerVertical="true"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/codeInput"
+            android:background="@null"
+            android:text=""
+            android:textColor="#2B2B2B"
+            android:textSize="14sp"
+            android:layout_marginStart="90dp"
+            android:layout_marginEnd="20dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:inputType="phone"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/defaultBtn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="#ffffff"
+        android:layout_marginTop="1dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="默认地址"
+            android:textColor="#2B2B2B"
+            android:textSize="14sp"
+            android:layout_marginStart="15dp"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/address_select_no"
+            android:layout_marginStart="90dp"
+            android:id="@+id/defaultImg"/>
+    </RelativeLayout>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:id="@+id/submitBtn"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/submit_bg"
+        android:layout_marginStart="13dp"
+        android:layout_marginEnd="13dp"
+        android:text="完成"
+        android:textSize="14sp"
+        android:textColor="#FFFFFF"
+        android:foreground="?android:attr/selectableItemBackground"/>
+
+</LinearLayout>

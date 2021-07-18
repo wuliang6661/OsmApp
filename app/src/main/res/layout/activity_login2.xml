@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.login.LoginActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/login_bg"
+        android:scaleType="centerCrop"/>
+
+    <include android:id="@+id/head"
+        layout="@layout/header_layout"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/head"
+        android:scrollbars="none">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/login_logo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="60dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/logo"
+                android:layout_marginTop="28dp"
+                android:background="#ffffff"
+                android:layout_marginStart="17dp"
+                android:layout_marginEnd="17dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="47dp"
+                    android:layout_marginEnd="47dp"
+                    app:tabIndicatorColor="#D8AE54"
+                    app:tabIndicatorHeight="1dp"
+                    app:tabSelectedTextColor="#D8AE54"
+                    app:tabTextColor="#949494"
+                    app:tabBackground="@color/transparent"
+                    app:tabRippleColor="@color/transparent"
+                    app:tabTextAppearance="@style/TabLayoutTextStyle"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginEnd="23dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/accountImg"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/login_phone"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/accountInput"
+                        android:layout_toEndOf="@id/accountImg"
+                        android:layout_marginStart="5dp"
+                        android:hint="输入手机号码"
+                        android:textColorHint="#A7A7A7"
+                        android:textColor="#333333"
+                        android:textSize="12sp"
+                        android:background="@null" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#D8AE54"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginEnd="23dp"
+                    android:layout_marginTop="10dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/passCodeImg"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/login_code"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/passCodeInput"
+                        android:layout_toEndOf="@id/passCodeImg"
+                        android:layout_marginStart="5dp"
+                        android:hint="输入验证码"
+                        android:textColorHint="#A7A7A7"
+                        android:textColor="#333333"
+                        android:textSize="12sp"
+                        android:background="@null" />
+
+                    <com.heloo.android.osmapp.widget.timebutton.TimeButton
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/codeBtn"
+                        android:layout_alignParentEnd="true"
+                        android:background="@drawable/login_btn_bg"
+                        android:layout_marginEnd="5dp"
+                        android:layout_centerVertical="true"
+                        android:text="获取验证码"
+                        android:textSize="12sp"
+                        android:textColor="#ffffff"
+                        android:foreground="?android:attr/selectableItemBackground"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#D8AE54"/>
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/setPasswordLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginEnd="23dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/setPasswordImg"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/login_password"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/setPasswordInput"
+                        android:layout_toEndOf="@id/setPasswordImg"
+                        android:layout_marginStart="5dp"
+                        android:hint="设置密码"
+                        android:textColorHint="#A7A7A7"
+                        android:textSize="12sp"
+                        android:background="@null"
+                        android:inputType="textPassword"
+                        android:textColor="#333333"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#D8AE54"/>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/agreeBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginTop="40dp"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:id="@+id/agreeImg"
+                        android:src="@drawable/agree_bg"
+                        android:layout_marginStart="10dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="我已阅读并同意《欧诗漫协议》"
+                        android:textSize="12sp"
+                        android:textColor="#A7A7A7"
+                        android:layout_marginStart="5dp"/>
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:id="@+id/submitBtn"
+                    android:background="@drawable/login_btn_bg"
+                    android:text="立即登录"
+                    android:textSize="13sp"
+                    android:textColor="#ffffff"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginEnd="23dp"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/forgetBtn"
+                    android:text="忘记密码?"
+                    android:textColor="#D8AE54"
+                    android:textSize="13sp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="28dp"
+                    android:visibility="invisible"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/newPersonBtn"
+                    android:textSize="13sp"
+                    android:textColor="#D8AE54"
+                    android:text="新员工入口"
+                    app:drawableEndCompat="@mipmap/login_arrow"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="56dp"
+                    android:layout_marginBottom="22dp"
+                    android:visibility="invisible"/>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

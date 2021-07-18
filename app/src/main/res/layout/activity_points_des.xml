@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.points.PointsDesActivity"
+    android:background="#F0F0F0"
+    android:orientation="vertical">
+
+    <include layout="@layout/header_layout"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="珍币说明"
+        android:textSize="14sp"
+        android:textColor="#D8AE54"
+        android:textStyle="bold"
+        app:drawableStartCompat="@mipmap/des_img"
+        android:drawablePadding="5dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="15dp"/>
+
+    <TextView
+        android:id="@+id/des"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="13sp"
+        android:textColor="#505050"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"/>
+
+</LinearLayout>

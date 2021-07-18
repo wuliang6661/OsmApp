@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginBottom="12dp"
+    android:id="@+id/commentItemClick"
+    android:background="@drawable/btn_selector">
+
+
+    <LinearLayout
+        android:id="@+id/commentLayout"
+        android:layout_width="0dp"
+        android:layout_weight="9"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/userOne"
+            android:text="用户"
+            android:textSize="15sp"
+            android:textColor="#D5AC5A"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="回复"
+            android:textSize="15sp"
+            android:textColor="#333333"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/userTwo"
+            android:text="用户"
+            android:textSize="15sp"
+            android:textColor="#D5AC5A"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/replyText"
+            android:text=""
+            android:textSize="15sp"
+            android:textColor="#333333"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:id="@+id/delete"
+        android:layout_toEndOf="@id/commentLayout"
+        android:text="删除"
+        android:textColor="#D5AC5A"
+        android:textSize="11sp"
+        android:layout_marginStart="10dp"
+        android:layout_centerVertical="true"
+        android:visibility="visible"/>
+
+</LinearLayout>

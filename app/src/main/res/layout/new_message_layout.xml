@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/headLayout">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:background="#ffffff">
+            <RelativeLayout
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:id="@+id/rlBack">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/back_icon"/>
+
+            </RelativeLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginEnd="100dp"
+                android:layout_centerVertical="true"
+                app:tabGravity="center"
+                app:tabIndicatorColor="#D5AC5A"
+                app:tabIndicatorHeight="3dp"
+                app:tabSelectedTextColor="#333333"
+                app:tabTextAppearance="@style/TabLayoutTextStyle"
+                app:tabTextColor="#333333"
+                app:tabPaddingStart="20dp"
+                app:tabPaddingEnd="20dp"
+                app:tabBackground="@color/transparent"
+                app:tabRippleColor="@color/transparent"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E6E6E6"
+                android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    <com.heloo.android.osmapp.widget.ViewPagerSlide
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headLayout"
+        android:background="#ffffff"/>
+</RelativeLayout>

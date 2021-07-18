@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#F6F6F6">
+
+    <RelativeLayout
+        android:id="@+id/banner1Layout"
+        android:layout_width="match_parent"
+        android:layout_height="210dp">
+
+        <com.stx.xhb.androidx.XBanner
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            app:AutoPlayTime="4000"
+            app:isAutoPlay="false"
+            app:isHandLoop="true"
+            app:isShowIndicatorOnlyOne="false"
+            app:isShowNumberIndicator="false"
+            app:pageChangeDuration="800"
+            app:viewPagerClipChildren="true"
+            app:pointsContainerBackground="@android:color/transparent" />
+
+        <LinearLayout
+            android:id="@+id/paperLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#99000000"
+            android:layout_alignParentEnd="true">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nowPage"
+                    android:text="1"
+                    android:textSize="13sp"
+                    android:textColor="#FFFFFF"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/"
+                    android:textSize="13sp"
+                    android:textColor="#FFFFFF"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/totalPage"
+                    android:text="5"
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"/>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/noticeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#ffffff">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="公告"
+            android:textColor="#F65959"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:drawablePadding="2dp"
+            android:layout_marginStart="7dp"
+            app:drawableStartCompat="@mipmap/notice_img"
+            android:gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/noticeTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:textColor="#2B2B2B"
+            android:textSize="12sp"
+            android:layout_marginStart="9dp"
+            android:text=""
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/banner2Layout"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp">
+
+        <com.stx.xhb.androidx.XBanner
+            android:id="@+id/banner2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            app:AutoPlayTime="4000"
+            app:isAutoPlay="false"
+            app:isHandLoop="true"
+            app:isShowIndicatorOnlyOne="true"
+            app:isShowNumberIndicator="false"
+            app:pageChangeDuration="800"
+            app:pointsContainerBackground="@android:color/transparent" />
+        <TextView
+            android:id="@+id/moreBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:text="更多"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:drawablePadding="2dp"
+            app:drawableEndCompat="@mipmap/right_img"
+            android:gravity="center_vertical"
+            android:background="@drawable/black_bg"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:layout_marginBottom="4dp"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

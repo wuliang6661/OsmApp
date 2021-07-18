@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#ffffff">
+    
+    <RelativeLayout
+        android:id="@+id/picLayout"
+        android:layout_width="167dp"
+        android:layout_height="125dp"
+        android:layout_centerHorizontal="true">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/image"
+            android:scaleType="centerCrop"
+            android:background="#F3E7CF"
+            app:shapeAppearanceOverlay="@style/roundedCornerImageStyle10"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:background="@drawable/pic_bottom_bg"
+            android:layout_alignParentBottom="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/picTitle"
+                android:textSize="14sp"
+                android:textColor="#F7F7F7"
+                android:text=""
+                android:layout_centerInParent="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_below="@id/picLayout"
+        android:background="@drawable/pic_bottom_bg2"
+        android:layout_alignStart="@id/picLayout"
+        android:layout_alignEnd="@id/picLayout"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@drawable/pic_bottom_bg3"
+        android:layout_alignStart="@id/picLayout"
+        android:layout_alignEnd="@id/picLayout"
+        android:layout_below="@id/view1"
+        android:layout_marginStart="11dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginBottom="13dp"/>
+</RelativeLayout>
