@@ -21,6 +21,7 @@ import com.heloo.android.osmapp.config.ConditionEnum;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.model.RouteDataBO;
 import com.heloo.android.osmapp.ui.WebViewActivity;
+import com.heloo.android.osmapp.ui.login.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,14 +125,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     ((ViewHolde) holder).btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(mContext, WebViewActivity.class);
                             if (MyApplication.isLogin == ConditionEnum.LOGIN) {
+                                Intent intent = new Intent(mContext, WebViewActivity.class);
                                 intent.putExtra("url", HttpInterface.URL + LocalConfiguration.liveUrl + "?liveid=" + mDatas.get(position).getId()
                                         + "&uid=" + LocalConfiguration.userInfo.getUid()+ "&username=" + LocalConfiguration.userInfo.getUsername()+"&app=1");
+                                mContext.startActivity(intent);
                             }else {
-                                intent.putExtra("url", HttpInterface.URL + LocalConfiguration.liveUrl + "?liveid=" + mDatas.get(position).getId()+"&app=1");
+                                Intent intent = new Intent(mContext, LoginActivity.class);
+                                mContext.startActivity(intent);
+//                                intent.putExtra("url", HttpInterface.URL + LocalConfiguration.liveUrl + "?liveid=" + mDatas.get(position).getId()+"&app=1");
                             }
-                            mContext.startActivity(intent);
+
                         }
                     });
                 }

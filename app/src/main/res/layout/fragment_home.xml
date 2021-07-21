@@ -36,16 +36,14 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        app:tabIndicatorColor="#EA4341"
-        app:tabIndicatorHeight="0dp"
-        app:tabSelectedTextColor="#2B2B2B"
+        app:tabIndicatorColor="#B99A49"
+        app:tabSelectedTextColor="#B99A49"
         app:tabTextColor="#2B2B2B"
         app:tabBackground="@color/transparent"
         app:tabRippleColor="@color/transparent"
         app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabPaddingStart="5dp"
         app:tabPaddingEnd="5dp"
-        app:tabMaxWidth="75dp"
         app:tabMinWidth="75dp"/>
 
     <androidx.viewpager.widget.ViewPager

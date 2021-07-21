@@ -23,6 +23,7 @@ import com.heloo.android.osmapp.mvp.contract.HomeContract;
 import com.heloo.android.osmapp.mvp.presenter.HomePresenter;
 import com.heloo.android.osmapp.ui.search.SearchActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
+import com.heloo.android.osmapp.utils.TabLayoutUtil;
 import com.heloo.android.osmapp.utils.ToastUtils;
 
 import org.json.JSONException;
@@ -68,32 +69,8 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         viewBinding.viewPager.setAdapter(adapter);
         viewBinding.viewPager.setOffscreenPageLimit(2);//设置预加载数量
         viewBinding.tabLayout.setupWithViewPager(viewBinding.viewPager);
-        viewBinding.tabLayout.setTabMode(TabLayout.MODE_AUTO);
+        viewBinding.tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         viewBinding.tabLayout.setTabIndicatorFullWidth(false);
-        //设置第一个
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.tab_item_layout,null);
-        TextView name = view.findViewById(R.id.name);
-        name.setText(viewBinding.tabLayout.getTabAt(0).getText());
-        viewBinding.tabLayout.getTabAt(0).setCustomView(view);
-        viewBinding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                View view = LayoutInflater.from(getContext()).inflate(R.layout.tab_item_layout,null);
-                TextView name = view.findViewById(R.id.name);
-                name.setText(tab.getText());
-                tab.setCustomView(view);
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                tab.setCustomView(null);
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
 
         viewBinding.searchBtn.setOnClickListener(v -> startActivity(new Intent(getActivity(), SearchActivity.class)));
     }

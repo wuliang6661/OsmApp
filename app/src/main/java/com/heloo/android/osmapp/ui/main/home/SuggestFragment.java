@@ -49,6 +49,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import okhttp3.ResponseBody;
 
 /**
@@ -59,17 +60,17 @@ import okhttp3.ResponseBody;
  */
 
 public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, SuggestPresenter, FragmentSuggestBinding>
-        implements SuggestContract.View{
+        implements SuggestContract.View {
 
     private CommonAdapter<ArticleBean.ArticleInfoListBean.DataBean> adapter;
     private ArticleBean articleBean;
     private List<ArticleBean.ArticleInfoListBean.DataBean> newsData = new ArrayList<>();
     private List<ArticleBean.ArticleInfoListBean.DataBean> suggestNewsData = new ArrayList<>();//推荐
     private List<ArticleBean.ArticleInfoListBean.DataBean> armyNewsData = new ArrayList<>();//五美党建
-    private XBanner banner ,banner2;
+    private XBanner banner, banner2;
     private List<BannerBean.BannerBean2> bannerData = new ArrayList<>();
     private List<BannerBean.ArticlespecialBean> bannerData2 = new ArrayList<>();
-    private TextView nowPage,totalPage,noticeTxt,moreBtn;
+    private TextView nowPage, totalPage, noticeTxt, moreBtn;
     private LinearLayout paperLayout;
     private LinearLayout noticeLayout;//公告
     private List<ArticleBean.BannerBean> armyBannerData = new ArrayList<>();
@@ -85,11 +86,11 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
     private BannerBean bannerBean;
 
 
-    public static SuggestFragment newInstance(String typeName,String categoryId) {
+    public static SuggestFragment newInstance(String typeName, String categoryId) {
         SuggestFragment suggestFragment = new SuggestFragment();
         Bundle b = new Bundle();
-        b.putString("typeName",typeName);
-        b.putString("categoryId",categoryId);
+        b.putString("typeName", typeName);
+        b.putString("categoryId", categoryId);
         suggestFragment.setArguments(b);
         return suggestFragment;
     }
@@ -102,10 +103,10 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
             typeName = args.getString("typeName");
             categoryId = args.getString("categoryId");
         }
-        if (typeName != null && typeName.equals("五美党建")){
+        if (typeName != null && typeName.equals("五美党建")) {
             newsData.clear();
             mPresenter.getList(MyApplication.spUtils.getString("token", ""), armyPageNo, armyPageSize, categoryId, "", "");
-        }else {
+        } else {
             newsData.clear();
             mPresenter.getList(MyApplication.spUtils.getString("token", ""), pageNo, pageSize, "", "Y", "");
             mPresenter.getBanner(MyApplication.spUtils.getString("token", ""));
@@ -130,10 +131,10 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
         params.width = ScreenUtils.getScreenWidth();
         noticeTxt.setLayoutParams(params);
         ViewGroup.LayoutParams paramsBanner1 = banner.getLayoutParams();
-        paramsBanner1.height = (int)(ScreenUtils.getScreenWidth() * 0.56);
+        paramsBanner1.height = (int) (ScreenUtils.getScreenWidth() * 0.56);
         banner.setLayoutParams(paramsBanner1);
         ViewGroup.LayoutParams paramsBanner2 = banner2.getLayoutParams();
-        paramsBanner2.height = (int)(ScreenUtils.getScreenWidth() * 0.16);
+        paramsBanner2.height = (int) (ScreenUtils.getScreenWidth() * 0.16);
         banner2.setLayoutParams(paramsBanner2);
         viewBinding.list.addHeaderView(headView);
         viewBinding.refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
@@ -144,13 +145,13 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                if (typeName != null && typeName.equals("五美党建")){
+                if (typeName != null && typeName.equals("五美党建")) {
                     armyPageNo = 1;
-                    mPresenter.getList(MyApplication.spUtils.getString("token", ""),armyPageNo,armyPageSize,categoryId,"","");
-                }else {
+                    mPresenter.getList(MyApplication.spUtils.getString("token", ""), armyPageNo, armyPageSize, categoryId, "", "");
+                } else {
                     pageNo = 1;
                     mPresenter.getBanner(MyApplication.spUtils.getString("token", ""));
-                    mPresenter.getList(MyApplication.spUtils.getString("token", ""),pageNo,pageSize,"","Y","");
+                    mPresenter.getList(MyApplication.spUtils.getString("token", ""), pageNo, pageSize, "", "Y", "");
                 }
                 refreshLayout.finishRefresh(100);
             }
@@ -163,13 +164,13 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if(firstVisibleItem + visibleItemCount == totalItemCount){
+                if (firstVisibleItem + visibleItemCount == totalItemCount) {
                     View last_view = viewBinding.list.getChildAt(viewBinding.list.getChildCount() - 1);
-                    if(last_view != null && last_view.getBottom() == viewBinding.list.getHeight()){
-                        if (typeName != null && typeName.equals("五美党建")){
+                    if (last_view != null && last_view.getBottom() == viewBinding.list.getHeight()) {
+                        if (typeName != null && typeName.equals("五美党建")) {
                             armyPageNo++;
-                            mPresenter.getList(MyApplication.spUtils.getString("token", ""),armyPageNo,armyPageSize,categoryId,"","");
-                        }else {
+                            mPresenter.getList(MyApplication.spUtils.getString("token", ""), armyPageNo, armyPageSize, categoryId, "", "");
+                        } else {
                             pageNo++;
                             mPresenter.getList(MyApplication.spUtils.getString("token", ""), pageNo, pageSize, "", "Y", "");
                         }
@@ -178,29 +179,29 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
             }
         });
         moreBtn.setOnClickListener(v -> {//更多
-            if (goLogin()) {
-                startActivity(new Intent(getActivity(), SubjectActivity.class));
-            }
+//            if (goLogin()) {
+            startActivity(new Intent(getActivity(), SubjectActivity.class));
+//            }
         });
     }
 
     private void setAdapter() {
-        if (adapter != null){
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
             return;
         }
-        adapter = new CommonAdapter<ArticleBean.ArticleInfoListBean.DataBean>(getActivity(),R.layout.news_item_layout,newsData) {
+        adapter = new CommonAdapter<ArticleBean.ArticleInfoListBean.DataBean>(getActivity(), R.layout.news_item_layout, newsData) {
             @Override
             protected void convert(ViewHolder holder, ArticleBean.ArticleInfoListBean.DataBean item, int position) {
                 TextView title = holder.getConvertView().findViewById(R.id.title);
                 ShapeableImageView imageView = holder.getConvertView().findViewById(R.id.image);
-                if (item.getIcon().startsWith("http")){
+                if (item.getIcon().startsWith("http")) {
                     Glide.with(getActivity()).load(item.getIcon()).into(imageView);
-                }else {
-                    Glide.with(getActivity()).load(HttpInterface.IMG_URL+ item.getIcon()).into(imageView);
+                } else {
+                    Glide.with(getActivity()).load(HttpInterface.IMG_URL + item.getIcon()).into(imageView);
                 }
 
-                if (item.getIsTop() != null && item.getIsTop().equals("1")){
+                if (item.getIsTop() != null && item.getIsTop().equals("1")) {
                     holder.getView(R.id.hotTxt).setVisibility(View.VISIBLE);
                     if (typeName != null && typeName.equals("五美党建")) {
                         holder.setText(R.id.hotTxt, "置顶");
@@ -208,29 +209,29 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
                         span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, 3,
                                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                         title.setText(span);
-                    }else {
+                    } else {
                         holder.setText(R.id.hotTxt, "热");
                         SpannableStringBuilder span = new SpannableStringBuilder("缩进" + item.getSubject());
                         span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, 2,
                                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                         title.setText(span);
                     }
-                }else {
+                } else {
                     holder.getView(R.id.hotTxt).setVisibility(View.GONE);
                     title.setText(item.getSubject());
                 }
 
-                holder.setText(R.id.time,item.getCreateDate());
-                holder.setText(R.id.glance,item.getViewNum());
+                holder.setText(R.id.time, item.getCreateDate());
+                holder.setText(R.id.glance, item.getViewNum());
                 holder.getView(R.id.newItemBtn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), WebViewActivity.class);
                         if (MyApplication.isLogin == ConditionEnum.LOGIN) {
                             intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticleId()
-                                    + "&uid=" + LocalConfiguration.userInfo.getUid()+ "&username=" + LocalConfiguration.userInfo.getUsername()+"&app=1");
-                        }else {
-                            intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticleId()+"&app=1");
+                                    + "&uid=" + LocalConfiguration.userInfo.getUid() + "&username=" + LocalConfiguration.userInfo.getUsername() + "&app=1");
+                        } else {
+                            intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticleId() + "&app=1");
                         }
                         startActivity(intent);
                     }
@@ -243,23 +244,24 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
 
     /**
      * 轮播图
+     *
      * @param banner
      */
     private void initBanner(XBanner banner) {
         banner.setOnItemClickListener((banner12, model, view, position) -> {
-            if (typeName != null && typeName.equals("五美党建")){
+            if (typeName != null && typeName.equals("五美党建")) {
                 if (armyBannerData.get(position).getBannerType() == 1
                         || armyBannerData.get(position).getBannerType() == 2
-                        || armyBannerData.get(position).getBannerType() == 5){
+                        || armyBannerData.get(position).getBannerType() == 5) {
                     Intent intent = new Intent(getActivity(), WebViewActivity.class);
                     if (MyApplication.isLogin == ConditionEnum.LOGIN) {
                         intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + armyBannerData.get(position).getJumpId()
-                                + "&uid=" + LocalConfiguration.userInfo.getUid()+ "&username=" + LocalConfiguration.userInfo.getUsername()+"&app=1");
-                    }else {
-                        intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + armyBannerData.get(position).getJumpId()+"&app=1");
+                                + "&uid=" + LocalConfiguration.userInfo.getUid() + "&username=" + LocalConfiguration.userInfo.getUsername() + "&app=1");
+                    } else {
+                        intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + armyBannerData.get(position).getJumpId() + "&app=1");
                     }
                     startActivity(intent);
-                }else {
+                } else {
                     if (armyBannerData.get(position).getJumpUrl() != null
                             && armyBannerData.get(position).getJumpUrl().length() > 10) {
                         Intent intent = new Intent(getActivity(), WebViewActivity.class);
@@ -267,19 +269,19 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
                         startActivity(intent);
                     }
                 }
-            }else {
+            } else {
                 if (bannerData.get(position).getJumpUrl() != null
-                        && bannerData.get(position).getJumpUrl().length()>10) {
+                        && bannerData.get(position).getJumpUrl().length() > 10) {
                     Intent intent = new Intent(getActivity(), WebViewActivity.class);
                     intent.putExtra("url", bannerData.get(position).getJumpUrl());
                     startActivity(intent);
-                }else {
+                } else {
                     Intent intent = new Intent(getActivity(), WebViewActivity.class);
                     if (MyApplication.isLogin == ConditionEnum.LOGIN) {
                         intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + bannerData.get(position).getJumpId()
-                                + "&uid=" + LocalConfiguration.userInfo.getUid()+ "&username=" + LocalConfiguration.userInfo.getUsername()+"&app=1");
-                    }else {
-                        intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + bannerData.get(position).getJumpId()+"&app=1");
+                                + "&uid=" + LocalConfiguration.userInfo.getUid() + "&username=" + LocalConfiguration.userInfo.getUsername() + "&app=1");
+                    } else {
+                        intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + bannerData.get(position).getJumpId() + "&app=1");
                     }
                     startActivity(intent);
                 }
@@ -291,15 +293,15 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
             if (typeName != null && typeName.equals("五美党建")) {
                 if (armyBannerData.get(position).getImgurl().startsWith("http")) {
                     Glide.with(getActivity()).load(armyBannerData.get(position).getImgurl()).into(image);
-                }else {
-                    Glide.with(getActivity()).load(HttpInterface.IMG_URL+armyBannerData.get(position).getImgurl()).into(image);
+                } else {
+                    Glide.with(getActivity()).load(HttpInterface.IMG_URL + armyBannerData.get(position).getImgurl()).into(image);
                 }
 //                desc.setText(armyBannerData.get(position).getSubject());
-            }else {
+            } else {
                 if (bannerData.get(position).getImgurl().startsWith("http")) {
                     Glide.with(getActivity()).load(bannerData.get(position).getImgurl()).into(image);
-                }else {
-                    Glide.with(getActivity()).load(HttpInterface.IMG_URL+bannerData.get(position).getImgurl()).into(image);
+                } else {
+                    Glide.with(getActivity()).load(HttpInterface.IMG_URL + bannerData.get(position).getImgurl()).into(image);
                 }
                 desc.setText(bannerData.get(position).getSubject());
                 nowPage.setText(String.valueOf(position + 1));
@@ -311,6 +313,7 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
 
     /**
      * 专题轮播图
+     *
      * @param banner
      */
     private void initBanner2(XBanner banner) {
@@ -322,12 +325,12 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
         banner.loadImage((banner1, model, view, position) -> {
             ShapeableImageView image = view.findViewById(R.id.image);
             ViewGroup.LayoutParams params = image.getLayoutParams();
-            params.height = (int)(ScreenUtils.getScreenWidth() * 0.16);
+            params.height = (int) (ScreenUtils.getScreenWidth() * 0.16);
             image.setLayoutParams(params);
             if (bannerData2.get(position).getIcon().startsWith("http")) {
                 Glide.with(getActivity()).load(bannerData2.get(position).getIcon()).into(image);
-            }else {
-                Glide.with(getActivity()).load(HttpInterface.IMG_URL+bannerData2.get(position).getIcon()).into(image);
+            } else {
+                Glide.with(getActivity()).load(HttpInterface.IMG_URL + bannerData2.get(position).getIcon()).into(image);
             }
         });
 
@@ -348,14 +351,14 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
         String s = new String(data.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
-            articleBean =JSON.parseObject(jsonObject.optString("data"),ArticleBean.class);
-            if (typeName != null && typeName.equals("五美党建")){
+        if (status.equals("success")) {
+            articleBean = JSON.parseObject(jsonObject.optString("data"), ArticleBean.class);
+            if (typeName != null && typeName.equals("五美党建")) {
                 noticeLayout.setVisibility(View.GONE);
                 if (armyPageNo == 1) {
                     armyNewsData.clear();
                     newsData.clear();
-                    if (articleBean.getBanner() != null){
+                    if (articleBean.getBanner() != null) {
                         //初始化banner
                         armyBannerData.clear();
                         armyBannerData.addAll(articleBean.getBanner());
@@ -369,10 +372,10 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
                 }
                 armyNewsData.addAll(articleBean.getArticleInfoList().getData());
                 newsData.addAll(armyNewsData);
-                if (adapter != null){
+                if (adapter != null) {
                     adapter.notifyDataSetChanged();
                 }
-            }else {
+            } else {
                 noticeLayout.setVisibility(View.VISIBLE);
                 if (pageNo == 1) {
                     suggestNewsData.clear();
@@ -380,7 +383,7 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
                 }
                 suggestNewsData.addAll(articleBean.getArticleInfoList().getData());
                 newsData.addAll(suggestNewsData);
-                if (adapter != null){
+                if (adapter != null) {
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -393,9 +396,9 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
         String s = new String(data.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
-            bannerBean = JSON.parseObject(jsonObject.optString("data"),BannerBean.class);
-            noticeTxt.setText(String.format("%s",bannerBean.getAnnouncement().getContent()+"                    "));
+        if (status.equals("success")) {
+            bannerBean = JSON.parseObject(jsonObject.optString("data"), BannerBean.class);
+            noticeTxt.setText(String.format("%s", bannerBean.getAnnouncement().getContent() + "                    "));
             bannerData.clear();
             bannerData.addAll(bannerBean.getBanner());
             bannerData2.clear();

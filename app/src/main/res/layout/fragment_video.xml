@@ -5,9 +5,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.nice.VideoFragment">
 
-    <com.tencent.smtt.sdk.WebView
+
+    <FrameLayout
+        android:id="@+id/webLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/videoWebView"/>
+        android:layout_height="match_parent">
+
+        <com.tencent.smtt.sdk.WebView
+            android:id="@+id/videoWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
 
 </LinearLayout>

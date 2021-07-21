@@ -9,6 +9,7 @@
         android:layout_marginTop="13dp"
         android:background="@drawable/tab_item_bg"
         android:layout_marginStart="5dp"
+        android:visibility="invisible"
         android:layout_marginEnd="5dp"/>
 
     <TextView
