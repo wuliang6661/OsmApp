@@ -1,10 +1,11 @@
-package com.heloo.android.osmapp.utils.webview;
+package com.heloo.android.osmapp.ui.main.nice;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.Log;
 import android.view.KeyEvent;
+
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.heloo.android.osmapp.base.MyApplication;
 import com.heloo.android.osmapp.utils.LogUtils;
@@ -25,13 +26,15 @@ import com.tencent.smtt.sdk.WebViewClient;
  * 是帮助WebView处理各种通知和请求事件的，我们可以称他为WebView的“内政大臣”。
  */
 
-public class WebClient extends WebViewClient {
+public class WebVideoClient extends WebViewClient {
 
     private Context mContext;
     private SVProgressHUD svProgressHUD;
+    private String url;
 
-    public WebClient(Context context) {
+    public WebVideoClient(Context context,String url) {
         mContext = context;
+        this.url = url;
         svProgressHUD = new SVProgressHUD(context);
     }
 
@@ -169,6 +172,9 @@ public class WebClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         String url = request.getUrl().toString();
+        if(!url.equals(this.url)){
+            return true;
+        }
         LogUtils.log(url);
         if (url.startsWith("https") || url.startsWith("http")) {
             view.loadUrl(url);
@@ -179,6 +185,9 @@ public class WebClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         LogUtils.log(url);
+        if(!url.equals(this.url)){
+            return true;
+        }
         if (url.startsWith("https") || url.startsWith("http")) {
             view.loadUrl(url);
         }
@@ -224,7 +233,7 @@ public class WebClient extends WebViewClient {
             String cookieValue = sbCookie.toString();
             Log.d("webviewwebviewwebview", "weweweeeeeeeeeeeeeeeeee: "+cookieValue);
             cookieManager.setCookie(url, cookieValue);//为url设置cookie
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 cookieManager.flush();
             } else {
                 CookieSyncManager.getInstance().sync();

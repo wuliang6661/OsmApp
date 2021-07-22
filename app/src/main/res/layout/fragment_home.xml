@@ -38,7 +38,7 @@
         android:layout_height="35dp"
         app:tabIndicatorColor="#B99A49"
         app:tabSelectedTextColor="#B99A49"
-        app:tabTextColor="#2B2B2B"
+        app:tabTextColor="#C3C3C3"
         app:tabBackground="@color/transparent"
         app:tabRippleColor="@color/transparent"
         app:tabTextAppearance="@style/TabLayoutTextStyle"

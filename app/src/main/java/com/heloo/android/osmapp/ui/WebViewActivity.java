@@ -39,7 +39,6 @@ public class WebViewActivity extends BaseWebActivity {
         setContentView(rootView);
         setListener();
         binding.headLayout2.post(() -> binding.headLayout2.setPadding(0, BubbleUtils.getStatusBarHeight(this), 0, 0));
-        binding.headLayout.setVisibility(View.GONE);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         url = getIntent().getExtras().getString("url");
         mTitle = getIntent().getStringExtra("title");
@@ -122,5 +121,6 @@ public class WebViewActivity extends BaseWebActivity {
                 finish();
             }
         });
+//        goBack();
     }
 }

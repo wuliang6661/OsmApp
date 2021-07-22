@@ -10,9 +10,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff">
+
+        <RelativeLayout
+            android:id="@+id/headLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff">
+
+            <com.tencent.smtt.sdk.WebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/act_bg01"/>
+
+        </RelativeLayout>
+
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp">
+            android:layout_marginTop="24dp"
+            android:background="@color/white"
+            android:layout_height="50dp">
             <ImageButton
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
@@ -43,19 +61,5 @@
                 android:visibility="gone"/>
         </RelativeLayout>
     </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/headLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff">
-
-        <com.tencent.smtt.sdk.WebView
-            android:id="@+id/webview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/act_bg01"/>
-
-    </RelativeLayout>
-
 
 </LinearLayout>

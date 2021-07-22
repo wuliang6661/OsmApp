@@ -66,17 +66,17 @@ public class TeamActivity extends MVPBaseActivity<TeamContract.View, TeamPresent
         viewBinding.tabLayout.setTabMode(TabLayout.MODE_FIXED);
         viewBinding.tabLayout.setTabIndicatorFullWidth(false);
         //设置第一个
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.tab_item_layout2,null);
-        TextView name = view.findViewById(R.id.name);
-        name.setText(viewBinding.tabLayout.getTabAt(0).getText());
-        viewBinding.tabLayout.getTabAt(0).setCustomView(view);
+//        View view = LayoutInflater.from(getContext()).inflate(R.layout.tab_item_layout2,null);
+//        TextView name = view.findViewById(R.id.name);
+//        name.setText(viewBinding.tabLayout.getTabAt(0).getText());
+//        viewBinding.tabLayout.getTabAt(0).setCustomView(view);
         viewBinding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                View view = LayoutInflater.from(getContext()).inflate(R.layout.tab_item_layout2,null);
-                TextView name = view.findViewById(R.id.name);
-                name.setText(tab.getText());
-                tab.setCustomView(view);
+//                View view = LayoutInflater.from(getContext()).inflate(R.layout.tab_item_layout2,null);
+//                TextView name = view.findViewById(R.id.name);
+//                name.setText(tab.getText());
+//                tab.setCustomView(view);
                 if (tab.getPosition() == 0){
                     type = "";
                 }else if (tab.getPosition() == 1){
@@ -90,7 +90,7 @@ public class TeamActivity extends MVPBaseActivity<TeamContract.View, TeamPresent
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                tab.setCustomView(null);
+//                tab.setCustomView(null);
             }
 
             @Override

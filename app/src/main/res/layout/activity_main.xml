@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:layout_alignParentBottom="true"
-        app:itemIconSize="20dp"
+        app:itemIconSize="25dp"
         app:itemTextColor="@color/selector_item_gray_color"
         app:menu="@menu/menu_navigation" />
 

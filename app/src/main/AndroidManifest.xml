@@ -147,7 +147,7 @@
             android:name=".ui.main.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait" />
+            />
         <activity
             android:name=".ui.StartActivity"
             android:launchMode="standard"

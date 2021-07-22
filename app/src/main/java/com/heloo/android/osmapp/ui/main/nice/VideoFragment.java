@@ -29,9 +29,10 @@ import static android.app.Activity.RESULT_OK;
 /**
  * 视频
  */
-public class VideoFragment extends MVPBaseFragment<VideoContract.View, VideoPresenter, FragmentVideoBinding>{
+public class VideoFragment extends MVPBaseFragment<VideoContract.View, VideoPresenter, FragmentVideoBinding> {
 
     private X5ChromeClient chromeClient;
+    private String url;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -40,14 +41,28 @@ public class VideoFragment extends MVPBaseFragment<VideoContract.View, VideoPres
     }
 
     private void initView() {
+        if (LocalConfiguration.userInfo != null) {
+            url = HttpInterface.URLS + LocalConfiguration.videoUrl
+                    + "?uid=" + LocalConfiguration.userInfo.getUid() + "&username=" + LocalConfiguration.userInfo.getUsername() + "&app=1";
+        } else {
+            url = HttpInterface.URLS + LocalConfiguration.videoUrl
+                    + "?uid=" + "" + "&username=" + "" + "&app=1";
+        }
         initWebView(viewBinding.videoWebView);
         viewBinding.videoWebView.getSettings().setTextZoom(100);
-        if (LocalConfiguration.userInfo != null) {
-            viewBinding.videoWebView.loadUrl(HttpInterface.URLS + LocalConfiguration.videoUrl
-                    + "?uid=" + LocalConfiguration.userInfo.getUid() + "&username=" + LocalConfiguration.userInfo.getUsername() + "&app=1");
-        }else {
-            viewBinding.videoWebView.loadUrl(HttpInterface.URLS + LocalConfiguration.videoUrl
-                    + "?uid=" + "" + "&username=" + "" + "&app=1");
+        viewBinding.videoWebView.loadUrl(url);
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(viewBinding== null){
+            return;
+        }
+        if (hidden) {
+            viewBinding.videoWebView.onPause();
+        } else {
+            viewBinding.videoWebView.onResume();
         }
     }
 
@@ -57,7 +72,7 @@ public class VideoFragment extends MVPBaseFragment<VideoContract.View, VideoPres
      */
     public void initWebView(WebView view) {
         initWebViewSettings(view);
-         chromeClient = new X5ChromeClient(getActivity());
+        chromeClient = new X5ChromeClient(getActivity());
         chromeClient.setData(viewBinding.webLayout, viewBinding.videoWebView);
         chromeClient.setOnReceivedListener(new X5ChromeClient.onReceivedMessage() {   //设置标题
             @Override
@@ -66,9 +81,9 @@ public class VideoFragment extends MVPBaseFragment<VideoContract.View, VideoPres
             }
         });
         view.setWebChromeClient(chromeClient);
-        view.setWebViewClient(new WebClient(getActivity()));
+        view.setWebViewClient(new WebVideoClient(getActivity(),url));
         view.addJavascriptInterface(new WebAppInterface(getActivity(), view), "Android");
-        view.setClickable(true);
+//        view.setClickable(true);
         view.setHorizontalScrollBarEnabled(false);
         view.setVerticalScrollBarEnabled(false);
         //下面方法去掉
@@ -194,7 +209,7 @@ public class VideoFragment extends MVPBaseFragment<VideoContract.View, VideoPres
      * @param event
      * @return
      */
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//    public boolean onKeyDown(int keyCode,  KeyEvent event) {
 //        switch (keyCode) {
 //            case KeyEvent.KEYCODE_BACK:
 //                /** 回退键 事件处理 优先级:视频播放全屏-网页回退-关闭页面 */

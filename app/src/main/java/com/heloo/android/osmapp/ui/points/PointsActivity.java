@@ -71,17 +71,17 @@ public class PointsActivity extends MVPBaseActivity<PointsContract.View, PointsP
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setTabIndicatorFullWidth(false);
         //设置第一个
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.tab_item_layout2,null);
-        TextView name = view.findViewById(R.id.name);
-        name.setText(tabLayout.getTabAt(0).getText());
-        tabLayout.getTabAt(0).setCustomView(view);
+//        View view = LayoutInflater.from(getContext()).inflate(R.layout.tab_item_layout2,null);
+//        TextView name = view.findViewById(R.id.name);
+//        name.setText(tabLayout.getTabAt(0).getText());
+//        tabLayout.getTabAt(0).setCustomView(view);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                View view = LayoutInflater.from(getContext()).inflate(R.layout.tab_item_layout2,null);
-                TextView name = view.findViewById(R.id.name);
-                name.setText(tab.getText());
-                tab.setCustomView(view);
+//                View view = LayoutInflater.from(getContext()).inflate(R.layout.tab_item_layout2,null);
+//                TextView name = view.findViewById(R.id.name);
+//                name.setText(tab.getText());
+//                tab.setCustomView(view);
                 if (tab.getPosition() == 0){
                     showProgress("");
                     mPresenter.getAddData(MyApplication.spUtils.getString("token", ""),pageNoAdd,pageSize);
@@ -99,7 +99,7 @@ public class PointsActivity extends MVPBaseActivity<PointsContract.View, PointsP
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                tab.setCustomView(null);
+//                tab.setCustomView(null);
             }
 
             @Override
