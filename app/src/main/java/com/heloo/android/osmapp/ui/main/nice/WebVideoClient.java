@@ -172,9 +172,9 @@ public class WebVideoClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         String url = request.getUrl().toString();
-        if(!url.equals(this.url)){
-            return true;
-        }
+//        if(!url.equals(this.url)){
+//            return true;
+//        }
         LogUtils.log(url);
         if (url.startsWith("https") || url.startsWith("http")) {
             view.loadUrl(url);
@@ -185,9 +185,9 @@ public class WebVideoClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         LogUtils.log(url);
-        if(!url.equals(this.url)){
-            return true;
-        }
+//        if(!url.equals(this.url)){
+//            return true;
+//        }
         if (url.startsWith("https") || url.startsWith("http")) {
             view.loadUrl(url);
         }

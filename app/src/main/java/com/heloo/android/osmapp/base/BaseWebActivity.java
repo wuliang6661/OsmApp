@@ -65,7 +65,7 @@ public abstract class BaseWebActivity extends BaseActivity {
         webSetting.setSupportZoom(true);
         webSetting.setTextZoom(100);
         webSetting.setBuiltInZoomControls(true);
-        webSetting.setUserAgentString("oushiman-Android");
+//        webSetting.setUserAgentString("oushiman-Android");
         webSetting.setUseWideViewPort(true);
         webSetting.setSupportMultipleWindows(true);
         // webSetting.setLoadWithOverviewMode(true);

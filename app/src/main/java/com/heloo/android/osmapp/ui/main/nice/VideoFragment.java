@@ -105,7 +105,7 @@ public class VideoFragment extends MVPBaseFragment<VideoContract.View, VideoPres
         webSetting.setSupportZoom(true);
         webSetting.setTextZoom(100);
         webSetting.setBuiltInZoomControls(true);
-        webSetting.setUserAgentString("oushiman-android");
+//        webSetting.setUserAgentString("oushiman-android");
         webSetting.setUseWideViewPort(true);
         webSetting.setSupportMultipleWindows(true);
         // webSetting.setLoadWithOverviewMode(true);
