@@ -1,5 +1,7 @@
 package com.heloo.android.osmapp.api;
 
+import com.heloo.android.osmapp.model.BaseResult;
+
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -147,7 +149,7 @@ public interface HttpInterface {
      * 商城轮播图
      */
     @GET("/shopOrder/getProdlist")
-    Observable<ResponseBody> getStoreBanner(@Header("Authorization") String token);
+    Observable<BaseResult<String>> getStoreBanner();
 
 
     /**

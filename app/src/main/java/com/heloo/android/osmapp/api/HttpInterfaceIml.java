@@ -2,6 +2,7 @@ package com.heloo.android.osmapp.api;
 
 
 import com.heloo.android.osmapp.utils.rx.RxHelper;
+import com.heloo.android.osmapp.utils.rx.RxResultHelper;
 
 import java.util.List;
 
@@ -130,8 +131,8 @@ public class HttpInterfaceIml {
     /**
      * 商城轮播图
      */
-    public static Observable<ResponseBody> getStoreBanner(String token) {
-        return getService().getStoreBanner(token).compose(RxHelper.httpRusult());
+    public static Observable<String> getStoreBanner() {
+        return getService().getStoreBanner().compose(RxResultHelper.httpRusult());
     }
 
     /**

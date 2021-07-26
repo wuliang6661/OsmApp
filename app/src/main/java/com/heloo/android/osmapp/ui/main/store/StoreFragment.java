@@ -84,14 +84,21 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
         bannerData.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Finews.gtimg.com%2Fnewsapp_match%2F0%2F11142554267%2F0.jpg&refer=http%3A%2F%2Finews.gtimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620287757&t=a7b1181981b11ed171e6b82cbac17579");
         initViews();
         showProgress("");
-        if (LocalConfiguration.userInfo != null) {
-            mPresenter.getClassify(MyApplication.spUtils.getString("token", ""), LocalConfiguration.userInfo.getUid());
-        }else {
-            mPresenter.getClassify(MyApplication.spUtils.getString("token", ""), "");
-        }
-        mPresenter.getBanner(MyApplication.spUtils.getString("token", ""));
     }
 
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            if (LocalConfiguration.userInfo != null) {
+                mPresenter.getClassify(MyApplication.spUtils.getString("token", ""), LocalConfiguration.userInfo.getUid());
+            }else {
+                mPresenter.getClassify(MyApplication.spUtils.getString("token", ""), "");
+            }
+            mPresenter.getBanner();
+        }
+    }
 
     private void initViews() {
         viewBinding.headLayout.post(() -> viewBinding.headLayout.setPadding(0, BubbleUtils.getStatusBarHeight(getActivity()), 0, 0));
@@ -191,7 +198,7 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 mPresenter.getClassify(MyApplication.spUtils.getString("token", ""),"");
-                mPresenter.getBanner(MyApplication.spUtils.getString("token", ""));
+                mPresenter.getBanner();
                 refreshLayout.finishRefresh(1000);
             }
         });

@@ -26,6 +26,6 @@ public class StoreContract {
 
         void getClassify(String token,String uid);
 
-        void getBanner(String token);
+        void getBanner();
     }
 }

@@ -133,9 +133,9 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
         ViewGroup.LayoutParams paramsBanner1 = banner.getLayoutParams();
         paramsBanner1.height = (int) (ScreenUtils.getScreenWidth() * 0.56);
         banner.setLayoutParams(paramsBanner1);
-        ViewGroup.LayoutParams paramsBanner2 = banner2.getLayoutParams();
-        paramsBanner2.height = (int) (ScreenUtils.getScreenWidth() * 0.16);
-        banner2.setLayoutParams(paramsBanner2);
+//        ViewGroup.LayoutParams paramsBanner2 = banner2.getLayoutParams();
+//        paramsBanner2.height = (int) (ScreenUtils.getScreenWidth() * 0.16);
+//        banner2.setLayoutParams(paramsBanner2);
         viewBinding.list.addHeaderView(headView);
         viewBinding.refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
@@ -324,9 +324,9 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
         });
         banner.loadImage((banner1, model, view, position) -> {
             ShapeableImageView image = view.findViewById(R.id.image);
-            ViewGroup.LayoutParams params = image.getLayoutParams();
-            params.height = (int) (ScreenUtils.getScreenWidth() * 0.16);
-            image.setLayoutParams(params);
+//            ViewGroup.LayoutParams params = image.getLayoutParams();
+//            params.height = (int) (ScreenUtils.getScreenWidth() * 0.16);
+//            image.setLayoutParams(params);
             if (bannerData2.get(position).getIcon().startsWith("http")) {
                 Glide.with(getActivity()).load(bannerData2.get(position).getIcon()).into(image);
             } else {

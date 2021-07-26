@@ -28,8 +28,6 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -38,9 +36,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import rx.android.schedulers.AndroidSchedulers;
 
 
 /**
@@ -255,7 +251,8 @@ public class WebAppInterface implements UMShareListener {
                 if (shareVo.getType().equals("weibo")) {
                     shareAction.withSubject(shareVo.getTitle()).withText(shareVo.getContent() + shareVo.getUrl()).setCallback((UMShareListener) mContext).share();
                 }
-                shareAction.withSubject(shareVo.getTitle()).withText(shareVo.getContent()).setCallback(this).share();
+                shareAction.withSubject(shareVo.getTitle()).withText(shareVo.getContent()).
+                        setCallback(this).share();
                 articleId = shareVo.getArticleId();
             }
         }
@@ -312,7 +309,7 @@ public class WebAppInterface implements UMShareListener {
 
     @Override
     public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-
+         throwable.printStackTrace();
     }
 
     @Override

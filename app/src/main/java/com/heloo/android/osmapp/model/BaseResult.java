@@ -11,7 +11,7 @@ public class BaseResult<T> {
 //    3）	code: 错误编码，当有错误发生时，此errorCode包含有错误编码
 //    4）	data：返回数据
 
-    private Integer status;
+    private String status;
 
     private String message;
 
@@ -43,16 +43,16 @@ public class BaseResult<T> {
         this.data = data;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
     public boolean surcess() {
-        return "1".equals(status);
+        return "success".equals(status);
     }
 
 }

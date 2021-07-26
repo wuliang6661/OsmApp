@@ -43,7 +43,7 @@ public abstract class BaseWebActivity extends BaseActivity {
         view.setWebChromeClient(chromeClient);
         view.setWebViewClient(new WebClient(this));
         view.addJavascriptInterface(new WebAppInterface(this, view), "Android");
-        view.setClickable(true);
+//        view.setClickable(true);
         view.setHorizontalScrollBarEnabled(false);
         view.setVerticalScrollBarEnabled(false);
         //下面方法去掉

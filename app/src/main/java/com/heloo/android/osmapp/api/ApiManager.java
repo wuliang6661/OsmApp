@@ -2,11 +2,13 @@ package com.heloo.android.osmapp.api;
 
 import android.os.Build;
 import android.util.Log;
-import androidx.annotation.RequiresApi;
+
 import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.google.gson.Gson;
+import com.heloo.android.osmapp.base.MyApplication;
 import com.heloo.android.osmapp.utils.MD5;
 import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.utils.Utils;
@@ -19,6 +21,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.RequiresApi;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -32,6 +35,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import okio.Buffer;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * <p>
@@ -68,6 +72,7 @@ public class ApiManager {
         builder.addInterceptor(loggingInterceptor);
 //        builder.addInterceptor(postInterceptor);
         builder.addInterceptor(cookileInter);
+        builder.addInterceptor(headerInterceptor);
 //        builder.addNetworkInterceptor(new ParamsInterceptor());  //添加网络拦截器
     }
 
@@ -92,7 +97,7 @@ public class ApiManager {
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(url)
                 .client(builder.build())
-//                .addConverterFactory(GsonConverterFactory.create(new Gson()))
+                .addConverterFactory(GsonConverterFactory.create(new Gson()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         return mRetrofit.create(service);
@@ -117,7 +122,7 @@ public class ApiManager {
                         String value;
                         try {
                             value = param.split("=")[1];
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                             value = "";
                         }
@@ -161,6 +166,22 @@ public class ApiManager {
                 }
             }
             return response;
+        }
+    };
+
+    Interceptor headerInterceptor = new Interceptor() {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            String token = MyApplication.spUtils.getString("token", "");
+            if (StringUtils.isEmpty(token)) {
+                return chain.proceed(chain.request());
+            }
+            Request request;
+            request = chain.request().newBuilder()
+                    .removeHeader("Authorization")
+                    .addHeader("Authorization", MyApplication.spUtils.getString("token", ""))
+                    .build();
+            return chain.proceed(request);
         }
     };
 

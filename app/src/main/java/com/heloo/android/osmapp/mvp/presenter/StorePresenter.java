@@ -1,6 +1,7 @@
 package com.heloo.android.osmapp.mvp.presenter;
 
 import com.heloo.android.osmapp.api.HttpInterfaceIml;
+import com.heloo.android.osmapp.api.HttpResultSubscriber;
 import com.heloo.android.osmapp.mvp.BasePresenterImpl;
 import com.heloo.android.osmapp.mvp.contract.StoreContract;
 
@@ -51,33 +52,16 @@ public class StorePresenter extends BasePresenterImpl<StoreContract.View>
     }
 
     @Override
-    public void getBanner(String token) {
-        HttpInterfaceIml.getBanner(token).subscribe(new Subscriber<ResponseBody>() {
+    public void getBanner() {
+        HttpInterfaceIml.getStoreBanner().subscribe(new HttpResultSubscriber<String>() {
             @Override
-            public void onCompleted() {
-                if (mView == null)
-                    return;
-                mView.onRequestEnd();
+            public void onSuccess(String s) {
+
             }
 
             @Override
-            public void onError(Throwable e) {
-                if (mView == null)
-                    return;
-                mView.onRequestError(e.getMessage());
-            }
+            public void onFiled(String message) {
 
-            @Override
-            public void onNext(ResponseBody s) {
-                if (mView == null)
-                    return;
-                try {
-                    mView.getBanner(s);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
         });
     }
