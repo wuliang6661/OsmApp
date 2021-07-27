@@ -21,12 +21,16 @@ import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.utils.LogUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.heloo.android.osmapp.widget.AlertDialog;
+import com.tencent.open.SocialConstants;
 import com.tencent.smtt.sdk.WebView;
 import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.ShareContent;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,7 +40,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import rx.android.schedulers.AndroidSchedulers;
 
 
 /**
@@ -200,6 +206,7 @@ public class WebAppInterface implements UMShareListener {
     public void jsShare(String data) {
         if (data != null) {
             ShareVo shareVo = JSON.parseObject(data, ShareVo.class);
+//            shareVo.setUrl("http://osm.happydoit.com/articleInfo/getArticleInfo/?articleId=2102230134545605733");
             if (shareVo != null) {
                 SHARE_MEDIA platform;
                 switch (shareVo.getType()) {
@@ -233,6 +240,7 @@ public class WebAppInterface implements UMShareListener {
                     UMWeb web = new UMWeb(shareUrl);
                     web.setTitle(shareVo.getTitle());//标题
                     web.setDescription(shareVo.getContent());//描述
+//                    web.setmExtra(SocialConstants.PARAM_TARGET_URL, shareUrl);
                     if (shareVo.getImage() != null) {
                         UMImage umImage = new UMImage(mContext, shareVo.getImage());
                         umImage.setTitle(shareVo.getTitle());
@@ -309,7 +317,7 @@ public class WebAppInterface implements UMShareListener {
 
     @Override
     public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-         throwable.printStackTrace();
+        throwable.printStackTrace();
     }
 
     @Override

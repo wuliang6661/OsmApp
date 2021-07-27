@@ -1,5 +1,6 @@
 package com.heloo.android.osmapp.mvp.contract;
 
+import com.heloo.android.osmapp.model.ShopDetailsBO;
 import com.heloo.android.osmapp.mvp.BasePresenter;
 import com.heloo.android.osmapp.mvp.BaseRequestView;
 
@@ -16,16 +17,16 @@ import okhttp3.ResponseBody;
 public class StoreDetailContract {
     public interface View extends BaseRequestView {
 
-        void getDetail(ResponseBody body) throws JSONException, IOException;
+        void getDetail(ShopDetailsBO body);
 
-        void getAddCart(ResponseBody body) throws JSONException, IOException;
+        void getAddCart(String body);
 
     }
 
     public  interface Presenter extends BasePresenter<View> {
 
-        void getDetail(String token,String id);
+        void getDetail(String id);
 
-        void addCart(String token,String id,String num);
+        void addCart(String goodId,String id,String num);
     }
 }

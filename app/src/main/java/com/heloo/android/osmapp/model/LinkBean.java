@@ -31,7 +31,7 @@ public class LinkBean {
         private String one_id;
         private String name;
         private String two_id;
-        private List<StoreClassifyBean.ChildBean.ChildListBean> childList;
+        private List<ShopListBO.ListBean.TypeGoodsMoelsBean.GoodsMoelsBean> childList;
 
         public String getOne_id() {
             return one_id;
@@ -57,11 +57,11 @@ public class LinkBean {
             this.two_id = two_id;
         }
 
-        public List<StoreClassifyBean.ChildBean.ChildListBean> getChildList() {
+        public List<ShopListBO.ListBean.TypeGoodsMoelsBean.GoodsMoelsBean> getChildList() {
             return childList;
         }
 
-        public void setChildList(List<StoreClassifyBean.ChildBean.ChildListBean> childList) {
+        public void setChildList(List<ShopListBO.ListBean.TypeGoodsMoelsBean.GoodsMoelsBean> childList) {
             this.childList = childList;
         }
     }

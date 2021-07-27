@@ -9,10 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.ShapeAppearanceModel;
@@ -30,14 +25,14 @@ import com.heloo.android.osmapp.R;
 import com.heloo.android.osmapp.adapter.BaseRecyclerHolder;
 import com.heloo.android.osmapp.adapter.BaseRecyclerViewAdater;
 import com.heloo.android.osmapp.api.HttpInterface;
-import com.heloo.android.osmapp.base.MyApplication;
-import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.FragmentStoreBinding;
 import com.heloo.android.osmapp.model.LinkBean;
-import com.heloo.android.osmapp.model.StoreClassifyBean;
+import com.heloo.android.osmapp.model.ShopBannarBO;
+import com.heloo.android.osmapp.model.ShopListBO;
 import com.heloo.android.osmapp.mvp.MVPBaseFragment;
 import com.heloo.android.osmapp.mvp.contract.StoreContract;
 import com.heloo.android.osmapp.mvp.presenter.StorePresenter;
+import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.ui.cart.CartActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
 import com.heloo.android.osmapp.utils.ScreenUtils;
@@ -47,19 +42,19 @@ import com.stx.xhb.androidx.XBanner;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import okhttp3.ResponseBody;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * 商城
  */
 public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePresenter, FragmentStoreBinding>
-        implements StoreContract.View{
+        implements StoreContract.View {
 
     private List<String> bannerData = new ArrayList<>();
     private LinkBean linkBean;
@@ -68,7 +63,8 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
     private boolean moveToTop = false;
     private int index;
     private PathMeasure mPathMeasure;
-    private List<StoreClassifyBean> classifyList = new ArrayList<>();//商品分类列表
+    private ShopBannarBO bannarBO;
+    private ShopListBO shopListBO;
 
     /**
      * 贝塞尔曲线中间过程的点的坐标
@@ -79,10 +75,9 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        bannerData.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Finews.gtimg.com%2Fnewsapp_bt%2F0%2F3125228141%2F1000.jpg&refer=http%3A%2F%2Finews.gtimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620287701&t=f2fef89aedc151d20ce495fb86808a76");
-        bannerData.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200107%2F586a179b5bcd44ef938e3d4141da9b09.jpeg&refer=http%3A%2F%2F5b0988e595225.cdn.sohucs.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620287734&t=77424656c6d5a3e88dcda6b2923c3250");
-        bannerData.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Finews.gtimg.com%2Fnewsapp_match%2F0%2F11142554267%2F0.jpg&refer=http%3A%2F%2Finews.gtimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620287757&t=a7b1181981b11ed171e6b82cbac17579");
         initViews();
+        mPresenter.getBanner();
+        mPresenter.getClassify();
         showProgress("");
     }
 
@@ -90,12 +85,8 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(!hidden){
-            if (LocalConfiguration.userInfo != null) {
-                mPresenter.getClassify(MyApplication.spUtils.getString("token", ""), LocalConfiguration.userInfo.getUid());
-            }else {
-                mPresenter.getClassify(MyApplication.spUtils.getString("token", ""), "");
-            }
+        if (!hidden) {
+            mPresenter.getClassify();
             mPresenter.getBanner();
         }
     }
@@ -103,7 +94,7 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
     private void initViews() {
         viewBinding.headLayout.post(() -> viewBinding.headLayout.setPadding(0, BubbleUtils.getStatusBarHeight(getActivity()), 0, 0));
         ViewGroup.LayoutParams paramsBanner1 = viewBinding.banner.getLayoutParams();
-        paramsBanner1.height = (int)(ScreenUtils.getScreenWidth() * 0.53);
+        paramsBanner1.height = (int) (ScreenUtils.getScreenWidth() * 0.53);
         viewBinding.banner.setLayoutParams(paramsBanner1);
         //初始化banner
         initBanner(viewBinding.banner);
@@ -111,9 +102,9 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
         viewBinding.banner.setPointsIsVisible(true);
         viewBinding.banner.setData(R.layout.home_banner_layout, bannerData, null);
         viewBinding.appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
-            if(verticalOffset >= 0){
+            if (verticalOffset >= 0) {
                 viewBinding.refreshLayout.setEnabled(true);
-            }else{
+            } else {
                 viewBinding.refreshLayout.setEnabled(false);
             }
         });
@@ -124,29 +115,26 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
         linkBean = new LinkBean();
         linkBean.itemLS = new ArrayList<>();
         linkBean.itemS = new ArrayList<>();
-        for (int i = 0; i < classifyList.size(); i++) {
+        for (int i = 0; i < shopListBO.list.size(); i++) {
             LinkBean.ItemL itemL = new LinkBean.ItemL();
             if (!linkBean.itemLS.contains(itemL)) {
-                itemL.setTitle(classifyList.get(i).getName());
-                itemL.setOne_id(classifyList.get(i).getOne_id());
+                itemL.setTitle(shopListBO.list.get(i).name);
                 linkBean.itemLS.add(itemL);
             }
-            for (int j=0;j<classifyList.get(i).getChild().size();j++) {
+            for (int j = 0; j < shopListBO.list.get(0).typeGoodsMoels.size(); j++) {
                 LinkBean.Item item = new LinkBean.Item();
-                item.setName(classifyList.get(i).getChild().get(j).getName());
-                item.setOne_id(classifyList.get(i).getChild().get(j).getOne_id());
-                item.setTwo_id(classifyList.get(i).getChild().get(j).getTwo_id());
-                item.setChildList(classifyList.get(i).getChild().get(j).getChildList());
+                item.setName(shopListBO.list.get(0).typeGoodsMoels.get(i).goodsMoels.get(j).name);
+                item.setChildList(shopListBO.list.get(0).typeGoodsMoels.get(j).goodsMoels);
                 linkBean.itemS.add(item);
             }
         }
         viewBinding.tvHeader.setText(linkBean.itemS.get(0).getName());
         viewBinding.rvLeft.setLayoutManager(new LinearLayoutManager(getActivity()));
         viewBinding.rvRight.setLayoutManager(new LinearLayoutManager(getActivity()));
-        lAdapter = new LAdapter(getActivity(),R.layout.item,linkBean.itemLS);
+        lAdapter = new LAdapter(getActivity(), R.layout.item, linkBean.itemLS);
         lAdapter.bindToRecyclerView(viewBinding.rvLeft);
         viewBinding.rvLeft.setAdapter(lAdapter);
-        rAdapter = new RAdapter(getActivity(),R.layout.item_goods,linkBean.itemS);
+        rAdapter = new RAdapter(getActivity(), R.layout.item_goods, linkBean.itemS);
         viewBinding.rvRight.setAdapter(rAdapter);
     }
 
@@ -154,13 +142,13 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
         lAdapter.setOnItemClickListener(new BaseRecyclerViewAdater.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if (viewBinding.rvRight.getScrollState() != RecyclerView.SCROLL_STATE_IDLE)return;
+                if (viewBinding.rvRight.getScrollState() != RecyclerView.SCROLL_STATE_IDLE) return;
                 lAdapter.fromClick = true;
                 lAdapter.setChecked(position);
-                String tag = lAdapter.getmData().get(position).getOne_id();
+                String tag = lAdapter.getmData().get(position).getTitle();
                 for (int i = 0; i < rAdapter.getmData().size(); i++) {
                     //根据左边选中的条目获取到右面此条目Title相同的位置索引；
-                    if (TextUtils.equals(tag,rAdapter.getmData().get(i).getOne_id())){
+                    if (TextUtils.equals(tag, rAdapter.getmData().get(i).getOne_id())) {
                         index = i;
                         moveToPosition_R(index);
                         return;
@@ -174,14 +162,14 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager layoutManager = (LinearLayoutManager) viewBinding.rvRight.getLayoutManager();
-                if (moveToTop){ //向下滑动时，只会把改条目显示出来；我们还需要让该条目滑动到顶部；
+                if (moveToTop) { //向下滑动时，只会把改条目显示出来；我们还需要让该条目滑动到顶部；
                     moveToTop = false;
                     int m = index - layoutManager.findFirstVisibleItemPosition();
-                    if (m >= 0 && m <= layoutManager.getChildCount()){
+                    if (m >= 0 && m <= layoutManager.getChildCount()) {
                         int top = layoutManager.getChildAt(m).getTop();
-                        viewBinding.rvRight.smoothScrollBy(0,top);
+                        viewBinding.rvRight.smoothScrollBy(0, top);
                     }
-                }else {
+                } else {
                     int index = layoutManager.findFirstVisibleItemPosition();
                     viewBinding.tvHeader.setText(rAdapter.getmData().get(index).getName());
                     lAdapter.setToPosition(rAdapter.getmData().get(index).getOne_id());
@@ -197,7 +185,7 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
         viewBinding.refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getClassify(MyApplication.spUtils.getString("token", ""),"");
+                mPresenter.getClassify();
                 mPresenter.getBanner();
                 refreshLayout.finishRefresh(1000);
             }
@@ -210,15 +198,15 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
         LinearLayoutManager layoutManager = (LinearLayoutManager) viewBinding.rvRight.getLayoutManager();
         int f = layoutManager.findFirstVisibleItemPosition();
         int l = layoutManager.findLastVisibleItemPosition();
-        if (index <= f){ //向上移动时
+        if (index <= f) { //向上移动时
             layoutManager.scrollToPosition(index);
-        }else if (index <= l){ //已经再屏幕上面显示时
+        } else if (index <= l) { //已经再屏幕上面显示时
             int m = index - f;
             if (0 <= m && m <= layoutManager.getChildCount()) {
                 int top = layoutManager.getChildAt(m).getTop();
                 viewBinding.rvRight.smoothScrollBy(0, top);
             }
-        }else { //向下移动时
+        } else { //向下移动时
             moveToTop = true;
             layoutManager.scrollToPosition(index);
         }
@@ -226,12 +214,18 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
 
     /**
      * 轮播图
+     *
      * @param banner
      */
     private void initBanner(XBanner banner) {
         //设置广告图片点击事件
         banner.setOnItemClickListener((banner12, model, view, position) -> {
-
+            if (bannarBO == null) {
+                return;
+            }
+            Intent intent = new Intent(getContext(), WebViewActivity.class);
+            intent.putExtra("url", bannarBO.banner.get(position).jumpUrl);
+            startActivity(intent);
         });
         //加载广告图片
         banner.loadImage((banner1, model, view, position) -> {
@@ -251,28 +245,24 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
     }
 
     @Override
-    public void getClassify(ResponseBody body) throws JSONException, IOException {
-        String s = new String(body.bytes());
-        JSONObject jsonObject = new JSONObject(s);
-        String status = jsonObject.optString("status");
-        if (status.equals("success")){
-            stopProgress();
-            classifyList.clear();
-            classifyList.addAll(JSON.parseArray(jsonObject.optString("data"),StoreClassifyBean.class));
-            initData();
-            initListener();
-        }
+    public void getClassify(ShopListBO body) {
+        stopProgress();
+        shopListBO = body;
+        initData();
+        initListener();
     }
 
     @Override
-    public void getBanner(ResponseBody body) throws JSONException, IOException {
-        String s = new String(body.bytes());
-        JSONObject jsonObject = new JSONObject(s);
-        String status = jsonObject.optString("status");
-        if (status.equals("success")){
-
-
+    public void getBanner(ShopBannarBO body) {
+        stopProgress();
+        bannarBO = body;
+        if (body == null) {
+            return;
         }
+        for (ShopBannarBO.BannerBean item : body.banner) {
+            bannerData.add(item.imgurl);
+        }
+        viewBinding.banner.setData(R.layout.home_banner_layout, bannerData, null);
     }
 
 
@@ -287,11 +277,11 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
         public void convert(BaseRecyclerHolder holder, final int position) {
             TextView tv = (holder.getView(R.id.tv));
             tv.setText(getmData().get(position).getTitle());
-            if (checked == position){
+            if (checked == position) {
                 tv.setTextColor(Color.parseColor("#D3A952"));
                 tv.setBackgroundResource(R.color.colorfff);
                 tv.getPaint().setFlags(Paint.FAKE_BOLD_TEXT_FLAG);
-            }else {
+            } else {
                 tv.setTextColor(Color.parseColor("#333333"));
                 tv.setBackgroundResource(R.color.colorF8);
                 tv.getPaint().setFlags(Paint.FAKE_BOLD_TEXT_FLAG);
@@ -308,12 +298,12 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
         }
 
         //让左边的额条目选中
-        public void setToPosition(String title){
-            if (fromClick)return;
-            if (TextUtils.equals(title,getmData().get(checked).getOne_id()))return;
-            if (TextUtils.isEmpty(title))return;
+        public void setToPosition(String title) {
+            if (fromClick) return;
+            if (TextUtils.equals(title, getmData().get(checked).getOne_id())) return;
+            if (TextUtils.isEmpty(title)) return;
             for (int i = 0; i < getmData().size(); i++) {
-                if (TextUtils.equals(getmData().get(i).getOne_id(),title)){
+                if (TextUtils.equals(getmData().get(i).getOne_id(), title)) {
                     setChecked(i);
                     moveToPosition(i);
                     return;
@@ -322,12 +312,12 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
 
         }
 
-        private void moveToPosition(int index){
+        private void moveToPosition(int index) {
             //如果选中的条目不在显示范围内，要滑动条目让该条目显示出来
             LinearLayoutManager linearLayoutManager = (LinearLayoutManager) getRecyclerView().getLayoutManager();
             int f = linearLayoutManager.findFirstVisibleItemPosition();
             int l = linearLayoutManager.findLastVisibleItemPosition();
-            if (index<=f || index >= l){
+            if (index <= f || index >= l) {
                 linearLayoutManager.scrollToPosition(index);
             }
 
@@ -335,7 +325,7 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
 
     }
 
-    class RAdapter extends BaseRecyclerViewAdater<LinkBean.Item>{
+    class RAdapter extends BaseRecyclerViewAdater<LinkBean.Item> {
 
 
         public RAdapter(Context context, int resLayout, List<LinkBean.Item> data) {
@@ -348,38 +338,38 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
             //悬停的标题头
             FrameLayout headLayout = holder.getView(R.id.stick_header);
             TextView tvHead = holder.getView(R.id.tvHeader);
-            if (position == 0){
+            if (position == 0) {
                 headLayout.setVisibility(View.VISIBLE);
                 tvHead.setText(getmData().get(position).getName());
-            }else {
-                if (TextUtils.equals(getmData().get(position).getName(),getmData().get(position-1).getName())){
+            } else {
+                if (TextUtils.equals(getmData().get(position).getName(), getmData().get(position - 1).getName())) {
                     headLayout.setVisibility(View.GONE);
-                }else {
+                } else {
                     headLayout.setVisibility(View.VISIBLE);
                     tvHead.setText(getmData().get(position).getName());
                 }
             }
             LinearLayoutManager manager = new LinearLayoutManager(getActivity());
             productLayout.setLayoutManager(manager);
-            CommonAdapter<StoreClassifyBean.ChildBean.ChildListBean> adapter
-                    = new CommonAdapter<StoreClassifyBean.ChildBean.ChildListBean>(getActivity(),
-                    R.layout.product_item_layout,getmData().get(position).getChildList()) {
+            CommonAdapter<ShopListBO.ListBean.TypeGoodsMoelsBean.GoodsMoelsBean> adapter
+                    = new CommonAdapter<ShopListBO.ListBean.TypeGoodsMoelsBean.GoodsMoelsBean>(getActivity(),
+                    R.layout.product_item_layout, getmData().get(position).getChildList()) {
                 @Override
-                protected void convert(ViewHolder holder, StoreClassifyBean.ChildBean.ChildListBean items, int position) {
-                    ((TextView)holder.getView(R.id.tvPrice)).setText(items.getPrice());
-                    ((TextView)holder.getView(R.id.tvName)).setText(getmData().get(position).getName());
+                protected void convert(ViewHolder holder, ShopListBO.ListBean.TypeGoodsMoelsBean.GoodsMoelsBean items, int position) {
+                    ((TextView) holder.getView(R.id.tvPrice)).setText(items.integralPrice + "");
+                    ((TextView) holder.getView(R.id.tvName)).setText(items.name);
                     ImageView productImg = holder.getView(R.id.productImg);
-                    holder.setText(R.id.tvPrice,String.format("￥%s",items.getPrice()));
+                    holder.setText(R.id.tvPrice, String.format("￥%s", items.integralPrice));
                     holder.getView(R.id.coinLayout).setVisibility(View.GONE);
-                    if (items.getIcon().startsWith("http")){
-                        Glide.with(getActivity()).load(items.getIcon()).into(productImg);
-                    }else {
-                        Glide.with(getActivity()).load(HttpInterface.URL + items.getIcon()).into(productImg);
+                    if (items.icon.startsWith("http")) {
+                        Glide.with(getActivity()).load(items.icon).into(productImg);
+                    } else {
+                        Glide.with(getActivity()).load(HttpInterface.URL + items.icon).into(productImg);
                     }
                     holder.itemView.setOnClickListener(view -> {
 //                        addCart(productImg);
-                        Intent intent = new Intent(getActivity(),StoreDetailActivity.class);
-                        intent.putExtra("id",items.getId());
+                        Intent intent = new Intent(getActivity(), StoreDetailActivity.class);
+                        intent.putExtra("id", items.id);
                         startActivity(intent);
                     });
                 }
@@ -390,8 +380,9 @@ public class StoreFragment extends MVPBaseFragment<StoreContract.View, StorePres
 
     /**
      * ★★★★★把商品添加到购物车的动画效果★★★★★
-     * @auther WITNESS
+     *
      * @param iv
+     * @auther WITNESS
      */
     private void addCart(ImageView iv) {
         //一、创造出执行动画的主题---imageview

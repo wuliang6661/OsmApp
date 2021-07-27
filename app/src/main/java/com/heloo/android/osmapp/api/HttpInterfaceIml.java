@@ -1,6 +1,9 @@
 package com.heloo.android.osmapp.api;
 
 
+import com.heloo.android.osmapp.model.ShopBannarBO;
+import com.heloo.android.osmapp.model.ShopDetailsBO;
+import com.heloo.android.osmapp.model.ShopListBO;
 import com.heloo.android.osmapp.utils.rx.RxHelper;
 import com.heloo.android.osmapp.utils.rx.RxResultHelper;
 
@@ -124,29 +127,29 @@ public class HttpInterfaceIml {
     /**
      * 商城商品分类
      */
-    public static Observable<ResponseBody> getStoreClassify(String token,String uid) {
-        return getService().getStoreClassify(token,uid).compose(RxHelper.httpRusult());
+    public static Observable<ShopListBO> getStoreClassify() {
+        return getService().getStoreClassify().compose(RxResultHelper.httpRusult());
     }
 
     /**
      * 商城轮播图
      */
-    public static Observable<String> getStoreBanner() {
+    public static Observable<ShopBannarBO> getStoreBanner() {
         return getService().getStoreBanner().compose(RxResultHelper.httpRusult());
     }
 
     /**
      * 商城商品详情
      */
-    public static Observable<ResponseBody> getProductDetail(String token,String id) {
-        return getService().getProductDetail(token,id).compose(RxHelper.httpRusult());
+    public static Observable<ShopDetailsBO> getProductDetail(String id) {
+        return getService().getProductDetail(id).compose(RxResultHelper.httpRusult());
     }
 
     /**
      * 加入购物车
      */
-    public static Observable<ResponseBody> addCart(String token,String id,String num) {
-        return getService().addCart(token,id,num).compose(RxHelper.httpRusult());
+    public static Observable<String> addCart(String goodsId,String id,String num) {
+        return getService().addCart(goodsId,id,num).compose(RxResultHelper.httpRusult());
     }
 
     /**

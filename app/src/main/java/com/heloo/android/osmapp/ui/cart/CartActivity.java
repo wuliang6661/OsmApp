@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import com.heloo.android.osmapp.R;
@@ -43,6 +44,7 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        goBack();
         for (int i=0;i<10;i++){
             data.add("");
         }
@@ -66,7 +68,7 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
         adapter = new CommonAdapter<String>(this,R.layout.cart_item_layout,data) {
             @Override
             protected void convert(ViewHolder holder, String s, int position) {
-                ImageView selectImg = holder.getConvertView().findViewById(R.id.selectImg);
+                CheckBox selectImg = holder.getView(R.id.selectImg);
                 if (position == editPosition){
                     holder.getView(R.id.normalPart).setVisibility(View.GONE);
                     holder.getView(R.id.editLayout).setVisibility(View.VISIBLE);
@@ -75,18 +77,10 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
                     holder.getView(R.id.editLayout).setVisibility(View.GONE);
                 }
                 if (selectProductList.contains(position)){
-                    selectImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.select_true,null));
+                    selectImg.setChecked(true);
                 }else {
-                    selectImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.item_notselect,null));
+                    selectImg.setChecked(false);
                 }
-                selectImg.setOnClickListener(v -> {//选择
-//                    if (!selectProductList.contains(position)){
-//                        selectProductList.add(position);
-//                    }else {
-//                        selectProductList.remove(position);
-//                    }
-                    notifyDataSetChanged();
-                });
                 holder.getView(R.id.editBtn).setOnClickListener(v -> {// 编辑
                     editPosition = position;
                     notifyDataSetChanged();

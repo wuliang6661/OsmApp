@@ -1,5 +1,7 @@
 package com.heloo.android.osmapp.mvp.contract;
 
+import com.heloo.android.osmapp.model.ShopBannarBO;
+import com.heloo.android.osmapp.model.ShopListBO;
 import com.heloo.android.osmapp.mvp.BasePresenter;
 import com.heloo.android.osmapp.mvp.BaseRequestView;
 
@@ -16,15 +18,14 @@ import okhttp3.ResponseBody;
 public class StoreContract {
     public interface View extends BaseRequestView {
 
-        void getClassify(ResponseBody body) throws JSONException, IOException;
+        void getClassify(ShopListBO body);
 
-        void getBanner(ResponseBody body) throws JSONException, IOException;
+        void getBanner(ShopBannarBO body);
 
     }
 
     public  interface Presenter extends BasePresenter<View> {
 
-        void getClassify(String token,String uid);
 
         void getBanner();
     }

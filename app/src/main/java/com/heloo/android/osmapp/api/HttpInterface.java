@@ -1,6 +1,9 @@
 package com.heloo.android.osmapp.api;
 
 import com.heloo.android.osmapp.model.BaseResult;
+import com.heloo.android.osmapp.model.ShopBannarBO;
+import com.heloo.android.osmapp.model.ShopDetailsBO;
+import com.heloo.android.osmapp.model.ShopListBO;
 
 import java.util.List;
 
@@ -142,30 +145,28 @@ public interface HttpInterface {
      * 商城商品
      */
     @GET("/shopOrder/getProductList")
-    Observable<ResponseBody> getStoreClassify(@Header("Authorization") String token,
-                                              @Query("uid") String uid);
+    Observable<BaseResult<ShopListBO>> getStoreClassify();
 
     /**
      * 商城轮播图
      */
     @GET("/shopOrder/getProdlist")
-    Observable<BaseResult<String>> getStoreBanner();
+    Observable<BaseResult<ShopBannarBO>> getStoreBanner();
 
 
     /**
      * 商城商品详情
      */
     @GET("/shopOrder/getProductListId/{id}")
-    Observable<ResponseBody> getProductDetail(@Header("Authorization") String token,
-                                              @Path("id") String id);
+    Observable<BaseResult<ShopDetailsBO>> getProductDetail(@Path("id") String id);
 
     /**
      * 加入购物车
      */
     @FormUrlEncoded
     @POST("/shopCart/createPostTopic")
-    Observable<ResponseBody> addCart(@Header("Authorization") String token,
-                                     @Field("id") String id,
+    Observable<BaseResult<String>> addCart(@Field("goodsId") String goodsId,
+                                     @Field("userId") String userId,
                                      @Field("num") String num);
 
     /**

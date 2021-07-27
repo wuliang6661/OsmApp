@@ -17,21 +17,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.heloo.android.osmapp.R;
 import com.heloo.android.osmapp.base.MyApplication;
+import com.heloo.android.osmapp.config.ConditionEnum;
+import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityStoreDetailBinding;
-import com.heloo.android.osmapp.model.ProductDetailBean;
+import com.heloo.android.osmapp.model.ShopDetailsBO;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.StoreDetailContract;
 import com.heloo.android.osmapp.mvp.presenter.StoreDetailPresenter;
 import com.heloo.android.osmapp.ui.confirm.ConfirmActivity;
+import com.heloo.android.osmapp.ui.login.LoginActivity;
 import com.heloo.android.osmapp.utils.ScreenUtils;
+import com.heloo.android.osmapp.utils.ToastUtils;
 import com.heloo.android.osmapp.utils.webview.WebAppInterface;
 import com.heloo.android.osmapp.utils.webview.WebClient;
 import com.heloo.android.osmapp.utils.webview.WebViewChromeClient;
@@ -43,29 +42,32 @@ import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.ResponseBody;
 
 /**
  * 商品详情
  */
 public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.View, StoreDetailPresenter, ActivityStoreDetailBinding>
-    implements StoreDetailContract.View, View.OnClickListener {
+        implements StoreDetailContract.View, View.OnClickListener {
 
     private List<String> bannerData = new ArrayList<>();
-    private ProductDetailBean productDetailBean;
+    private ShopDetailsBO.ListBean productDetailBean;
+    private Dialog noticeDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        showProgress("");
-        mPresenter.getDetail(MyApplication.spUtils.getString("token", ""),getIntent().getStringExtra("id"));
+        mPresenter.getDetail(getIntent().getStringExtra("id"));
     }
 
     private void initView() {
@@ -84,6 +86,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
 
     /**
      * 轮播图
+     *
      * @param banner
      */
     private void initBanner(XBanner banner) {
@@ -159,7 +162,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.cartBtn:
 
                 break;
@@ -174,6 +177,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
     @Override
     public void onRequestError(String msg) {
         stopProgress();
+        ToastUtils.showShortToast(msg);
     }
 
     @Override
@@ -186,6 +190,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
      */
     private int selectPosition = -1;
     private int productNum = 1;
+
     private void skuDialog(List<String> data) {
         selectPosition = -1;
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialog);
@@ -201,23 +206,23 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         TextView leftNum = v.findViewById(R.id.leftNum);
         TextView numTxt = v.findViewById(R.id.numTxt);
         if (productDetailBean != null) {
-            productName.setText(productDetailBean.getName());
-            price.setText(String.format("¥%s", productDetailBean.getPrice()));
-            leftNum.setText(String.format("库存%s件", productDetailBean.getFreeNum()));
+            productName.setText(productDetailBean.name);
+            price.setText(String.format("¥%s", productDetailBean.price));
+            leftNum.setText(String.format("库存%s件", productDetailBean.freeNum));
         }
         productNum = 1;
         numTxt.setText(String.valueOf(productNum));
         RecyclerView list = v.findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(StoreDetailActivity.this));
-        CommonAdapter<String> adapter = new CommonAdapter<String>(this,R.layout.sku_item_layout,data) {
+        CommonAdapter<String> adapter = new CommonAdapter<String>(this, R.layout.sku_item_layout, data) {
             @Override
             protected void convert(ViewHolder holder, String s, int position) {
                 TextView text = holder.getConvertView().findViewById(R.id.text);
-                if (selectPosition == position){
-                    text.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.submit_bg,null));
+                if (selectPosition == position) {
+                    text.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.submit_bg, null));
                     text.setTextColor(Color.parseColor("#FFFFFF"));
-                }else {
-                    text.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.cancel_order_bg,null));
+                } else {
+                    text.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.cancel_order_bg, null));
                     text.setTextColor(Color.parseColor("#454545"));
                 }
                 text.setOnClickListener(v12 -> {
@@ -230,7 +235,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
 
         builder.setView(v);
         builder.setCancelable(true);
-        final Dialog noticeDialog = builder.create();
+        noticeDialog = builder.create();
         noticeDialog.getWindow().setGravity(Gravity.BOTTOM);
         noticeDialog.getWindow().setWindowAnimations(R.style.anim_menu_bottombar);
         noticeDialog.show();
@@ -238,14 +243,14 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         close.setOnClickListener(view -> noticeDialog.dismiss());
 
         delBtn.setOnClickListener(v14 -> {//减少
-            if (productNum > 1){
-                productNum --;
+            if (productNum > 1) {
+                productNum--;
                 numTxt.setText(String.valueOf(productNum));
             }
         });
 
         addBtn.setOnClickListener(v13 -> {//增加
-            productNum ++;
+            productNum++;
             numTxt.setText(String.valueOf(productNum));
         });
 
@@ -258,7 +263,9 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
             @Override
             public void onClick(View v) {
                 showProgress("");
-                mPresenter.addCart(MyApplication.spUtils.getString("token", ""),getIntent().getStringExtra("id"),String.valueOf(productNum));
+                if (goLogin()) {
+                    mPresenter.addCart(getIntent().getStringExtra("id"), LocalConfiguration.userInfo.getId() + "", String.valueOf(productNum));
+                }
             }
         });
         WindowManager.LayoutParams layoutParams = noticeDialog.getWindow().getAttributes();
@@ -268,36 +275,35 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
     }
 
     @Override
-    public void getDetail(ResponseBody body) throws JSONException, IOException {
-        String s = new String(body.bytes());
-        JSONObject jsonObject = new JSONObject(s);
-        String status = jsonObject.optString("status");
-        if (status.equals("success")){
-            stopProgress();
-            productDetailBean = JSON.parseObject(jsonObject.optString("data"),ProductDetailBean.class);
-            if (productDetailBean != null){
-                viewBinding.title.setText(productDetailBean.getName());
-                viewBinding.price.setText(String.format("￥%s",productDetailBean.getPrice()));
-                bannerData.add(productDetailBean.getIcon());
-                //初始化banner
-                initBanner(viewBinding.banner);
-                viewBinding.banner.setAutoPlayAble(bannerData.size() > 1);
-                viewBinding.banner.setPointsIsVisible(true);
-                viewBinding.banner.setData(R.layout.home_banner_layout, bannerData, null);
-                String detailUrl = new String(Base64.decode(productDetailBean.getDescription().getBytes("UTF-8"), Base64.DEFAULT));
-                viewBinding.webView.loadDataWithBaseURL(null, getHtmlData(detailUrl), "text/html", "utf-8", null);//加载html数据
-
+    public void getDetail(ShopDetailsBO body) {
+        productDetailBean = body.list;
+        if (productDetailBean != null) {
+            viewBinding.title.setText(productDetailBean.name);
+            viewBinding.price.setText(String.format("￥%s", productDetailBean.preferentialPrice));
+            viewBinding.shichangLayout.setVisibility(productDetailBean.price == 0 ? View.INVISIBLE : View.VISIBLE);
+            viewBinding.oldPrice.setText(String.format("￥%s", productDetailBean.price));
+            bannerData.add(productDetailBean.icon);
+            //初始化banner
+            initBanner(viewBinding.banner);
+            viewBinding.banner.setAutoPlayAble(bannerData.size() > 1);
+            viewBinding.banner.setPointsIsVisible(true);
+            viewBinding.banner.setData(R.layout.home_banner_layout, bannerData, null);
+            String detailUrl = null;
+            try {
+                detailUrl = new String(Base64.decode(productDetailBean.description.getBytes("UTF-8"), Base64.DEFAULT));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
+            viewBinding.webView.loadDataWithBaseURL(null, getHtmlData(detailUrl), "text/html", "utf-8", null);//加载html数据
+
         }
     }
 
     @Override
-    public void getAddCart(ResponseBody body) throws JSONException, IOException {
-        String s = new String(body.bytes());
-        JSONObject jsonObject = new JSONObject(s);
-        String status = jsonObject.optString("status");
-        if (status.equals("success")){
-
-        }
+    public void getAddCart(String body) {
+        stopProgress();
+        if (noticeDialog != null)
+            noticeDialog.dismiss();
+        ToastUtils.showShortToast("已加入购物车！");
     }
 }

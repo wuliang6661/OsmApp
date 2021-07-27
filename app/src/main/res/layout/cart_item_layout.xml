@@ -10,12 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+        <CheckBox
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:id="@+id/selectImg"
-            android:src="@mipmap/cart_not_select"
+            android:background="@drawable/check_shop_car"
             android:layout_marginStart="14dp"
+            android:button="@null"
             android:layout_gravity="center_vertical"/>
         <LinearLayout
             android:layout_width="match_parent"
