@@ -70,4 +70,13 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
+    <style name="CheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/check_shop_car</item>
+        <item name="android:paddingLeft">6dp</item>
+        <item name="android:maxHeight">50dp</item>
+        <item name="android:layout_marginRight">6dp</item>
+        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:gravity">end|center_vertical</item>
+    </style>
 </resources>

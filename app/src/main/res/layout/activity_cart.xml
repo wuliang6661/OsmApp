@@ -1,47 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.cart.CartActivity"
     android:background="#F5F5F5"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.cart.CartActivity">
 
     <RelativeLayout
         android:id="@+id/headLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="45dp">
+
             <ImageButton
+                android:id="@+id/backBtn"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:id="@+id/backBtn"
                 android:background="@null"
-                android:src="@mipmap/back_icon"
-                android:foreground="?android:attr/selectableItemBackground"/>
+                android:foreground="?android:attr/selectableItemBackground"
+                android:src="@mipmap/back_icon" />
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/title"
+                android:layout_centerInParent="true"
                 android:text="购物车（1)"
                 android:textColor="#333333"
-                android:textSize="18sp"
-                android:layout_centerInParent="true"/>
+                android:textSize="18sp" />
+
             <TextView
+                android:id="@+id/manageBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/manageBtn"
-                android:textSize="15sp"
-                android:textColor="#D3A952"
-                android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:layout_marginEnd="16dp"
+                android:gravity="center"
                 android:text="管理"
-                android:gravity="center"/>
+                android:textColor="#D3A952"
+                android:textSize="15sp" />
         </RelativeLayout>
     </RelativeLayout>
 
@@ -51,87 +53,91 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
         <com.scwang.smartrefresh.layout.header.ClassicsHeader
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <com.heloo.android.osmapp.widget.SlideRecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff"/>
+            android:background="#ffffff" />
 
         <com.scwang.smartrefresh.layout.footer.FalsifyFooter
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:background="#ffffff">
-        <TextView
+
+        <CheckBox
+            android:id="@+id/selectAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/selectAll"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="15dp"
+            android:button="@drawable/check_shop_car"
+            style="@style/CheckBox"
             android:text="全选"
             android:textColor="#808080"
-            android:textSize="13sp"
-            android:gravity="center_vertical"
-            android:drawablePadding="6dp"
-            app:drawableStartCompat="@mipmap/cart_not_select"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="15dp"/>
-        
+            android:textSize="13sp" />
+
         <Button
+            android:id="@+id/submitBtn"
             android:layout_width="90dp"
             android:layout_height="40dp"
-            android:id="@+id/submitBtn"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:background="@drawable/submit_bg"
             android:layout_centerVertical="true"
-            android:text="结算(1)"
-            android:textSize="14sp"
-            android:textColor="#FFFFFF"/>
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/submit_bg"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="结算"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
 
         <LinearLayout
             android:id="@+id/priceLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/submitBtn"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/submitBtn"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="合计："
                     android:textColor="#747474"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp" />
+
                 <TextView
+                    android:id="@+id/totalPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/totalPrice"
-                    android:textSize="14sp"
+                    android:text="￥ 0.00"
                     android:textColor="#D3A952"
-                    android:text="￥89.00+200积分"/>
+                    android:textSize="14sp" />
             </LinearLayout>
+
             <TextView
+                android:id="@+id/myPoints"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/myPoints"
+                android:layout_gravity="end"
                 android:text="（可用积分 280）"
-                android:textSize="10sp"
                 android:textColor="#A1A1A1"
-                android:layout_gravity="end"/>
+                android:textSize="10sp"
+                android:visibility="gone" />
         </LinearLayout>
-
-
     </RelativeLayout>
 </LinearLayout>

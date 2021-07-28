@@ -1,5 +1,6 @@
 package com.heloo.android.osmapp.mvp.contract;
 
+import com.heloo.android.osmapp.model.ShopCarBO;
 import com.heloo.android.osmapp.mvp.BasePresenter;
 import com.heloo.android.osmapp.mvp.BaseRequestView;
 
@@ -18,6 +19,11 @@ public class CartContract {
 
         void getAddResult(ResponseBody addResult) throws JSONException, IOException;
 
+        void getCar(ShopCarBO carBO);
+
+        void getCarNum(String num);
+
+        void deleteShopSource();
     }
 
     public  interface Presenter extends BasePresenter<View> {

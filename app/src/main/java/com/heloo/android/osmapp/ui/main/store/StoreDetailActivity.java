@@ -19,17 +19,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.heloo.android.osmapp.R;
-import com.heloo.android.osmapp.base.MyApplication;
-import com.heloo.android.osmapp.config.ConditionEnum;
+import com.heloo.android.osmapp.api.HttpInterfaceIml;
+import com.heloo.android.osmapp.api.HttpResultSubscriber;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityStoreDetailBinding;
 import com.heloo.android.osmapp.model.ShopDetailsBO;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.StoreDetailContract;
 import com.heloo.android.osmapp.mvp.presenter.StoreDetailPresenter;
+import com.heloo.android.osmapp.ui.cart.CartActivity;
 import com.heloo.android.osmapp.ui.confirm.ConfirmActivity;
-import com.heloo.android.osmapp.ui.login.LoginActivity;
 import com.heloo.android.osmapp.utils.ScreenUtils;
+import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.heloo.android.osmapp.utils.webview.WebAppInterface;
 import com.heloo.android.osmapp.utils.webview.WebClient;
@@ -41,9 +42,6 @@ import com.tencent.smtt.sdk.WebView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +49,6 @@ import java.util.List;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import okhttp3.ResponseBody;
 
 /**
  * 商品详情
@@ -68,6 +65,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         super.onCreate(savedInstanceState);
         initView();
         mPresenter.getDetail(getIntent().getStringExtra("id"));
+        getNumCar();
     }
 
     private void initView() {
@@ -164,7 +162,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cartBtn:
-
+                gotoActivity(CartActivity.class, false);
                 break;
             case R.id.addCart:
             case R.id.buyBtn:
@@ -290,7 +288,9 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
             viewBinding.banner.setData(R.layout.home_banner_layout, bannerData, null);
             String detailUrl = null;
             try {
-                detailUrl = new String(Base64.decode(productDetailBean.description.getBytes("UTF-8"), Base64.DEFAULT));
+                if (!StringUtils.isEmpty(productDetailBean.description)) {
+                    detailUrl = new String(Base64.decode(productDetailBean.description.getBytes("UTF-8"), Base64.DEFAULT));
+                }
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -305,5 +305,28 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         if (noticeDialog != null)
             noticeDialog.dismiss();
         ToastUtils.showShortToast("已加入购物车！");
+        getNumCar();
+    }
+
+
+    public void getNumCar() {
+        HttpInterfaceIml.getNumCar(LocalConfiguration.userInfo.getId() + "").subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                if (viewBinding != null) {
+                    if (Integer.parseInt(s) <= 0) {
+                        viewBinding.carNum.setVisibility(View.GONE);
+                        return;
+                    }
+                    viewBinding.carNum.setVisibility(View.VISIBLE);
+                    viewBinding.carNum.setText(s);
+                }
+            }
+
+            @Override
+            public void onFiled(String message) {
+                ToastUtils.showShortToast(message);
+            }
+        });
     }
 }

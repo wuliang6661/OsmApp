@@ -2,6 +2,7 @@ package com.heloo.android.osmapp.api;
 
 import com.heloo.android.osmapp.model.BaseResult;
 import com.heloo.android.osmapp.model.ShopBannarBO;
+import com.heloo.android.osmapp.model.ShopCarBO;
 import com.heloo.android.osmapp.model.ShopDetailsBO;
 import com.heloo.android.osmapp.model.ShopListBO;
 
@@ -104,8 +105,6 @@ public interface HttpInterface {
     Observable<ResponseBody> getBanner(@Header("Authorization") String token);
 
 
-
-
     /**
      * 首页文章列表
      */
@@ -166,8 +165,43 @@ public interface HttpInterface {
     @FormUrlEncoded
     @POST("/shopCart/createPostTopic")
     Observable<BaseResult<String>> addCart(@Field("goodsId") String goodsId,
-                                     @Field("userId") String userId,
-                                     @Field("num") String num);
+                                           @Field("userId") String userId,
+                                           @Field("num") String num);
+
+
+    /**
+     * 查询我的购物车
+     */
+    @GET("/shopCart/getShopCar/{userId}")
+    Observable<BaseResult<ShopCarBO>> getShopCar(@Path("userId") String userId);
+
+    /**
+     * 获取购物车数量
+     */
+    @GET("/shopCart/getNumCar/{userId}")
+    Observable<BaseResult<String>> getNumCar(@Path("userId") String userId);
+
+    /**
+     * 删除购物车商品
+     */
+    @POST("/shopCart/delCar")
+    Observable<BaseResult<String>> delCar(@Query("id") String id);
+
+    /**
+     * 批量删除购物车商品个数
+     */
+    @POST("/shopCart/batchDelete")
+    Observable<BaseResult<String>> batchDelete(@Query("shopIds") String shopIds,
+                                               @Query("userId") String userId);
+
+    /**
+     * 批量修改购物车商品个数
+     */
+    @GET("/shopCart/getUpdateNum")
+    Observable<BaseResult<String>> getUpdateNum(@Query("shopIds") String shopIds,
+                                                @Query("shopNums") String shopNums,
+                                                @Query("userId") String userId);
+
 
     /**
      * 添加地址

@@ -24,6 +24,7 @@ import com.heloo.android.osmapp.ui.login.LoginActivity;
 import com.heloo.android.osmapp.utils.AppManager;
 import com.heloo.android.osmapp.utils.BubbleUtils;
 import com.heloo.android.osmapp.utils.LogUtils;
+import com.heloo.android.osmapp.utils.ToastUtils;
 import com.leaf.library.StatusBarUtil;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -110,6 +111,14 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         findViewById(R.id.registerBtn).setVisibility(View.VISIBLE);
     }
 
+
+    public void onRequestError(String msg) {
+        ToastUtils.showShortToast(msg);
+    }
+
+    public void onRequestEnd() {
+
+    }
 
     /**
      * 隐藏返回按钮
