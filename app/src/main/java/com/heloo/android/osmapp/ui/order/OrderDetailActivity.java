@@ -9,20 +9,23 @@ import com.heloo.android.osmapp.R;
 import com.heloo.android.osmapp.databinding.ActivityOrderDetailBinding;
 import com.heloo.android.osmapp.model.OrderBO;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
-import com.heloo.android.osmapp.mvp.contract.OrderDetailContract;
-import com.heloo.android.osmapp.mvp.presenter.OrderDetailPresenter;
+import com.heloo.android.osmapp.mvp.contract.OrderContract;
+import com.heloo.android.osmapp.mvp.presenter.OrderPresenter;
 import com.heloo.android.osmapp.utils.BubbleUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
+import com.heloo.android.osmapp.widget.AlertDialog;
 import com.heloo.android.osmapp.widget.lgrecycleadapter.LGRecycleViewAdapter;
 import com.heloo.android.osmapp.widget.lgrecycleadapter.LGViewHolder;
+
+import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
  * 订单详情
  */
-public class OrderDetailActivity extends MVPBaseActivity<OrderDetailContract.View, OrderDetailPresenter, ActivityOrderDetailBinding>
-        implements OrderDetailContract.View, View.OnClickListener {
+public class OrderDetailActivity extends MVPBaseActivity<OrderContract.View, OrderPresenter, ActivityOrderDetailBinding>
+        implements OrderContract.View, View.OnClickListener {
 
     private LGRecycleViewAdapter<OrderBO.OrderItemlistBean> adapter;
     private OrderBO orderBO;
@@ -82,6 +85,23 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderDetailContract.Vie
     }
 
     @Override
+    public void getOrder(List<OrderBO> orderBOS) {
+
+    }
+
+    @Override
+    public void cancleSuress() {
+        ToastUtils.showShortToast("订单已取消！");
+        mPresenter.getOrderDetails(orderBO.id);
+    }
+
+    @Override
+    public void comfimOrder() {
+        ToastUtils.showShortToast("已确认收货！");
+        mPresenter.getOrderDetails(orderBO.id);
+    }
+
+    @Override
     public void getOrderDetails(OrderBO orderBO) {
         this.orderBO = orderBO;
         viewBinding.orderNum.setText("订单号: " + orderBO.orderNo);
@@ -95,6 +115,20 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderDetailContract.Vie
             case "create":  //待支付
                 viewBinding.orderStatus.setText("待支付");
                 viewBinding.orderStatus.setTextColor(Color.parseColor("#FF5A5A"));
+                viewBinding.btn1.setVisibility(View.VISIBLE);
+                viewBinding.btn2.setVisibility(View.VISIBLE);
+                viewBinding.btn1.setText("取消订单");
+                viewBinding.btn2.setText("付款");
+                viewBinding.btn1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new AlertDialog(OrderDetailActivity.this).builder().setGone().setMsg("确认取消订单？")
+                                .setNegativeButton("取消", null)
+                                .setPositiveButton("确定", v -> {
+                                    mPresenter.cancleOrder(orderBO.id);
+                                }).show();
+                    }
+                });
                 break;
             case "cancel":  //已取消
                 viewBinding.orderStatus.setText("已取消");
@@ -109,6 +143,9 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderDetailContract.Vie
             case "pay":    //已支付
                 viewBinding.orderStatus.setText("已付款");
                 viewBinding.orderStatus.setTextColor(Color.parseColor("#FF5A5A"));
+                viewBinding.btn1.setVisibility(View.VISIBLE);
+                viewBinding.btn2.setVisibility(View.GONE);
+                viewBinding.btn1.setText("退款");
                 break;
             case "success":  //已完成
                 viewBinding.orderStatus.setText("已完成");
@@ -118,8 +155,23 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderDetailContract.Vie
             case "shipments":  //待确认
                 viewBinding.orderStatus.setText("待确认");
                 viewBinding.orderStatus.setTextColor(Color.parseColor("#D4AB56"));
+                viewBinding.btn1.setVisibility(View.GONE);
+                viewBinding.btn2.setVisibility(View.VISIBLE);
+                viewBinding.btn2.setText("确认提货");
+                viewBinding.btn2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new AlertDialog(OrderDetailActivity.this).builder().setGone().setMsg("是否确认已收货？")
+                                .setNegativeButton("取消", null)
+                                .setPositiveButton("确定", v -> {
+                                    mPresenter.comfimOrder(orderBO.id);
+                                }).show();
+                    }
+                });
                 break;
         }
         setAdapter();
     }
+
+
 }

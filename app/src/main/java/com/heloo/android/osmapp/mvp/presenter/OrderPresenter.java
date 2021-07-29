@@ -72,4 +72,22 @@ public class OrderPresenter extends BasePresenterImpl<OrderContract.View>
         });
     }
 
+
+    public void getOrderDetails(String orderId) {
+        HttpInterfaceIml.getorderDetail(orderId).subscribe(new HttpResultSubscriber<OrderBO>() {
+            @Override
+            public void onSuccess(OrderBO s) {
+                if (mView != null) {
+                    mView.getOrderDetails(s);
+                }
+            }
+
+            @Override
+            public void onFiled(String message) {
+                if (mView != null) {
+                    mView.onRequestError(message);
+                }
+            }
+        });
+    }
 }

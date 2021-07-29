@@ -276,4 +276,9 @@ public class OrderActivity extends MVPBaseActivity<OrderContract.View, OrderPres
         pageNum = 1;
         mPresenter.getOrder(pageNum, type);
     }
+
+    @Override
+    public void getOrderDetails(OrderBO orderBO) {
+
+    }
 }

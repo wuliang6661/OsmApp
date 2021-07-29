@@ -24,6 +24,8 @@ public class OrderContract {
 
         void comfimOrder();
 
+        void getOrderDetails(OrderBO orderBO);
+
     }
 
     public  interface Presenter extends BasePresenter<View> {
