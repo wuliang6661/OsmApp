@@ -1,5 +1,6 @@
 package com.heloo.android.osmapp.mvp.contract;
 
+import com.heloo.android.osmapp.model.OrderBO;
 import com.heloo.android.osmapp.mvp.BasePresenter;
 import com.heloo.android.osmapp.mvp.BaseRequestView;
 
@@ -16,13 +17,12 @@ import okhttp3.ResponseBody;
 public class OrderDetailContract {
     public interface View extends BaseRequestView {
 
-        void getAddResult(ResponseBody addResult) throws JSONException, IOException;
+        void getOrderDetails(OrderBO orderBO);
 
     }
 
     public  interface Presenter extends BasePresenter<View> {
 
-        void addAddress(String distributorId, String name, String telephone, String province, String city, String area, String address, String timeStamp, String mac);
 
     }
 }

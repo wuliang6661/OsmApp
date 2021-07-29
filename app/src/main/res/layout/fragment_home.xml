@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ffffff"
-    tools:context=".ui.main.home.HomeFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.main.home.HomeFragment">
+
     <RelativeLayout
         android:id="@+id/headLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="44dp">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/title_img"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true"
+                android:src="@mipmap/title_img" />
+
             <ImageButton
                 android:id="@+id/searchBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@mipmap/search_img"
-                android:background="@null"
-                android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="26dp"/>
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="26dp"
+                android:background="@null"
+                android:src="@mipmap/search_img" />
         </RelativeLayout>
 
     </RelativeLayout>
@@ -36,21 +40,22 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        app:tabIndicatorColor="#B99A49"
-        app:tabSelectedTextColor="#B99A49"
-        app:tabTextColor="#C3C3C3"
         app:tabBackground="@color/transparent"
-        app:tabRippleColor="@color/transparent"
-        app:tabTextAppearance="@style/TabLayoutTextStyle"
-        app:tabPaddingStart="5dp"
+        app:tabIndicatorColor="#B99A49"
+        app:tabMinWidth="75dp"
         app:tabPaddingEnd="5dp"
-        app:tabMinWidth="75dp"/>
+        app:tabPaddingStart="5dp"
+        app:tabMode="fixed"
+        app:tabRippleColor="@color/transparent"
+        app:tabSelectedTextColor="#B99A49"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabTextColor="#C3C3C3" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </LinearLayout>

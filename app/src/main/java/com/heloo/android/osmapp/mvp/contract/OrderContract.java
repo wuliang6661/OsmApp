@@ -1,11 +1,13 @@
 package com.heloo.android.osmapp.mvp.contract;
 
+import com.heloo.android.osmapp.model.OrderBO;
 import com.heloo.android.osmapp.mvp.BasePresenter;
 import com.heloo.android.osmapp.mvp.BaseRequestView;
 
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 
@@ -16,13 +18,16 @@ import okhttp3.ResponseBody;
 public class OrderContract {
     public interface View extends BaseRequestView {
 
-        void getAddResult(ResponseBody addResult) throws JSONException, IOException;
+        void getOrder(List<OrderBO> orderBOS);
+
+        void cancleSuress();
+
+        void comfimOrder();
 
     }
 
     public  interface Presenter extends BasePresenter<View> {
 
-        void addAddress(String distributorId, String name, String telephone, String province, String city, String area, String address, String timeStamp, String mac);
 
     }
 }

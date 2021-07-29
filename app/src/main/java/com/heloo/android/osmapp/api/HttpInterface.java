@@ -1,6 +1,7 @@
 package com.heloo.android.osmapp.api;
 
 import com.heloo.android.osmapp.model.BaseResult;
+import com.heloo.android.osmapp.model.OrderBO;
 import com.heloo.android.osmapp.model.ShopBannarBO;
 import com.heloo.android.osmapp.model.ShopCarBO;
 import com.heloo.android.osmapp.model.ShopDetailsBO;
@@ -202,6 +203,44 @@ public interface HttpInterface {
                                                 @Query("shopNums") String shopNums,
                                                 @Query("userId") String userId);
 
+    /**
+     * 获取订单列表
+     */
+    @GET("/shopOrderItem/getShopOrderItem")
+    Observable<BaseResult<List<OrderBO>>> getShopOrderItem(@Query("pageNum") Integer pageNum, @Query("pageSize") Integer pageSize,
+                                                           @Query("type") Integer type);
+
+    /**
+     * 确认收货
+     */
+    @POST("/shopOrderItem/verification/{id}")
+    Observable<BaseResult<Object>> comfimOrder(@Path("id") String id);
+
+    /**
+     * 取消订单
+     */
+    @POST("/shopOrderItem/delete/{id}")
+    Observable<BaseResult<Object>> cancleOrder(@Path("id") String id);
+
+    /**
+     * 查询订单详情
+     */
+    @GET("/shopOrderItem/getorderDetail")
+    Observable<BaseResult<OrderBO>> getorderDetail(@Query("id") String id);
+
+    /**
+     * 支付
+     */
+    @FormUrlEncoded
+    @POST("/alipay/pay")
+    Observable<BaseResult<String>> pay(@Field("orderId") String orderId);
+
+    /**
+     * 退款
+     */
+    @FormUrlEncoded
+    @POST("/alipay/Refund")
+    Observable<BaseResult<String>> paRefundy(@Field("orderId") String orderId);
 
     /**
      * 添加地址

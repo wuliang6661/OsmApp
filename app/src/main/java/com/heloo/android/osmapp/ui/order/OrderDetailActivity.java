@@ -1,62 +1,65 @@
 package com.heloo.android.osmapp.ui.order;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.heloo.android.osmapp.R;
 import com.heloo.android.osmapp.databinding.ActivityOrderDetailBinding;
+import com.heloo.android.osmapp.model.OrderBO;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.OrderDetailContract;
 import com.heloo.android.osmapp.mvp.presenter.OrderDetailPresenter;
 import com.heloo.android.osmapp.utils.BubbleUtils;
-import com.zhy.adapter.recyclerview.CommonAdapter;
-import com.zhy.adapter.recyclerview.base.ViewHolder;
+import com.heloo.android.osmapp.utils.ToastUtils;
+import com.heloo.android.osmapp.widget.lgrecycleadapter.LGRecycleViewAdapter;
+import com.heloo.android.osmapp.widget.lgrecycleadapter.LGViewHolder;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import okhttp3.ResponseBody;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
  * 订单详情
  */
 public class OrderDetailActivity extends MVPBaseActivity<OrderDetailContract.View, OrderDetailPresenter, ActivityOrderDetailBinding>
-    implements OrderDetailContract.View, View.OnClickListener {
+        implements OrderDetailContract.View, View.OnClickListener {
 
-    private CommonAdapter<String> adapter;
-    private List<String> data = new ArrayList<>();
+    private LGRecycleViewAdapter<OrderBO.OrderItemlistBean> adapter;
+    private OrderBO orderBO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        for (int i=0;i<3;i++){
-            data.add("");
-        }
+        String orderId = getIntent().getExtras().getString("id");
         initView();
+        mPresenter.getOrderDetails(orderId);
     }
 
     private void initView() {
         viewBinding.headLayout.post(() -> viewBinding.headLayout.setPadding(0, BubbleUtils.getStatusBarHeight(this), 0, 0));
         viewBinding.backBtn.setOnClickListener(this);
         viewBinding.productList.setLayoutManager(new LinearLayoutManager(this));
-        setAdapter();
     }
 
     private void setAdapter() {
-        if (adapter != null){
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
             return;
         }
-        adapter = new CommonAdapter<String>(this,R.layout.cart_item_layout,data) {
+        adapter = new LGRecycleViewAdapter<OrderBO.OrderItemlistBean>(orderBO.orderItemlist) {
             @Override
-            protected void convert(ViewHolder holder, String s, int position) {
-                holder.getView(R.id.selectImg).setVisibility(View.INVISIBLE);
+            public int getLayoutId(int viewType) {
+                return R.layout.cart_item_layout;
+            }
+
+            @Override
+            public void convert(LGViewHolder holder, OrderBO.OrderItemlistBean orderItemlistBean, int position) {
+                holder.setImageUrl(holder.itemView.getContext(), R.id.productImg, orderItemlistBean.icon);
+                holder.setText(R.id.productTitle, orderItemlistBean.name);
+                holder.setText(R.id.price, "￥ " + orderItemlistBean.prize);
+                holder.setText(R.id.num, "x" + orderItemlistBean.prodNum);
+                holder.setText(R.id.productSecondTitle, "x" + orderItemlistBean.spec);
+                holder.getView(R.id.selectImg).setVisibility(View.GONE);
                 holder.getView(R.id.editBtn).setVisibility(View.INVISIBLE);
             }
         };
@@ -65,25 +68,58 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderDetailContract.Vie
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.backBtn:
                 finish();
                 break;
         }
     }
 
-    @Override
-    public void getAddResult(ResponseBody addResult) throws JSONException, IOException {
-
-    }
 
     @Override
     public void onRequestError(String msg) {
-
+        ToastUtils.showShortToast(msg);
     }
 
     @Override
-    public void onRequestEnd() {
-
+    public void getOrderDetails(OrderBO orderBO) {
+        this.orderBO = orderBO;
+        viewBinding.orderNum.setText("订单号: " + orderBO.orderNo);
+        viewBinding.oldPrice.setText("¥ " + orderBO.totalPrice);
+        viewBinding.delPrice.setText("-¥ " + orderBO.discountFee);
+        viewBinding.nowPrice.setText("¥ " + orderBO.payFee);
+        viewBinding.totalPrice.setText("¥ " + orderBO.totalFee);
+        viewBinding.orderNum2.setText("订单编号：" + orderBO.orderNo);
+        viewBinding.orderTime.setText("提交时间：" + orderBO.createDate);
+        switch (orderBO.status) {
+            case "create":  //待支付
+                viewBinding.orderStatus.setText("待支付");
+                viewBinding.orderStatus.setTextColor(Color.parseColor("#FF5A5A"));
+                break;
+            case "cancel":  //已取消
+                viewBinding.orderStatus.setText("已取消");
+                viewBinding.orderStatus.setTextColor(Color.parseColor("#BABABA"));
+                viewBinding.buttomLayout.setVisibility(View.GONE);
+                break;
+            case "refunded":  //已退款
+                viewBinding.orderStatus.setText("已退款");
+                viewBinding.orderStatus.setTextColor(Color.parseColor("#BABABA"));
+                viewBinding.buttomLayout.setVisibility(View.GONE);
+                break;
+            case "pay":    //已支付
+                viewBinding.orderStatus.setText("已付款");
+                viewBinding.orderStatus.setTextColor(Color.parseColor("#FF5A5A"));
+                break;
+            case "success":  //已完成
+                viewBinding.orderStatus.setText("已完成");
+                viewBinding.orderStatus.setTextColor(Color.parseColor("#BABABA"));
+                viewBinding.buttomLayout.setVisibility(View.GONE);
+                break;
+            case "shipments":  //待确认
+                viewBinding.orderStatus.setText("待确认");
+                viewBinding.orderStatus.setTextColor(Color.parseColor("#D4AB56"));
+                break;
+        }
+        setAdapter();
     }
 }

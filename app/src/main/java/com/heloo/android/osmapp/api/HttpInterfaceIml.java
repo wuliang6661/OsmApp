@@ -1,6 +1,7 @@
 package com.heloo.android.osmapp.api;
 
 
+import com.heloo.android.osmapp.model.OrderBO;
 import com.heloo.android.osmapp.model.ShopBannarBO;
 import com.heloo.android.osmapp.model.ShopCarBO;
 import com.heloo.android.osmapp.model.ShopDetailsBO;
@@ -189,6 +190,49 @@ public class HttpInterfaceIml {
     public static Observable<String> getUpdateNum(String shopIds, String shopNums, String userId) {
         return getService().getUpdateNum(shopIds, shopNums, userId).compose(RxResultHelper.httpRusult());
     }
+
+    /**
+     * 获取订单列表
+     */
+    public static Observable<List<OrderBO>> getShopOrderItem(int pageNum, int type) {
+        return getService().getShopOrderItem(pageNum, 30, type).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 订单详情
+     */
+    public static Observable<OrderBO> getorderDetail(String id) {
+        return getService().getorderDetail(id).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 取消订单
+     */
+    public static Observable<Object> cancleOrder(String id) {
+        return getService().cancleOrder(id).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 确认订单
+     */
+    public static Observable<Object> comfimOrder(String id) {
+        return getService().comfimOrder(id).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 支付订单
+     */
+    public static Observable<String> pay(String orderId) {
+        return getService().pay(orderId).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 退款
+     */
+    public static Observable<String> paRefundy(String orderId) {
+        return getService().paRefundy(orderId).compose(RxResultHelper.httpRusult());
+    }
+
 
     /**
      * 添加地址

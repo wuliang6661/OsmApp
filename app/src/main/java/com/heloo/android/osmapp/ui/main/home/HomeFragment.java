@@ -69,7 +69,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         viewBinding.viewPager.setAdapter(adapter);
         viewBinding.viewPager.setOffscreenPageLimit(2);//设置预加载数量
         viewBinding.tabLayout.setupWithViewPager(viewBinding.viewPager);
-        viewBinding.tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+//        viewBinding.tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         viewBinding.tabLayout.setTabIndicatorFullWidth(false);
 
         viewBinding.searchBtn.setOnClickListener(v -> startActivity(new Intent(getActivity(), SearchActivity.class)));
