@@ -15,10 +15,13 @@ import android.webkit.JavascriptInterface;
 
 import com.alibaba.fastjson.JSON;
 import com.bigkoo.alertview.AlertView;
+import com.heloo.android.osmapp.api.HttpInterfaceIml;
+import com.heloo.android.osmapp.api.HttpResultSubscriber;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.model.ShareVo;
 import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.utils.LogUtils;
+import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.heloo.android.osmapp.widget.AlertDialog;
 import com.tencent.smtt.sdk.WebView;
@@ -257,6 +260,23 @@ public class WebAppInterface implements UMShareListener {
     }
 
 
+    private void articleforward(String articleId) {
+        HttpInterfaceIml.articleforward(articleId, LocalConfiguration.userInfo == null ? null :
+                LocalConfiguration.userInfo.getUsername()).subscribe(new HttpResultSubscriber<Object>() {
+
+            @Override
+            public void onSuccess(Object o) {
+
+            }
+
+            @Override
+            public void onFiled(String message) {
+                ToastUtils.showShortToast(message);
+            }
+        });
+    }
+
+
     private AlertView alertView;
 
     /**
@@ -302,7 +322,9 @@ public class WebAppInterface implements UMShareListener {
 
     @Override
     public void onResult(SHARE_MEDIA share_media) {
-
+        if (!StringUtils.isEmpty(articleId)) {
+            articleforward(articleId);
+        }
     }
 
     @Override
