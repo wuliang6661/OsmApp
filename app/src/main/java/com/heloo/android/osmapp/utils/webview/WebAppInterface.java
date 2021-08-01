@@ -5,44 +5,36 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
+import android.util.Base64;
 import android.webkit.JavascriptInterface;
-import android.webkit.MimeTypeMap;
 
 import com.alibaba.fastjson.JSON;
 import com.bigkoo.alertview.AlertView;
-import com.bumptech.glide.Glide;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.model.ShareVo;
 import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.utils.LogUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.heloo.android.osmapp.widget.AlertDialog;
-import com.tencent.open.SocialConstants;
 import com.tencent.smtt.sdk.WebView;
 import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.ShareContent;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import rx.android.schedulers.AndroidSchedulers;
 
 
 /**
@@ -96,11 +88,11 @@ public class WebAppInterface implements UMShareListener {
      * 保存海报
      */
     @JavascriptInterface
-    public void saveImg(String url) {
+    public void saveImg(String base64) {
         new AlertDialog(mContext).builder().setGone().setMsg("确认保存海报？")
                 .setNegativeButton("取消", null)
                 .setPositiveButton("确定", v -> {
-                    saveImgToGallery(mContext, url);
+                    saveImgToGallery(mContext, base64);
                 }).show();
     }
 
@@ -118,47 +110,46 @@ public class WebAppInterface implements UMShareListener {
             ActivityCompat.requestPermissions(mContext, PERMISSIONS, 1);
             return;
         }
-        Observable.create((ObservableOnSubscribe<File>) emitter -> {
-            //Glide提供了一个download() 接口来获取缓存的图片文件，
-            // 但是前提必须要设置diskCacheStrategy方法的缓存策略为
-            // DiskCacheStrategy.ALL或者DiskCacheStrategy.SOURCE，
-            // 还有download()方法需要在子线程里进行
-            File file = Glide.with(context)
-                    .download(imgUrl)
-                    .submit()
-                    .get();
-            String fileParentPath =
-                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/XingTu/Image";
-            File appDir = new File(fileParentPath);
-            if (!appDir.exists()) {
-                appDir.mkdirs();
+        saveImage(imgUrl);
+    }
+
+
+    private void saveImage(String base64) {
+        if (TextUtils.isEmpty(base64)) //图像数据为空
+            return;
+        OutputStream fos = null;
+        try {
+            byte[] b = Base64.decode(base64, Base64.DEFAULT);
+            for (int i = 0; i < b.length; ++i) {
+                if (b[i] < 0) {//调整异常数据
+                    b[i] += 256;
+                }
             }
-            //获得原文件流
-            FileInputStream fis = new FileInputStream(file);
-            //保存的文件名
-            String fileName = "xt" + System.currentTimeMillis() + ".jpg";
-            //目标文件
-            File targetFile = new File(appDir, fileName);
-            //输出文件流
-            FileOutputStream fos = new FileOutputStream(targetFile);
-            // 缓冲数组
-            byte[] b = new byte[1024 * 8];
-            while (fis.read(b) != -1) {
-                fos.write(b);
-            }
+            String path = Environment.getExternalStorageDirectory()
+                    + File.separator + Environment.DIRECTORY_DCIM
+                    + File.separator + "Camera" + File.separator;
+            File currentFile = new File(path, System.currentTimeMillis() + ".jpg");
+            fos = new FileOutputStream(currentFile);
+            fos.write(b);
             fos.flush();
-            fis.close();
             fos.close();
-            //扫描媒体库
-            String extension = MimeTypeMap.getFileExtensionFromUrl(targetFile.getAbsolutePath());
-            String mimeTypes = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-            MediaScannerConnection.scanFile(context, new String[]{targetFile.getAbsolutePath()},
-                    new String[]{mimeTypes}, null);
-            emitter.onNext(targetFile);
-        })
-                .subscribeOn(Schedulers.io()) //发送事件在io线程
-                .subscribe(file -> ToastUtils.showShortToast("保存图片成功"),
-                        throwable -> ToastUtils.showShortToast("保存失败"));
+            // 最后通知图库更新
+            mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                    Uri.fromFile(currentFile)));
+            ToastUtils.showShortToast("保存图片成功");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ToastUtils.showShortToast("保存失败");
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
 
@@ -206,7 +197,6 @@ public class WebAppInterface implements UMShareListener {
     public void jsShare(String data) {
         if (data != null) {
             ShareVo shareVo = JSON.parseObject(data, ShareVo.class);
-//            shareVo.setUrl("http://osm.happydoit.com/articleInfo/getArticleInfo/?articleId=2102230134545605733");
             if (shareVo != null) {
                 SHARE_MEDIA platform;
                 switch (shareVo.getType()) {

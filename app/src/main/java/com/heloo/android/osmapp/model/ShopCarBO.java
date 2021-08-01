@@ -1,14 +1,15 @@
 package com.heloo.android.osmapp.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ShopCarBO {
+public class ShopCarBO implements Serializable {
 
 
     public String umsMemberUserInfoDO;
     public List<ShopCarInfoDOSBean> shopCarInfoDOS;
 
-    public static class ShopCarInfoDOSBean {
+    public static class ShopCarInfoDOSBean implements Serializable {
         public String id;
         public String userId;
         public String userName;
@@ -17,7 +18,7 @@ public class ShopCarBO {
         public Double goodsPrice;
         public Integer goodsNum;
         public String goodsImg;
-        public Integer coinsNum;
+        public Double coinsNum;
         public String createTime;
         public String updateTime;
         public String status;

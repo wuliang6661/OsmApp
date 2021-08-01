@@ -4,6 +4,7 @@ import com.heloo.android.osmapp.api.HttpInterfaceIml;
 import com.heloo.android.osmapp.api.HttpResultSubscriber;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.model.ShopCarBO;
+import com.heloo.android.osmapp.model.UserInfo;
 import com.heloo.android.osmapp.mvp.BasePresenterImpl;
 import com.heloo.android.osmapp.mvp.contract.CartContract;
 
@@ -13,11 +14,6 @@ import com.heloo.android.osmapp.mvp.contract.CartContract;
  */
 public class CartPresenter extends BasePresenterImpl<CartContract.View>
         implements CartContract.Presenter {
-
-    @Override
-    public void addAddress(String distributorId, String name, String telephone, String province, String city, String area, String address, String timeStamp, String mac) {
-
-    }
 
 
     public void getShopCar() {
@@ -39,30 +35,11 @@ public class CartPresenter extends BasePresenterImpl<CartContract.View>
     }
 
 
-    public void getNumCar() {
-        HttpInterfaceIml.getNumCar(LocalConfiguration.userInfo.getId() + "").subscribe(new HttpResultSubscriber<String>() {
-            @Override
-            public void onSuccess(String s) {
-                if (mView != null) {
-                    mView.getCarNum(s);
-                }
-            }
-
-            @Override
-            public void onFiled(String message) {
-                if (mView != null) {
-                    mView.onRequestError(message);
-                }
-            }
-        });
-    }
-
-
     public void delCar(String id) {
         HttpInterfaceIml.delCar(id).subscribe(new HttpResultSubscriber<String>() {
             @Override
             public void onSuccess(String s) {
-                if(mView != null){
+                if (mView != null) {
                     mView.deleteShopSource();
                 }
             }
@@ -81,7 +58,7 @@ public class CartPresenter extends BasePresenterImpl<CartContract.View>
         HttpInterfaceIml.batchDelete(shopIds, LocalConfiguration.userInfo.getId() + "").subscribe(new HttpResultSubscriber<String>() {
             @Override
             public void onSuccess(String s) {
-                if(mView != null){
+                if (mView != null) {
                     mView.deleteShopSource();
                 }
             }
@@ -99,7 +76,7 @@ public class CartPresenter extends BasePresenterImpl<CartContract.View>
         HttpInterfaceIml.getUpdateNum(shopIds, shopNums, LocalConfiguration.userInfo.getId() + "").subscribe(new HttpResultSubscriber<String>() {
             @Override
             public void onSuccess(String s) {
-                if(mView != null){
+                if (mView != null) {
                     mView.deleteShopSource();
                 }
             }
@@ -111,6 +88,26 @@ public class CartPresenter extends BasePresenterImpl<CartContract.View>
                 }
             }
         });
+    }
+
+
+    public void getUserIntegration() {
+        HttpInterfaceIml.getUserIntegration(LocalConfiguration.userInfo.getUid() + "")
+                .subscribe(new HttpResultSubscriber<UserInfo>() {
+                    @Override
+                    public void onSuccess(UserInfo s) {
+                        if (mView != null) {
+                            mView.getUserInner(s);
+                        }
+                    }
+
+                    @Override
+                    public void onFiled(String message) {
+                        if (mView != null) {
+                            mView.onRequestError(message);
+                        }
+                    }
+                });
     }
 
 }

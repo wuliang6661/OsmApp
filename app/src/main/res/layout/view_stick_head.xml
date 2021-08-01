@@ -2,25 +2,26 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/stick_header"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
+    android:layout_height="40dp"
     android:background="@color/colorfff"
     android:orientation="vertical">
 
     <View
         android:layout_width="2dp"
         android:layout_height="13dp"
-        android:background="#D3A952"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="14dp"/>
+        android:layout_marginStart="14dp"
+        android:background="#D3A952" />
+
     <TextView
         android:id="@+id/tvHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="25dp"
-        android:textColor="#333333"
-        android:textSize="13sp"
+        android:ellipsize="end"
         android:singleLine="true"
-        android:ellipsize="end"/>
+        android:textColor="#333333"
+        android:textSize="13sp" />
 
 </FrameLayout>

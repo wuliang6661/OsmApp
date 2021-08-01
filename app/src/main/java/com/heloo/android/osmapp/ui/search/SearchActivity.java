@@ -22,8 +22,8 @@ import com.heloo.android.osmapp.databinding.ActivitySearchBinding;
 import com.heloo.android.osmapp.model.ArticleBean;
 import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.utils.StringUtils;
-import com.zhy.adapter.abslistview.CommonAdapter;
-import com.zhy.adapter.abslistview.ViewHolder;
+import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,6 +67,7 @@ public class SearchActivity extends BaseActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         binding.historyList.setLayoutManager(linearLayoutManager);
+        binding.list.setLayoutManager(new LinearLayoutManager(this));
         setHistory();
         binding.searchView.isIconified();
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -156,10 +157,6 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void setAdapter() {
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-            return;
-        }
         adapter = new CommonAdapter<ArticleBean.ArticleInfoListBean.DataBean>(this, R.layout.news_item_layout, newsData) {
             @Override
             protected void convert(ViewHolder holder, ArticleBean.ArticleInfoListBean.DataBean item, int position) {
@@ -199,9 +196,9 @@ public class SearchActivity extends BaseActivity {
      * 搜索历史
      */
     private void setHistoryAdapter() {
-        historyAdapter = new com.zhy.adapter.recyclerview.CommonAdapter<String>(this, R.layout.sku_item_layout, historyData) {
+        historyAdapter = new CommonAdapter<String>(this, R.layout.sku_item_layout, historyData) {
             @Override
-            protected void convert(com.zhy.adapter.recyclerview.base.ViewHolder holder, String item, int position) {
+            protected void convert(ViewHolder holder, String item, int position) {
                 holder.setText(R.id.text, item);
                 holder.getView(R.id.text).setOnClickListener(new View.OnClickListener() {
                     @Override

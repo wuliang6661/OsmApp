@@ -1,51 +1,96 @@
 package com.heloo.android.osmapp.ui.confirm;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.alipay.sdk.app.PayTask;
+import com.bumptech.glide.Glide;
 import com.heloo.android.osmapp.R;
+import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityConfirmBinding;
+import com.heloo.android.osmapp.model.AddressBean;
+import com.heloo.android.osmapp.model.OrderPriceBO;
+import com.heloo.android.osmapp.model.PayBean;
+import com.heloo.android.osmapp.model.PayResult;
+import com.heloo.android.osmapp.model.ShopAddressList;
+import com.heloo.android.osmapp.model.ShopCarBO;
+import com.heloo.android.osmapp.model.UserInfo;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.ConfirmContract;
 import com.heloo.android.osmapp.mvp.presenter.ConfirmPresenter;
+import com.heloo.android.osmapp.ui.address.AddressActivity;
+import com.heloo.android.osmapp.ui.order.OrderDetailActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
+import com.heloo.android.osmapp.utils.ToastUtils;
 import com.zhy.adapter.abslistview.CommonAdapter;
 import com.zhy.adapter.abslistview.ViewHolder;
 
-import org.json.JSONException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
-import okhttp3.ResponseBody;
+import androidx.annotation.Nullable;
 
 /**
  * 订单确认
  */
 public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, ConfirmPresenter, ActivityConfirmBinding>
-    implements ConfirmContract.View, View.OnClickListener {
+        implements ConfirmContract.View, View.OnClickListener {
 
-    private CommonAdapter<String> adapter;
-    private List<String> data = new ArrayList<>();
+    private CommonAdapter<ShopCarBO.ShopCarInfoDOSBean> adapter;
+    private ArrayList<ShopCarBO.ShopCarInfoDOSBean> data;
 
+    private TextView selectAddress;
+    private RelativeLayout addressLayout;
+    private TextView name, phone, address, all_inter, edit_remark;
+    private ImageView editAddress;
+    private CheckBox selectImg;
+    private AddressBean addressBean;
+    private OrderPriceBO priceBO;
+
+    StringBuilder shopIds;
+    StringBuilder shopNums;
+
+    private String orderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        for (int i=0;i<3;i++){
-            data.add("");
-        }
+        data = (ArrayList<ShopCarBO.ShopCarInfoDOSBean>) getIntent().getExtras().getSerializable("shops");
         initView();
+        mPresenter.getUserAdd();
+        mPresenter.getUserIntegration();
+        shopIds = new StringBuilder();
+        shopNums = new StringBuilder();
+        for (ShopCarBO.ShopCarInfoDOSBean item : data) {
+            shopIds.append(item.goodsId).append(",");
+            shopNums.append(item.goodsNum).append(",");
+        }
+        mPresenter.getshopInter(shopIds.substring(0, shopIds.length() - 1), shopNums.substring(0, shopNums.length() - 1));
+
+        if (LocalConfiguration.userInfo.getSourceType() != 1001) {
+            selectImg.setChecked(true);
+            selectImg.setEnabled(false);
+        } else {
+            selectImg.setEnabled(true);
+        }
     }
 
     private void initView() {
@@ -54,51 +99,96 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         viewBinding.list.addFooterView(footView);
         viewBinding.submitBtn.setOnClickListener(this);
         viewBinding.backBtn.setOnClickListener(this);
+        selectAddress = footView.findViewById(R.id.select_address);
+        addressLayout = footView.findViewById(R.id.address_layout);
+        all_inter = footView.findViewById(R.id.all_inter);
+        edit_remark = footView.findViewById(R.id.edit_remark);
+        name = footView.findViewById(R.id.name);
+        phone = footView.findViewById(R.id.phone);
+        address = footView.findViewById(R.id.address);
+        editAddress = footView.findViewById(R.id.editAddress);
+        selectImg = footView.findViewById(R.id.selectImg);
         setAdapter();
+        int price = 0;
+        for (ShopCarBO.ShopCarInfoDOSBean item : data) {
+            price += (item.goodsPrice * item.goodsNum);
+        }
+        editAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ConfirmActivity.this, AddressActivity.class);
+                intent.putExtra("type", true);
+                startActivityForResult(intent, 0x11);
+            }
+        });
+        selectAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ConfirmActivity.this, AddressActivity.class);
+                intent.putExtra("type", true);
+                startActivityForResult(intent, 0x11);
+            }
+        });
     }
 
     private void setAdapter() {
-        if (adapter != null){
-            adapter.notifyDataSetChanged();
-            return;
-        }
-        adapter = new CommonAdapter<String>(this,R.layout.cart_item_layout,data) {
+        adapter = new CommonAdapter<ShopCarBO.ShopCarInfoDOSBean>(this, R.layout.cart_item_layout, data) {
             @Override
-            protected void convert(ViewHolder holder, String item, int position) {
-                holder.getView(R.id.selectImg).setVisibility(View.INVISIBLE);
+            protected void convert(ViewHolder holder, ShopCarBO.ShopCarInfoDOSBean s, int position) {
+                holder.getView(R.id.selectImg).setVisibility(View.GONE);
                 holder.getView(R.id.editBtn).setVisibility(View.INVISIBLE);
+                holder.setText(R.id.productTitle, s.goodsName);
+                holder.setText(R.id.editTitle, s.goodsName);
+                holder.setText(R.id.price, "¥ " + s.goodsPrice);
+                holder.setText(R.id.num, "x " + s.goodsNum);
+                holder.setText(R.id.editNum, s.goodsNum + "");
+                Glide.with(ConfirmActivity.this).load(s.goodsImg)
+                        .placeholder(R.drawable.default_head)
+                        .error(R.drawable.default_head)
+                        .into((ImageView) holder.getView(R.id.productImg));
+
             }
         };
         viewBinding.list.setAdapter(adapter);
     }
 
-    @Override
-    public void getAddResult(ResponseBody addResult) throws JSONException, IOException {
-
-    }
 
     @Override
     public void onRequestError(String msg) {
-
-    }
-
-    @Override
-    public void onRequestEnd() {
-
+        ToastUtils.showShortToast(msg);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.submitBtn:
 //                payDialog();
-                startActivity(new Intent(ConfirmActivity.this,PaySuccessActivity.class));
+//                startActivity(new Intent(ConfirmActivity.this, PaySuccessActivity.class));
+                createOrder();
                 break;
             case R.id.backBtn:
                 finish();
                 break;
         }
     }
+
+
+    /**
+     * 生成订单
+     */
+    private void createOrder() {
+        String remark = edit_remark.getText().toString().trim();
+        //会员
+        if (LocalConfiguration.userInfo.getSourceType() != 1001) {
+            if (addressBean == null) {
+                ToastUtils.showShortToast("请选择收货地址！");
+                return;
+            }
+        }
+        mPresenter.createOrder(addressBean == null ? null : addressBean.getId(), shopIds.substring(0, shopIds.length() - 1),
+                shopNums.substring(0, shopNums.length() - 1), remark, selectImg.isChecked() ? 1 : 0);
+    }
+
 
     /**
      * 支付弹窗
@@ -121,7 +211,7 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
 
         submitBtn.setOnClickListener(v1 -> {
             noticeDialog.dismiss();
-            startActivity(new Intent(ConfirmActivity.this,PaySuccessActivity.class));
+            startActivity(new Intent(ConfirmActivity.this, PaySuccessActivity.class));
         });
         WindowManager.LayoutParams layoutParams = noticeDialog.getWindow().getAttributes();
         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -129,4 +219,113 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         noticeDialog.getWindow().setAttributes(layoutParams);
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            return;
+        }
+        switch (resultCode) {
+            case 0x11:
+                addressBean = (AddressBean) data.getSerializableExtra("address");
+                selectAddress.setVisibility(View.GONE);
+                addressLayout.setVisibility(View.VISIBLE);
+                name.setText(addressBean.getName());
+                phone.setText(addressBean.getPhone());
+                this.address.setText(String.format("%s%s%s%s", addressBean.getProvince(), addressBean.getCity(), addressBean.getArea(), addressBean.getAddress()));
+                break;
+        }
+    }
+
+    @Override
+    public void getAddress(ShopAddressList address) {
+        if (address.list.isEmpty()) {
+            selectAddress.setVisibility(View.VISIBLE);
+            addressLayout.setVisibility(View.GONE);
+            return;
+        }
+        for (AddressBean item : address.list) {
+            if (item.getStatus() == 1) {
+                addressBean = item;
+            }
+        }
+        if (addressBean == null) {
+            selectAddress.setVisibility(View.VISIBLE);
+            addressLayout.setVisibility(View.GONE);
+            return;
+        }
+        selectAddress.setVisibility(View.GONE);
+        addressLayout.setVisibility(View.VISIBLE);
+        name.setText(addressBean.getName());
+        phone.setText(addressBean.getPhone());
+        this.address.setText(String.format("%s%s%s%s", addressBean.getProvince(), addressBean.getCity(), addressBean.getArea(), addressBean.getAddress()));
+    }
+
+    @Override
+    public void getshopInter(OrderPriceBO priceBO) {
+        this.priceBO = priceBO;
+        viewBinding.price.setText("￥ " + priceBO.totalPrice + (priceBO.totalScore != 0 ? "  + " + priceBO.totalScore + "珍币" : ""));
+        String text = "使用珍币（本单最多可使用珍币" + (priceBO == null ? 0 : priceBO.totalScore) + "，当前用户剩余珍币" + LocalConfiguration.userInfo.getIntegration() + "）";
+        all_inter.setText(text);
+    }
+
+    @Override
+    public void getAllInter(UserInfo info) {
+        LocalConfiguration.userInfo = info;
+        String text = "使用珍币（本单最多可使用珍币" + (priceBO == null ? 0 : priceBO.totalScore) + "，当前用户剩余珍币" + info.getIntegration() + "）";
+        all_inter.setText(text);
+    }
+
+
+    public void pay(PayBean orderInfo, String order) {
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                orderId = order;
+                PayTask alipay = new PayTask(ConfirmActivity.this);
+                Map<String, String> result = alipay.payV2(orderInfo.body, true);
+
+                Message msg = new Message();
+                msg.what = 1;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
+    }
+
+
+    private final Handler mHandler = new Handler() {
+
+        @SuppressLint("HandlerLeak")
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    @SuppressLint("HandlerLeak")
+                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    /**
+                     * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                     */
+                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                    String resultStatus = payResult.getResultStatus();
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", orderId);
+                        gotoActivity(PaySuccessActivity.class, bundle, false);
+                    } else {
+                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                        ToastUtils.showShortToast("支付失败！");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 }

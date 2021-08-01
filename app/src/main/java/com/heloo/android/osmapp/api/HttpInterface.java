@@ -1,11 +1,17 @@
 package com.heloo.android.osmapp.api;
 
 import com.heloo.android.osmapp.model.BaseResult;
+import com.heloo.android.osmapp.model.CreateOrderBo;
 import com.heloo.android.osmapp.model.OrderBO;
+import com.heloo.android.osmapp.model.OrderPriceBO;
+import com.heloo.android.osmapp.model.PayBean;
+import com.heloo.android.osmapp.model.SearchShopBO;
+import com.heloo.android.osmapp.model.ShopAddressList;
 import com.heloo.android.osmapp.model.ShopBannarBO;
 import com.heloo.android.osmapp.model.ShopCarBO;
 import com.heloo.android.osmapp.model.ShopDetailsBO;
 import com.heloo.android.osmapp.model.ShopListBO;
+import com.heloo.android.osmapp.model.UserInfo;
 
 import java.util.List;
 
@@ -233,14 +239,53 @@ public interface HttpInterface {
      */
     @FormUrlEncoded
     @POST("/alipay/pay")
-    Observable<BaseResult<String>> pay(@Field("orderId") String orderId);
+    Observable<BaseResult<PayBean>> pay(@Field("orderId") String orderId);
 
     /**
      * 退款
      */
     @FormUrlEncoded
     @POST("/alipay/Refund")
-    Observable<BaseResult<String>> paRefundy(@Field("orderId") String orderId);
+    Observable<BaseResult<Object>> paRefundy(@Field("orderId") String orderId);
+
+    /**
+     * 查询收货地址
+     */
+    @GET("/app/getuseraddress")
+    Observable<BaseResult<ShopAddressList>> getUserAdd(@Query("userId") String userId);
+
+    /**
+     * 查询可用珍币
+     */
+    @GET("/shopOrderItem/getUserIntegration/{userId}")
+    Observable<BaseResult<UserInfo>> getUserIntegration(@Path("userId") String userId);
+
+    /**
+     * 计算商品能使用的珍币，和使用珍币之后的价格
+     */
+    @POST("/shopOrderItem/getshopInter")
+    Observable<BaseResult<OrderPriceBO>> getshopInter(@Query("shopIds") String shopIds, @Query("shopNums") String shopNums);
+
+    /**
+     * 生成订单
+     */
+    @POST("/shopOrderItem/createOrderItem")
+    Observable<BaseResult<CreateOrderBo>> createOrder(@Query("addressId") String addressId, @Query("shopIds") String shopIds,
+                                                      @Query("shopNums") String shopNums, @Query("app") int app,
+                                                      @Query("remarks") String remarks, @Query("scoreflag") Integer scoreflag);
+
+    /**
+     * 转发文章
+     */
+    @POST("/articleInfo/Articleforward")
+    Observable<BaseResult<Object>> articleforward(@Query("articleId") String articleId, @Query("username") String username);
+
+    /**
+     * 搜索商品
+     */
+    @GET("/shopOrder/getSearch")
+    Observable<BaseResult<List<SearchShopBO>>> getSearch(@Query("shopname") String shopname);
+
 
     /**
      * 添加地址

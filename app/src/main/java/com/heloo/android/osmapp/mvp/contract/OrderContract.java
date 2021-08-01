@@ -1,6 +1,7 @@
 package com.heloo.android.osmapp.mvp.contract;
 
 import com.heloo.android.osmapp.model.OrderBO;
+import com.heloo.android.osmapp.model.PayBean;
 import com.heloo.android.osmapp.mvp.BasePresenter;
 import com.heloo.android.osmapp.mvp.BaseRequestView;
 
@@ -25,6 +26,10 @@ public class OrderContract {
         void comfimOrder();
 
         void getOrderDetails(OrderBO orderBO);
+
+        void pay(PayBean args);
+
+        void unRelase();
 
     }
 

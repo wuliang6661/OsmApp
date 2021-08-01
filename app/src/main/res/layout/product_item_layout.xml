@@ -1,66 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/productImg"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
+        android:layout_marginLeft="8dp"
+        android:scaleType="centerCrop" />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="98dp"
-        android:layout_margin="2dp"
-        android:foreground="?android:attr/selectableItemBackground">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@+id/productImg"
+        android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="8dp"
-            android:background="#ededed" />
-
-        <androidx.cardview.widget.CardView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="3dp">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="88dp"
-                android:layout_height="88dp"
-                android:scaleType="centerCrop"
-                android:background="#DDDDDD"
-                android:id="@+id/productImg"/>
-        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"
-            android:layout_marginTop="10dp"
-            android:layout_toEndOf="@id/iv"
-            android:textColor="#333"
-            android:textSize="13sp"
-            android:maxLines="2"
             android:ellipsize="end"
-            android:minLines="2"
+            android:maxLines="2"
+            android:textColor="#333333"
+            android:textSize="13sp"
             tools:text="我是名称" />
 
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@id/tvName"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@id/iv"
-            android:gravity="center_vertical">
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvPrice"
@@ -70,33 +54,38 @@
                 android:textColor="#D3A952"
                 android:textSize="14sp" />
 
-            <LinearLayout
-                android:id="@+id/coinLayout"
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginStart="3dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="+"
-                    android:textColor="#D3A952"
-                    android:textSize="14sp" />
-                <TextView
-                    android:id="@+id/tvCoin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="200"
-                    android:textColor="#D3A952"
-                    android:textSize="14sp"
-                    android:layout_marginStart="5dp"
-                    app:drawableStartCompat="@mipmap/coin_img"
-                    android:drawablePadding="3dp"/>
-            </LinearLayout>
-        </LinearLayout>
+                android:layout_marginLeft="5dp"
+                android:text="+"
+                android:textColor="#D3A952"
+                android:textSize="14sp"
+                android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/tvCoin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:drawablePadding="3dp"
+                android:gravity="center_vertical"
+                android:text="200"
+                android:textColor="#D3A952"
+                android:textSize="14sp"
+                android:visibility="gone"
+                app:drawableStartCompat="@mipmap/coin_img" />
+
+        </LinearLayout>
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:background="#F3F3F3" />
 
-</LinearLayout>
+</RelativeLayout>

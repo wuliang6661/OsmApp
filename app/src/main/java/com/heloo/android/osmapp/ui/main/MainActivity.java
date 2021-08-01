@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.heloo.android.osmapp.R;
 import com.heloo.android.osmapp.base.MyApplication;
@@ -19,13 +16,16 @@ import com.heloo.android.osmapp.ui.main.circle.CircleFragment;
 import com.heloo.android.osmapp.ui.main.home.HomeFragment;
 import com.heloo.android.osmapp.ui.main.mine.MineFragment;
 import com.heloo.android.osmapp.ui.main.nice.NiceFragment;
-import com.heloo.android.osmapp.ui.main.store.StoreFragment;
+import com.heloo.android.osmapp.ui.main.store.StoreFragmentNew;
 import com.heloo.android.osmapp.utils.AppManager;
 import com.heloo.android.osmapp.utils.ToastUtils;
 
 import org.json.JSONException;
+
 import java.io.IOException;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import cn.jzvd.Jzvd;
 import okhttp3.ResponseBody;
 
@@ -39,7 +39,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     private HomeFragment homeFragment = new HomeFragment();
     private CircleFragment circleFragment = new CircleFragment();
-    private StoreFragment storeFragment = new StoreFragment();
+    private StoreFragmentNew storeFragment = new StoreFragmentNew();
     private MineFragment mineFragment = new MineFragment();
     private NiceFragment niceFragment = new NiceFragment();
     public static boolean isForeground = false;

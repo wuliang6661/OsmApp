@@ -28,8 +28,8 @@ public class ShopDetailsBO {
         public String createDate;
         public String modifyDate;
         public String areaId;
-        public Integer price;
-        public Integer preferentialPrice;
+        public Double price;
+        public Double preferentialPrice;
         public String ticketType;
         public String linkSpots;
         public String pos;
@@ -53,6 +53,8 @@ public class ShopDetailsBO {
         public String prodId;
         public String picId;
         public String url;
+
+
     }
 
     public static class ShopProdExtInfoDOWithBLOBsBean {

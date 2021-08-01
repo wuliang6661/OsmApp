@@ -3,6 +3,7 @@ package com.heloo.android.osmapp.mvp.presenter;
 import com.heloo.android.osmapp.api.HttpInterfaceIml;
 import com.heloo.android.osmapp.api.HttpResultSubscriber;
 import com.heloo.android.osmapp.model.OrderBO;
+import com.heloo.android.osmapp.model.PayBean;
 import com.heloo.android.osmapp.mvp.BasePresenterImpl;
 import com.heloo.android.osmapp.mvp.contract.OrderContract;
 
@@ -54,7 +55,7 @@ public class OrderPresenter extends BasePresenterImpl<OrderContract.View>
     }
 
 
-    public void comfimOrder(String id){
+    public void comfimOrder(String id) {
         HttpInterfaceIml.comfimOrder(id).subscribe(new HttpResultSubscriber<Object>() {
             @Override
             public void onSuccess(Object s) {
@@ -90,4 +91,43 @@ public class OrderPresenter extends BasePresenterImpl<OrderContract.View>
             }
         });
     }
+
+
+    public void pay(String orderId) {
+        HttpInterfaceIml.pay(orderId).subscribe(new HttpResultSubscriber<PayBean>() {
+            @Override
+            public void onSuccess(PayBean s) {
+                if (mView != null) {
+                    mView.pay(s);
+                }
+            }
+
+            @Override
+            public void onFiled(String message) {
+                if (mView != null) {
+                    mView.onRequestError(message);
+                }
+            }
+        });
+    }
+
+
+    public void paRefundy(String orderId) {
+        HttpInterfaceIml.paRefundy(orderId).subscribe(new HttpResultSubscriber<Object>() {
+            @Override
+            public void onSuccess(Object s) {
+                if (mView != null) {
+                    mView.unRelase();
+                }
+            }
+
+            @Override
+            public void onFiled(String message) {
+                if (mView != null) {
+                    mView.onRequestError(message);
+                }
+            }
+        });
+    }
+
 }

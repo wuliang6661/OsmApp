@@ -3,8 +3,8 @@ package com.heloo.android.osmapp.ui.main.store;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.Gravity;
@@ -23,12 +23,14 @@ import com.heloo.android.osmapp.api.HttpInterfaceIml;
 import com.heloo.android.osmapp.api.HttpResultSubscriber;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityStoreDetailBinding;
+import com.heloo.android.osmapp.model.ShopCarBO;
 import com.heloo.android.osmapp.model.ShopDetailsBO;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.StoreDetailContract;
 import com.heloo.android.osmapp.mvp.presenter.StoreDetailPresenter;
 import com.heloo.android.osmapp.ui.cart.CartActivity;
 import com.heloo.android.osmapp.ui.confirm.ConfirmActivity;
+import com.heloo.android.osmapp.utils.HtmlFormat;
 import com.heloo.android.osmapp.utils.ScreenUtils;
 import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
@@ -64,8 +66,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        mPresenter.getDetail(getIntent().getStringExtra("id"));
-        getNumCar();
+
     }
 
     private void initView() {
@@ -78,9 +79,15 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         paramsBanner1.height = ScreenUtils.getScreenWidth();
         viewBinding.banner.setLayoutParams(paramsBanner1);
         initWebView(viewBinding.webView);
-        viewBinding.webView.getSettings().setTextZoom(100);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.getDetail(getIntent().getStringExtra("id"));
+        getNumCar();
+    }
 
     /**
      * 轮播图
@@ -95,19 +102,13 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         //加载广告图片
         banner.loadImage((banner1, model, view, position) -> {
             ImageView image = view.findViewById(R.id.image);
-            Glide.with(this).load(bannerData.get(position)).into(image);
+            Glide.with(this).load(bannerData.get(position))
+                    .placeholder(R.drawable.default_head)
+                    .error(R.drawable.default_head).into(image);
         });
 
     }
 
-
-    private String getHtmlData(String bodyHTML) {
-        String head = "<head>"
-                + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> "
-                + "<style>img{max-width: 100%; width:100%; height:auto;}*{margin:0px;}</style>"
-                + "</head>";
-        return "<html>" + head + "<body>" + bodyHTML + "</body></html>";
-    }
 
     /**
      * 初始化webview的实例
@@ -121,6 +122,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         view.setClickable(true);
         view.setHorizontalScrollBarEnabled(false);
         view.setVerticalScrollBarEnabled(false);
+        view.getSettings().setTextZoom(100);
     }
 
     /**
@@ -132,8 +134,6 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         webSetting.setJavaScriptCanOpenWindowsAutomatically(true);
         webSetting.setAllowFileAccess(true);
         webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
-        webSetting.setSupportZoom(true);
-        webSetting.setBuiltInZoomControls(true);
         webSetting.setUseWideViewPort(true);
         webSetting.setSupportMultipleWindows(true);
         // webSetting.setLoadWithOverviewMode(true);
@@ -203,10 +203,13 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         TextView price = v.findViewById(R.id.price);
         TextView leftNum = v.findViewById(R.id.leftNum);
         TextView numTxt = v.findViewById(R.id.numTxt);
+        ImageView productImg = v.findViewById(R.id.productImg);
         if (productDetailBean != null) {
             productName.setText(productDetailBean.name);
-            price.setText(String.format("¥%s", productDetailBean.price));
+            price.setText(String.format("¥%s", productDetailBean.preferentialPrice));
             leftNum.setText(String.format("库存%s件", productDetailBean.freeNum));
+            Glide.with(this).load(productDetailBean.icon).placeholder(R.drawable.default_head)
+                    .error(R.drawable.default_head).into(productImg);
         }
         productNum = 1;
         numTxt.setText(String.valueOf(productNum));
@@ -254,7 +257,18 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
 
         buyBtn.setOnClickListener(v1 -> {
             noticeDialog.dismiss();
-            startActivity(new Intent(StoreDetailActivity.this, ConfirmActivity.class));
+            Bundle bundle = new Bundle();
+            ArrayList<ShopCarBO.ShopCarInfoDOSBean> shops = new ArrayList<>();
+            ShopCarBO.ShopCarInfoDOSBean item = new ShopCarBO.ShopCarInfoDOSBean();
+            item.goodsNum = productNum;
+            item.goodsPrice = productDetailBean.preferentialPrice;
+            item.goodsId = getIntent().getStringExtra("id");
+            item.goodsImg = productDetailBean.icon;
+            item.goodsName = productDetailBean.name;
+            item.id = getIntent().getStringExtra("id");
+            shops.add(item);
+            bundle.putSerializable("shops", shops);
+            gotoActivity(ConfirmActivity.class, bundle, false);
         });
 
         addCart.setOnClickListener(new View.OnClickListener() {
@@ -280,6 +294,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
             viewBinding.price.setText(String.format("￥%s", productDetailBean.preferentialPrice));
             viewBinding.shichangLayout.setVisibility(productDetailBean.price == 0 ? View.INVISIBLE : View.VISIBLE);
             viewBinding.oldPrice.setText(String.format("￥%s", productDetailBean.price));
+            viewBinding.oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
             bannerData.add(productDetailBean.icon);
             //初始化banner
             initBanner(viewBinding.banner);
@@ -294,7 +309,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            viewBinding.webView.loadDataWithBaseURL(null, getHtmlData(detailUrl), "text/html", "utf-8", null);//加载html数据
+            viewBinding.webView.loadDataWithBaseURL(null, HtmlFormat.getNewContent(detailUrl), "text/html", "utf-8", null);//加载html数据
 
         }
     }
@@ -310,6 +325,9 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
 
 
     public void getNumCar() {
+        if (LocalConfiguration.userInfo == null) {
+            return;
+        }
         HttpInterfaceIml.getNumCar(LocalConfiguration.userInfo.getId() + "").subscribe(new HttpResultSubscriber<String>() {
             @Override
             public void onSuccess(String s) {

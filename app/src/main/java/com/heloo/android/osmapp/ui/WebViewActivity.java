@@ -8,13 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.annotation.Nullable;
-
 import com.heloo.android.osmapp.base.BaseWebActivity;
 import com.heloo.android.osmapp.databinding.WebviewLayoutBinding;
 import com.heloo.android.osmapp.utils.BubbleUtils;
+import com.heloo.android.osmapp.utils.HtmlFormat;
 
 import java.util.HashMap;
+
+import androidx.annotation.Nullable;
 
 /**
  * <p>
@@ -46,22 +47,13 @@ public class WebViewActivity extends BaseWebActivity {
         if (getIntent().getStringExtra("tag") != null){
             initWebView(binding.webview,1);
             binding.webview.getSettings().setTextZoom(100);
-            binding.webview.loadDataWithBaseURL(null, getHtmlData(url), "text/html", "utf-8", null);//加载html数据
+            binding.webview.loadDataWithBaseURL(null, HtmlFormat.getNewContent(url), "text/html", "utf-8", null);//加载html数据
         }else {
             initWebView(binding.webview,2);
             extraHeaders = new HashMap<String, String>();
 //            extraHeaders.put("accessType", "app_android");
             binding.webview.loadUrl(url);
         }
-    }
-
-
-    private String getHtmlData(String bodyHTML) {
-        String head = "<head>"
-                + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> "
-                + "<style>img{max-width: 100%; width:100%; height:auto;}*{margin:0px;}</style>"
-                + "</head>";
-        return "<html>" + head + "<body>" + bodyHTML + "</body></html>";
     }
 
 

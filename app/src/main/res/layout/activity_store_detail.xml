@@ -124,7 +124,8 @@
                     android:layout_marginTop="40dp"
                     android:layout_marginEnd="15dp"
                     android:background="@null"
-                    android:src="@mipmap/detail_share" />
+                    android:src="@mipmap/detail_share"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <TextView
@@ -227,17 +228,12 @@
                 android:textSize="13sp"
                 app:drawableStartCompat="@mipmap/detail_img" />
 
-            <RelativeLayout
+
+            <com.tencent.smtt.sdk.WebView
+                android:id="@+id/webView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp">
-
-                <com.tencent.smtt.sdk.WebView
-                    android:id="@+id/webView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </RelativeLayout>
-
+                android:layout_marginTop="20dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -76,6 +76,7 @@ dependencies {
     implementation files('libs/weiboSDKCore.jar')
     implementation files('libs/barlibrary-2.2.5.jar')
     implementation files('libs/open_sdk_r5788_lite.jar')
+    api (name: 'alipaysdk-15.8.03.210428205839', ext: 'aar')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -130,5 +131,6 @@ dependencies {
     api  'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.5'//微信官方SDK依赖库
     api  'com.umeng.umsdk:share-sina:7.1.4'
     api 'com.tencent.tbs.tbssdk:sdk:43939'
+    api 'org.jsoup:jsoup:1.10.1'
 
 }

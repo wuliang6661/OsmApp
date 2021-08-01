@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/webLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.nice.VideoFragment">
+    android:layout_height="match_parent">
 
 
-    <FrameLayout
-        android:id="@+id/webLayout"
+    <com.tencent.smtt.sdk.WebView
+        android:id="@+id/videoWebView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <com.tencent.smtt.sdk.WebView
-            android:id="@+id/videoWebView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </FrameLayout>
-
-
-</LinearLayout>
+</FrameLayout>

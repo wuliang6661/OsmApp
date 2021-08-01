@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -36,7 +37,7 @@
                     android:layout_marginStart="7dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:background="#B6B6B6" />
+                    android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -67,9 +68,9 @@
                                 android:ellipsize="end"
                                 android:maxLines="2"
                                 android:minLines="2"
-                                tools:text="欧诗漫OSM珍珠白精萃美白原液30ML欧诗漫OSM珍珠白精萃美白原液30ML欧诗漫OSM珍珠白精萃美白原液30ML"
                                 android:textColor="#1E1E1E"
-                                android:textSize="13sp" />
+                                android:textSize="13sp"
+                                tools:text="欧诗漫OSM珍珠白精萃美白原液30ML欧诗漫OSM珍珠白精萃美白原液30ML欧诗漫OSM珍珠白精萃美白原液30ML" />
 
                             <TextView
                                 android:id="@+id/productSecondTitle"
@@ -78,19 +79,19 @@
                                 android:layout_marginTop="7dp"
                                 android:ellipsize="end"
                                 android:maxLines="1"
-                                tools:text="珍珠白精萃焕白礼盒（洁面+水+乳+原液）"
                                 android:textColor="#999999"
                                 android:textSize="11sp"
-                                android:visibility="invisible" />
+                                android:visibility="invisible"
+                                tools:text="珍珠白精萃焕白礼盒（洁面+水+乳+原液）" />
 
                             <TextView
                                 android:id="@+id/price"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="14dp"
-                                tools:text="￥10"
                                 android:textColor="#D3A952"
-                                android:textSize="14sp" />
+                                android:textSize="14sp"
+                                tools:text="￥10" />
 
                         </LinearLayout>
 
@@ -112,9 +113,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="46dp"
-                                tools:text="x2"
                                 android:textColor="#B6B6B6"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"
+                                tools:text="x2" />
                         </LinearLayout>
                     </LinearLayout>
 

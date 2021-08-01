@@ -6,6 +6,7 @@ package com.heloo.android.osmapp.model;
  */
 public class UserInfo {
 
+    public String isVirtual;
     private int id;
     private String username;
     private String password;
@@ -25,6 +26,14 @@ public class UserInfo {
     private String singDays;
     private String positionId;
     private String uid;
+
+    public String getIsVirtual() {
+        return isVirtual;
+    }
+
+    public void setIsVirtual(String isVirtual) {
+        this.isVirtual = isVirtual;
+    }
 
     public int getId() {
         return id;

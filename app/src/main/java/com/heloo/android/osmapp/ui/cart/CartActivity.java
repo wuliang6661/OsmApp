@@ -1,35 +1,35 @@
 package com.heloo.android.osmapp.ui.cart;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.heloo.android.osmapp.R;
+import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityCartBinding;
 import com.heloo.android.osmapp.model.ShopCarBO;
+import com.heloo.android.osmapp.model.UserInfo;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.CartContract;
 import com.heloo.android.osmapp.mvp.presenter.CartPresenter;
 import com.heloo.android.osmapp.ui.confirm.ConfirmActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
+import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
-import org.json.JSONException;
-
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import okhttp3.ResponseBody;
 
 /**
  * 购物车
@@ -37,7 +37,7 @@ import okhttp3.ResponseBody;
  * @auther WITNESS 2021/4/13
  */
 public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresenter, ActivityCartBinding>
-        implements CartContract.View, View.OnClickListener , CompoundButton.OnCheckedChangeListener {
+        implements CartContract.View, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private CommonAdapter<ShopCarBO.ShopCarInfoDOSBean> adapter;
     private int editPosition = -1;//编辑
@@ -51,7 +51,7 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
         super.onCreate(savedInstanceState);
         goBack();
         mPresenter.getShopCar();
-        mPresenter.getNumCar();
+        mPresenter.getUserIntegration();
         initView();
     }
 
@@ -75,8 +75,11 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
                 holder.setText(R.id.price, "¥ " + s.goodsPrice);
                 holder.setText(R.id.num, "x " + s.goodsNum);
                 holder.setText(R.id.editNum, s.goodsNum + "");
-                Glide.with(CartActivity.this).load(s.goodsImg).into((ImageView) holder.getView(R.id.productImg));
-                Glide.with(CartActivity.this).load(s.goodsImg).into((ImageView) holder.getView(R.id.productImg));
+                Glide.with(CartActivity.this).load(s.goodsImg)
+                        .placeholder(R.drawable.default_head)
+                        .error(R.drawable.default_head)
+                        .into((ImageView) holder.getView(R.id.productImg));
+                EditText editNum = holder.getView(R.id.editNum);
                 if (position == editPosition) {
                     holder.getView(R.id.normalPart).setVisibility(View.GONE);
                     holder.getView(R.id.editLayout).setVisibility(View.VISIBLE);
@@ -125,9 +128,21 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
                     notifyDataSetChanged();
                 });
                 holder.getView(R.id.doneBtn).setOnClickListener(v -> {//完成
+                    String num = editNum.getText().toString().trim();
+                    if (StringUtils.isEmpty(num)) {
+                        ToastUtils.showShortToast("商品数量不能为空！");
+                        return;
+                    }
+                    if (Integer.parseInt(num) <= 0) {
+                        ToastUtils.showShortToast("商品数量不能小于0！");
+                        return;
+                    }
+                    if (selectShop.containsKey(s.id)) {
+                        selectShop.get(s.id).goodsNum = Integer.parseInt(num);
+                    }
                     editPosition = -1;
                     notifyDataSetChanged();
-                    mPresenter.getUpdateNum(s.id, s.goodsNum + "");
+                    mPresenter.getUpdateNum(s.id, num + "");
                 });
                 holder.getView(R.id.txt_delete).setOnClickListener(v -> {// 删除
                     selectShop.remove(s.id);
@@ -136,11 +151,6 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
             }
         };
         viewBinding.list.setAdapter(adapter);
-    }
-
-    @Override
-    public void getAddResult(ResponseBody addResult) throws JSONException, IOException {
-
     }
 
     @Override
@@ -159,28 +169,26 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
     private void showPriceAndNum() {
         if (isEdit) return;
         if (selectShop.size() == 0) {
-            viewBinding.submitBtn.setText("结算");
             viewBinding.totalPrice.setText("¥ 0.00");
         } else {
-            viewBinding.submitBtn.setText("结算（" + selectShop.size() + "）");
             double price = 0;
             for (String key : selectShop.keySet()) {
                 price += (selectShop.get(key).goodsPrice * selectShop.get(key).goodsNum);
             }
             viewBinding.totalPrice.setText("¥ " + price);
         }
-    }
-
-
-    @Override
-    public void getCarNum(String num) {
-        viewBinding.title.setText("购物车（" + num + "）");
+        viewBinding.submitBtn.setText("结算");
     }
 
     @Override
     public void deleteShopSource() {
-        mPresenter.getNumCar();
         mPresenter.getShopCar();
+    }
+
+    @Override
+    public void getUserInner(UserInfo info) {
+        LocalConfiguration.userInfo = info;
+        viewBinding.myPoints.setText("（当前用户可用珍币数" + info.getIntegration() + "）");
     }
 
 
@@ -194,6 +202,7 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
                     viewBinding.submitBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.submit_bg, null));
                     viewBinding.submitBtn.setTextColor(Color.parseColor("#ffffff"));
                     showPriceAndNum();
+                    mPresenter.getShopCar();
                     isEdit = false;
                 } else {
                     viewBinding.manageBtn.setText("取消");
@@ -216,7 +225,11 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
                     }
                     mPresenter.batchDelete(builder.substring(0, builder.length() - 1));
                 } else {
-                    startActivity(new Intent(CartActivity.this, ConfirmActivity.class));
+                    ArrayList<ShopCarBO.ShopCarInfoDOSBean> shops = new ArrayList<>();
+                    shops.addAll(selectShop.values());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("shops", shops);
+                    gotoActivity(ConfirmActivity.class, bundle, false);
                 }
                 break;
         }

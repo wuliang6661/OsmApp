@@ -124,6 +124,12 @@
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Mike" />
+
+        <activity
+            android:name=".ui.SearchShopActivity"
+            android:launchMode="standard"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Mike" />
         <activity
             android:name=".ui.order.OrderDetailActivity"
             android:launchMode="standard"
@@ -152,8 +158,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:launchMode="standard"
-            />
+            android:launchMode="standard" />
         <activity
             android:name=".ui.StartActivity"
             android:launchMode="standard"

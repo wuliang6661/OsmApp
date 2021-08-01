@@ -20,8 +20,10 @@ public class ShopListBO {
                 public String id;
                 public String name;
                 public String icon;
-                public Integer preferentialPrice;
-                public Integer integralPrice;
+                public Double preferentialPrice;
+                public Double integralPrice;
+
+
             }
         }
     }

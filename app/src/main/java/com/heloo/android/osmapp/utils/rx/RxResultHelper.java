@@ -1,7 +1,8 @@
 package com.heloo.android.osmapp.utils.rx;
 
-import android.util.Log;
+import com.google.gson.Gson;
 import com.heloo.android.osmapp.model.BaseResult;
+import com.heloo.android.osmapp.model.ErrorBean;
 import com.heloo.android.osmapp.utils.LogUtils;
 
 import rx.Observable;
@@ -28,14 +29,17 @@ public class RxResultHelper {
                         new Func1<BaseResult<T>, Observable<T>>() {
                             @Override
                             public Observable<T> call(BaseResult<T> result) {
-                                LogUtils.E("请求报错啦！！！"+result.getStatus());
                                 if (result.surcess()) {
-                                    Log.d("res请求报错啦", "call: "+result.getData());
                                     return createData(result.getData());
-
                                 } else {
-                                        LogUtils.E("请求报错啦！！！");
-                                        return Observable.error(new RuntimeException(result.getMessage()));
+                                    LogUtils.E("请求报错啦！！！");
+                                    if (result.getData() instanceof String) {
+                                        return Observable.error(new RuntimeException((String) result.getData()));
+                                    } else {
+                                        String str = new Gson().toJson(result.getData());
+                                        ErrorBean errorBean = new Gson().fromJson(str, ErrorBean.class);
+                                        return Observable.error(new RuntimeException(errorBean.errMsg));
+                                    }
                                 }
                             }
                         }

@@ -1,17 +1,25 @@
 package com.heloo.android.osmapp.ui.order;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.PayTask;
 import com.google.android.material.tabs.TabLayout;
 import com.heloo.android.osmapp.R;
 import com.heloo.android.osmapp.databinding.ActivityOrderBinding;
 import com.heloo.android.osmapp.model.OrderBO;
+import com.heloo.android.osmapp.model.PayBean;
+import com.heloo.android.osmapp.model.PayResult;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.OrderContract;
 import com.heloo.android.osmapp.mvp.presenter.OrderPresenter;
+import com.heloo.android.osmapp.ui.confirm.PaySuccessActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.heloo.android.osmapp.widget.AlertDialog;
@@ -20,6 +28,7 @@ import com.heloo.android.osmapp.widget.lgrecycleadapter.LGViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +45,7 @@ public class OrderActivity extends MVPBaseActivity<OrderContract.View, OrderPres
     int pageNum = 1;
     int type = 1;
 
+    private String payOrderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +192,13 @@ public class OrderActivity extends MVPBaseActivity<OrderContract.View, OrderPres
                                 }).show();
                     }
                 });
+                holder.getView(R.id.payBtn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        payOrderId = orderBO.id;
+                        mPresenter.pay(orderBO.id);
+                    }
+                });
                 break;
             case "cancel":  //已取消
                 textView.setText("已取消");
@@ -201,6 +218,16 @@ public class OrderActivity extends MVPBaseActivity<OrderContract.View, OrderPres
                 holder.getView(R.id.payBtn).setVisibility(View.GONE);
                 holder.getView(R.id.getProductBtn).setVisibility(View.VISIBLE);
                 holder.setText(R.id.getProductBtn, "退款");
+                holder.getView(R.id.getProductBtn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new AlertDialog(OrderActivity.this).builder().setGone().setMsg("是否确认退款？")
+                                .setNegativeButton("取消", null)
+                                .setPositiveButton("确定", v -> {
+                                    mPresenter.paRefundy(orderBO.id);
+                                }).show();
+                    }
+                });
                 break;
             case "success":  //已完成
                 textView.setText("已完成");
@@ -281,4 +308,63 @@ public class OrderActivity extends MVPBaseActivity<OrderContract.View, OrderPres
     public void getOrderDetails(OrderBO orderBO) {
 
     }
+
+    @Override
+    public void pay(PayBean orderInfo) {
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                PayTask alipay = new PayTask(OrderActivity.this);
+                Map<String, String> result = alipay.payV2(orderInfo.body, true);
+
+                Message msg = new Message();
+                msg.what = 1;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
+    }
+
+    @Override
+    public void unRelase() {
+        ToastUtils.showShortToast("已成功申请退款！");
+        pageNum = 1;
+        mPresenter.getOrder(pageNum, type);
+    }
+
+
+    private final Handler mHandler = new Handler() {
+
+        @SuppressLint("HandlerLeak")
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    @SuppressLint("HandlerLeak")
+                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    /**
+                     * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                     */
+                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                    String resultStatus = payResult.getResultStatus();
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", payOrderId);
+                        gotoActivity(PaySuccessActivity.class, bundle, false);
+                    } else {
+                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                        ToastUtils.showShortToast("支付失败！");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
 }
