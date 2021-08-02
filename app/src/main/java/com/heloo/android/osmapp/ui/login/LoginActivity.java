@@ -8,6 +8,7 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import androidx.core.content.res.ResourcesCompat;
 
 import com.alibaba.fastjson.JSON;
@@ -26,6 +27,7 @@ import com.heloo.android.osmapp.ui.main.MainActivity;
 import com.heloo.android.osmapp.ui.password.ModifyActivity;
 import com.heloo.android.osmapp.utils.ScreenUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,7 +45,7 @@ import okhttp3.ResponseBody;
  * @date 4/26/21
  */
 public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPresenter, ActivityLogin2Binding>
-    implements LoginContract.View, View.OnClickListener {
+        implements LoginContract.View, View.OnClickListener {
 
     private int loginWay = 1;//1 手机快捷登录 2 账号密码登录 3 注册
     private boolean isAgree = false;
@@ -51,7 +53,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getIntent().getStringExtra("tag") != null){
+        if (getIntent().getStringExtra("tag") != null) {
             coverBack();
         }
     }
@@ -80,22 +82,22 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
                 viewBinding.passCodeInput.setText("");
                 viewBinding.setPasswordInput.setText("");
                 viewBinding.accountInput.setText("");
-                if (tab.getPosition() == 0){//手机快捷登录
+                if (tab.getPosition() == 0) {//手机快捷登录
                     loginWay = 1;
-                    viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.login_phone,null));
+                    viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_phone, null));
                     viewBinding.accountInput.setHint("输入手机号码");
-                    viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.login_code,null));
+                    viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_code, null));
                     viewBinding.passCodeInput.setHint("输入验证码");
                     viewBinding.passCodeInput.setInputType(InputType.TYPE_CLASS_NUMBER);
                     viewBinding.passCodeInput.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                     viewBinding.codeBtn.setVisibility(View.VISIBLE);
                     viewBinding.setPasswordLayout.setVisibility(View.GONE);
                     viewBinding.forgetBtn.setVisibility(View.GONE);
-                }else {//账号密码登录
+                } else {//账号密码登录
                     loginWay = 2;
-                    viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.login_account,null));
+                    viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_account, null));
                     viewBinding.accountInput.setHint("输入账号");
-                    viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.login_password,null));
+                    viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_password, null));
                     viewBinding.passCodeInput.setHint("输入密码");
                     viewBinding.passCodeInput.setTransformationMethod(PasswordTransformationMethod.getInstance()); //设置为密码输入框
                     viewBinding.codeBtn.setVisibility(View.GONE);
@@ -118,9 +120,9 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             loginWay = 3;
             setTitle("注册");
             findViewById(R.id.registerBtn).setVisibility(View.GONE);
-            viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.login_phone,null));
+            viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_phone, null));
             viewBinding.accountInput.setHint("输入手机号码");
-            viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.login_code,null));
+            viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_code, null));
             viewBinding.passCodeInput.setHint("输入验证码");
             viewBinding.passCodeInput.setInputType(InputType.TYPE_CLASS_NUMBER);
             viewBinding.codeBtn.setVisibility(View.VISIBLE);
@@ -156,13 +158,13 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.codeBtn:
-                if (TextUtils.isEmpty(viewBinding.accountInput.getText())){
+                if (TextUtils.isEmpty(viewBinding.accountInput.getText())) {
                     ToastUtils.showShortToast("请输入手机号");
                     return;
                 }
-                if (viewBinding.accountInput.getText().length() != 11 || !viewBinding.accountInput.getText().toString().startsWith("1")){
+                if (viewBinding.accountInput.getText().length() != 11 || !viewBinding.accountInput.getText().toString().startsWith("1")) {
                     ToastUtils.showShortToast("请输入正确的手机号");
                     return;
                 }
@@ -171,7 +173,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
                 getCode();
                 break;
             case R.id.forgetBtn:
-                startActivity(new Intent(LoginActivity.this, ModifyActivity.class));
+                startActivity(new Intent(LoginActivity.this, ForwordPasswordActivity.class));
                 break;
             case R.id.submitBtn:
                 submit();
@@ -180,11 +182,11 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
 
                 break;
             case R.id.agreeBtn:
-                if (isAgree){
-                    viewBinding.agreeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.agree_bg,null));
+                if (isAgree) {
+                    viewBinding.agreeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.agree_bg, null));
                     isAgree = false;
-                }else {
-                    viewBinding.agreeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.agree_select_yes,null));
+                } else {
+                    viewBinding.agreeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.agree_select_yes, null));
                     isAgree = true;
                 }
                 break;
@@ -195,53 +197,53 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
      * 登录注册操作
      */
     private void submit() {
-        switch (loginWay){
+        switch (loginWay) {
             case 1://1 手机快捷登录
-                if (TextUtils.isEmpty(viewBinding.accountInput.getText())){
+                if (TextUtils.isEmpty(viewBinding.accountInput.getText())) {
                     ToastUtils.showShortToast("请先输入手机号码");
                     return;
                 }
-                if (TextUtils.isEmpty(viewBinding.passCodeInput.getText())){
+                if (TextUtils.isEmpty(viewBinding.passCodeInput.getText())) {
                     ToastUtils.showShortToast("请先输入验证码");
                     return;
                 }
-                if (!isAgree){
+                if (!isAgree) {
                     ToastUtils.showShortToast("请先阅读并同意《欧诗漫头条协议》");
                     return;
                 }
                 showProgress("");
-                mPresenter.login("byOtpCode",viewBinding.accountInput.getText().toString(),viewBinding.passCodeInput.getText().toString(),"");
+                mPresenter.login("byOtpCode", viewBinding.accountInput.getText().toString(), viewBinding.passCodeInput.getText().toString(), "");
                 break;
             case 2://2 账号密码登录
-                if (TextUtils.isEmpty(viewBinding.accountInput.getText())){
+                if (TextUtils.isEmpty(viewBinding.accountInput.getText())) {
                     ToastUtils.showShortToast("请先输入手机号码");
                     return;
                 }
-                if (TextUtils.isEmpty(viewBinding.passCodeInput.getText())){
+                if (TextUtils.isEmpty(viewBinding.passCodeInput.getText())) {
                     ToastUtils.showShortToast("请先输入密码");
                     return;
                 }
-                if (!isAgree){
+                if (!isAgree) {
                     ToastUtils.showShortToast("请先阅读并同意《欧诗漫头条协议》");
                     return;
                 }
                 showProgress("");
-                mPresenter.login("byPassword",viewBinding.accountInput.getText().toString(),"",viewBinding.passCodeInput.getText().toString());
+                mPresenter.login("byPassword", viewBinding.accountInput.getText().toString(), "", viewBinding.passCodeInput.getText().toString());
                 break;
             case 3://3 注册
-                if (TextUtils.isEmpty(viewBinding.passCodeInput.getText())){
+                if (TextUtils.isEmpty(viewBinding.passCodeInput.getText())) {
                     ToastUtils.showShortToast("请先输入验证码");
                     return;
                 }
-                if (TextUtils.isEmpty(viewBinding.setPasswordInput.getText())){
+                if (TextUtils.isEmpty(viewBinding.setPasswordInput.getText())) {
                     ToastUtils.showShortToast("请先输入密码");
                     return;
                 }
-                if (viewBinding.setPasswordInput.getText().toString().length() <= 6){
+                if (viewBinding.setPasswordInput.getText().toString().length() <= 6) {
                     ToastUtils.showShortToast("密码过短，请完善密码");
                     return;
                 }
-                if (!isAgree){
+                if (!isAgree) {
                     ToastUtils.showShortToast("请先阅读并同意《欧诗漫头条协议》");
                     return;
                 }
@@ -257,15 +259,15 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
      * 获取验证码
      */
     private void getCode() {
-        switch (loginWay){
+        switch (loginWay) {
             case 1://1 手机快捷登录
-                mPresenter.getRegisterCode(viewBinding.accountInput.getText().toString(),"login");
+                mPresenter.getRegisterCode(viewBinding.accountInput.getText().toString(), "login");
                 break;
             case 2://2 账号密码登录
 
                 break;
             case 3://3 注册
-                mPresenter.getRegisterCode(viewBinding.accountInput.getText().toString(),"register");
+                mPresenter.getRegisterCode(viewBinding.accountInput.getText().toString(), "register");
                 break;
         }
     }
@@ -273,15 +275,15 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
     /**
      * 返回
      */
-    private void back(){
-        if (loginWay == 3){
+    private void back() {
+        if (loginWay == 3) {
             loginWay = 1;
             setTitle("登录");
             findViewById(R.id.registerBtn).setVisibility(View.VISIBLE);
             viewBinding.tabLayout.getTabAt(0).select();
-            viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.login_phone,null));
+            viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_phone, null));
             viewBinding.accountInput.setHint("输入手机号码");
-            viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.login_code,null));
+            viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_code, null));
             viewBinding.passCodeInput.setHint("输入验证码");
             viewBinding.passCodeInput.setInputType(InputType.TYPE_CLASS_NUMBER);
             viewBinding.codeBtn.setVisibility(View.VISIBLE);
@@ -291,7 +293,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             viewBinding.tabLayout.setVisibility(View.VISIBLE);
             viewBinding.passCodeInput.setText("");
             viewBinding.setPasswordInput.setText("");
-            viewBinding.agreeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.agree_bg,null));
+            viewBinding.agreeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.agree_bg, null));
             isAgree = false;
             viewBinding.codeBtn.onDestroy();
             viewBinding.submitBtn.setText("立即登录");
@@ -300,7 +302,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
                     LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(ScreenUtils.dp2px(22), ScreenUtils.dp2px(10), ScreenUtils.dp2px(22), 0);
             viewBinding.submitBtn.setLayoutParams(lp);
-        }else {
+        } else {
             finish();
         }
     }
@@ -310,9 +312,9 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         String s = new String(data.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
+        if (status.equals("success")) {
             ToastUtils.showShortToast("验证码发送成功");
-        }else {
+        } else {
             ToastUtils.showShortToast("验证码发送失败，请稍后重试...");
         }
     }
@@ -322,10 +324,10 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         String s = new String(data.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
+        if (status.equals("success")) {
             ToastUtils.showShortToast("注册成功");
             back();
-        }else {
+        } else {
             JSONObject jsonObject1 = jsonObject.getJSONObject("data");
             ToastUtils.showShortToast(jsonObject1.optString("errMsg"));
         }
@@ -336,12 +338,12 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         String s = new String(data.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
-            LocalConfiguration.tokenBean = JSON.parseObject(jsonObject.optString("data"),TokenBean.class);
-            MyApplication.spUtils.put("token",LocalConfiguration.tokenBean.getTokenHead()+LocalConfiguration.tokenBean.getToken());
+        if (status.equals("success")) {
+            LocalConfiguration.tokenBean = JSON.parseObject(jsonObject.optString("data"), TokenBean.class);
+            MyApplication.spUtils.put("token", LocalConfiguration.tokenBean.getTokenHead() + LocalConfiguration.tokenBean.getToken());
             showProgress("");
-            mPresenter.getUserInfo(LocalConfiguration.tokenBean.getTokenHead()+LocalConfiguration.tokenBean.getToken());
-        }else {
+            mPresenter.getUserInfo(LocalConfiguration.tokenBean.getTokenHead() + LocalConfiguration.tokenBean.getToken());
+        } else {
             MyApplication.spUtils.clear();
             JSONObject jsonObject1 = jsonObject.getJSONObject("data");
             ToastUtils.showShortToast(jsonObject1.optString("errMsg"));
@@ -353,20 +355,20 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         String s = new String(data.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
+        if (status.equals("success")) {
             MyApplication.isLogin = ConditionEnum.LOGIN;
-            LocalConfiguration.userInfo = JSON.parseObject(jsonObject.optString("data"),UserInfo.class);
+            LocalConfiguration.userInfo = JSON.parseObject(jsonObject.optString("data"), UserInfo.class);
             //极光推送注册
-            JPushInterface.setAlias(getApplicationContext(),111,LocalConfiguration.userInfo.getPhone());
+            JPushInterface.setAlias(getApplicationContext(), 111, LocalConfiguration.userInfo.getPhone());
             Set<String> tags = new HashSet<>();
             tags.add(LocalConfiguration.userInfo.getPhone());
-            JPushInterface.setTags(getApplicationContext(),222,tags);
-            if (getIntent().getStringExtra("tag") != null){
-                gotoActivity(MainActivity.class,true);
-            }else {
+            JPushInterface.setTags(getApplicationContext(), 222, tags);
+            if (getIntent().getStringExtra("tag") != null) {
+                gotoActivity(MainActivity.class, true);
+            } else {
                 finish();
             }
-        }else {
+        } else {
             MyApplication.isLogin = ConditionEnum.NOLOGIN;
             JSONObject jsonObject1 = jsonObject.getJSONObject("data");
             ToastUtils.showShortToast(jsonObject1.optString("errMsg"));

@@ -4,4 +4,6 @@ public class PayBean {
 
 
     public String body;
+    public Integer errCode;
+    public String errMsg;
 }

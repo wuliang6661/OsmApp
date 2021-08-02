@@ -324,9 +324,6 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
         });
         banner.loadImage((banner1, model, view, position) -> {
             ShapeableImageView image = view.findViewById(R.id.image);
-//            ViewGroup.LayoutParams params = image.getLayoutParams();
-//            params.height = (int) (ScreenUtils.getScreenWidth() * 0.16);
-//            image.setLayoutParams(params);
             if (bannerData2.get(position).getIcon().startsWith("http")) {
                 Glide.with(getActivity()).load(bannerData2.get(position).getIcon()).into(image);
             } else {

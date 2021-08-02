@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.alipay.sdk.app.PayTask;
 import com.bumptech.glide.Glide;
 import com.heloo.android.osmapp.R;
+import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityConfirmBinding;
 import com.heloo.android.osmapp.model.AddressBean;
@@ -37,7 +38,6 @@ import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.ConfirmContract;
 import com.heloo.android.osmapp.mvp.presenter.ConfirmPresenter;
 import com.heloo.android.osmapp.ui.address.AddressActivity;
-import com.heloo.android.osmapp.ui.order.OrderDetailActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.zhy.adapter.abslistview.CommonAdapter;
@@ -54,16 +54,17 @@ import androidx.annotation.Nullable;
 public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, ConfirmPresenter, ActivityConfirmBinding>
         implements ConfirmContract.View, View.OnClickListener {
 
-    private CommonAdapter<ShopCarBO.ShopCarInfoDOSBean> adapter;
+    private CommonAdapter<OrderPriceBO.ShopOrderModelsBean> adapter;
     private ArrayList<ShopCarBO.ShopCarInfoDOSBean> data;
 
     private TextView selectAddress;
     private RelativeLayout addressLayout;
-    private TextView name, phone, address, all_inter, edit_remark;
+    private TextView name, phone, address, all_inter, edit_remark, zhifu;
     private ImageView editAddress;
-    private CheckBox selectImg;
+    private CheckBox selectImg, zhifu_bao_check;
     private AddressBean addressBean;
     private OrderPriceBO priceBO;
+    private RelativeLayout zhifuBao;
 
     StringBuilder shopIds;
     StringBuilder shopNums;
@@ -83,11 +84,15 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
             shopIds.append(item.goodsId).append(",");
             shopNums.append(item.goodsNum).append(",");
         }
+        showProgress(null);
         mPresenter.getshopInter(shopIds.substring(0, shopIds.length() - 1), shopNums.substring(0, shopNums.length() - 1));
 
         if (LocalConfiguration.userInfo.getSourceType() != 1001) {
             selectImg.setChecked(true);
             selectImg.setEnabled(false);
+            zhifu.setVisibility(View.GONE);
+            zhifuBao.setVisibility(View.GONE);
+            zhifu_bao_check.setChecked(false);
         } else {
             selectImg.setEnabled(true);
         }
@@ -107,8 +112,10 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         phone = footView.findViewById(R.id.phone);
         address = footView.findViewById(R.id.address);
         editAddress = footView.findViewById(R.id.editAddress);
+        zhifu = footView.findViewById(R.id.zhifu_text);
+        zhifuBao = footView.findViewById(R.id.zhifu_bao);
+        zhifu_bao_check = footView.findViewById(R.id.zhifu_bao_check);
         selectImg = footView.findViewById(R.id.selectImg);
-        setAdapter();
         int price = 0;
         for (ShopCarBO.ShopCarInfoDOSBean item : data) {
             price += (item.goodsPrice * item.goodsNum);
@@ -132,17 +139,20 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
     }
 
     private void setAdapter() {
-        adapter = new CommonAdapter<ShopCarBO.ShopCarInfoDOSBean>(this, R.layout.cart_item_layout, data) {
+        adapter = new CommonAdapter<OrderPriceBO.ShopOrderModelsBean>(this, R.layout.cart_item_layout, priceBO.shopOrderModels) {
             @Override
-            protected void convert(ViewHolder holder, ShopCarBO.ShopCarInfoDOSBean s, int position) {
+            protected void convert(ViewHolder holder, OrderPriceBO.ShopOrderModelsBean s, int position) {
                 holder.getView(R.id.selectImg).setVisibility(View.GONE);
                 holder.getView(R.id.editBtn).setVisibility(View.INVISIBLE);
-                holder.setText(R.id.productTitle, s.goodsName);
-                holder.setText(R.id.editTitle, s.goodsName);
-                holder.setText(R.id.price, "¥ " + s.goodsPrice);
-                holder.setText(R.id.num, "x " + s.goodsNum);
-                holder.setText(R.id.editNum, s.goodsNum + "");
-                Glide.with(ConfirmActivity.this).load(s.goodsImg)
+                holder.setText(R.id.productTitle, s.name);
+                holder.setText(R.id.editTitle, s.name);
+                holder.setText(R.id.price, "¥ " + s.discountprice);
+                holder.setText(R.id.num, "x " + s.number);
+                holder.setText(R.id.editNum, s.number + "");
+                if (!s.icon.startsWith("http")) {
+                    s.icon = HttpInterface.IMG_URL + s.icon;
+                }
+                Glide.with(ConfirmActivity.this).load(s.icon)
                         .placeholder(R.drawable.default_head)
                         .error(R.drawable.default_head)
                         .into((ImageView) holder.getView(R.id.productImg));
@@ -155,6 +165,7 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
 
     @Override
     public void onRequestError(String msg) {
+        stopProgress();
         ToastUtils.showShortToast(msg);
     }
 
@@ -264,10 +275,17 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
 
     @Override
     public void getshopInter(OrderPriceBO priceBO) {
+        stopProgress();
         this.priceBO = priceBO;
-        viewBinding.price.setText("￥ " + priceBO.totalPrice + (priceBO.totalScore != 0 ? "  + " + priceBO.totalScore + "珍币" : ""));
+        if (LocalConfiguration.userInfo.getSourceType() != 1001) {
+            viewBinding.price.setText(priceBO.totalScore + "");
+            viewBinding.zhenbiImg.setVisibility(View.VISIBLE);
+        } else {
+            viewBinding.price.setText("￥ " + priceBO.totalPrice + (priceBO.totalScore != 0 ? "  + " + priceBO.totalScore + "珍币" : ""));
+        }
         String text = "使用珍币（本单最多可使用珍币" + (priceBO == null ? 0 : priceBO.totalScore) + "，当前用户剩余珍币" + LocalConfiguration.userInfo.getIntegration() + "）";
         all_inter.setText(text);
+        setAdapter();
     }
 
     @Override
@@ -279,6 +297,12 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
 
 
     public void pay(PayBean orderInfo, String order) {
+        if (LocalConfiguration.userInfo.getSourceType() != 1001) {
+            Bundle bundle = new Bundle();
+            bundle.putString("id", orderId);
+            gotoActivity(PaySuccessActivity.class, bundle, true);
+            return;
+        }
         Runnable payRunnable = new Runnable() {
 
             @Override
@@ -317,7 +341,7 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                         Bundle bundle = new Bundle();
                         bundle.putString("id", orderId);
-                        gotoActivity(PaySuccessActivity.class, bundle, false);
+                        gotoActivity(PaySuccessActivity.class, bundle, true);
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                         ToastUtils.showShortToast("支付失败！");

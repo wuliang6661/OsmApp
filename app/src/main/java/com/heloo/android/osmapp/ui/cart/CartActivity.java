@@ -21,6 +21,7 @@ import com.heloo.android.osmapp.ui.confirm.ConfirmActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
 import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
+import com.heloo.android.osmapp.widget.AlertDialog;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -145,8 +146,12 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
                     mPresenter.getUpdateNum(s.id, num + "");
                 });
                 holder.getView(R.id.txt_delete).setOnClickListener(v -> {// 删除
-                    selectShop.remove(s.id);
-                    mPresenter.delCar(s.id);
+                    new AlertDialog(CartActivity.this).builder().setGone().setMsg("确认删除商品？")
+                            .setNegativeButton("取消", null)
+                            .setPositiveButton("确定", v1 -> {
+                                selectShop.remove(s.id);
+                                mPresenter.delCar(s.id);
+                            }).show();
                 });
             }
         };
@@ -219,11 +224,15 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
                     return;
                 }
                 if (isEdit) {
-                    StringBuilder builder = new StringBuilder();
-                    for (String key : selectShop.keySet()) {
-                        builder.append(key).append(",");
-                    }
-                    mPresenter.batchDelete(builder.substring(0, builder.length() - 1));
+                    new AlertDialog(CartActivity.this).builder().setGone().setMsg("确认删除商品？")
+                            .setNegativeButton("取消", null)
+                            .setPositiveButton("确定", v1 -> {
+                                StringBuilder builder = new StringBuilder();
+                                for (String key : selectShop.keySet()) {
+                                    builder.append(key).append(",");
+                                }
+                                mPresenter.batchDelete(builder.substring(0, builder.length() - 1));
+                            }).show();
                 } else {
                     ArrayList<ShopCarBO.ShopCarInfoDOSBean> shops = new ArrayList<>();
                     shops.addAll(selectShop.values());

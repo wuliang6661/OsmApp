@@ -53,6 +53,10 @@ public interface HttpInterface {
     Observable<ResponseBody> getCode(@Query("telephone") String telephone,
                                      @Query("type") String type);//获取验证码类型，注册register,登录login,改密码resetPassword
 
+    @GET("/ums/getOtpCode")
+    Observable<BaseResult<Object>> getOPTCode(@Query("telephone") String telephone,
+                                              @Query("type") String type);//获取验证码类型，注册register,登录login,改密码resetPassword
+
     /**
      * 注册
      */
@@ -525,5 +529,15 @@ public interface HttpInterface {
                                             @Field("otpCode") String otpCode,
                                             @Field("password") String password,
                                             @Field("username") String username);
+
+    /**
+     * 忘记密码2
+     */
+    @FormUrlEncoded
+    @POST("/ums/resetPassword")
+    Observable<BaseResult<Object>> resetPassword(
+            @Field("otpCode") String otpCode,
+            @Field("password") String password,
+            @Field("username") String username);
 }
 

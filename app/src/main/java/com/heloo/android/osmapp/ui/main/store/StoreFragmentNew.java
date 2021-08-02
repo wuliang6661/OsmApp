@@ -141,6 +141,11 @@ public class StoreFragmentNew extends MVPBaseFragment<StoreContract.View, StoreP
 
 
     private void setLeftAdapter() {
+        for (int i = 0; i < shopListBO.list.size(); i++) {
+            if (shopListBO.list.get(i).typeGoodsMoels.isEmpty()) {
+                shopListBO.list.remove(i);
+            }
+        }
         LGRecycleViewAdapter<ShopListBO.ListBean> adapter = new LGRecycleViewAdapter<ShopListBO.ListBean>(shopListBO.list) {
             @Override
             public int getLayoutId(int viewType) {
@@ -208,11 +213,11 @@ public class StoreFragmentNew extends MVPBaseFragment<StoreContract.View, StoreP
                     @Override
                     public void convert(LGViewHolder holder, ShopListBO.ListBean.TypeGoodsMoelsBean.GoodsMoelsBean goodsMoelsBean, int position) {
                         holder.setText(R.id.tvName, goodsMoelsBean.name);
-                        holder.setText(R.id.tvPrice, String.format("￥%s", goodsMoelsBean.integralPrice));
+                        holder.setText(R.id.tvPrice, String.format("￥%s", goodsMoelsBean.preferentialPrice));
                         if (goodsMoelsBean.icon.startsWith("http")) {
                             holder.setImageUrl(getActivity(), R.id.productImg, goodsMoelsBean.icon);
                         } else {
-                            holder.setImageUrl(getActivity(), R.id.productImg, HttpInterface.URL + goodsMoelsBean.icon);
+                            holder.setImageUrl(getActivity(), R.id.productImg, HttpInterface.IMG_URL + goodsMoelsBean.icon);
                         }
                     }
                 };

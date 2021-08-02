@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.heloo.android.osmapp.R;
+import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.api.HttpInterfaceIml;
 import com.heloo.android.osmapp.api.HttpResultSubscriber;
 import com.heloo.android.osmapp.config.LocalConfiguration;
@@ -102,6 +103,9 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         //加载广告图片
         banner.loadImage((banner1, model, view, position) -> {
             ImageView image = view.findViewById(R.id.image);
+            if (!bannerData.get(position).startsWith("http")) {
+                bannerData.set(position, HttpInterface.IMG_URL + bannerData.get(position));
+            }
             Glide.with(this).load(bannerData.get(position))
                     .placeholder(R.drawable.default_head)
                     .error(R.drawable.default_head).into(image);
@@ -208,6 +212,9 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
             productName.setText(productDetailBean.name);
             price.setText(String.format("¥%s", productDetailBean.preferentialPrice));
             leftNum.setText(String.format("库存%s件", productDetailBean.freeNum));
+            if (!productDetailBean.icon.startsWith("http")) {
+                productDetailBean.icon = HttpInterface.IMG_URL + productDetailBean.icon;
+            }
             Glide.with(this).load(productDetailBean.icon).placeholder(R.drawable.default_head)
                     .error(R.drawable.default_head).into(productImg);
         }

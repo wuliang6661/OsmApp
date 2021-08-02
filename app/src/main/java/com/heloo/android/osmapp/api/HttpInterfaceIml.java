@@ -1,6 +1,7 @@
 package com.heloo.android.osmapp.api;
 
 
+import com.heloo.android.osmapp.model.BaseResult;
 import com.heloo.android.osmapp.model.CreateOrderBo;
 import com.heloo.android.osmapp.model.OrderBO;
 import com.heloo.android.osmapp.model.OrderPriceBO;
@@ -45,6 +46,13 @@ public class HttpInterfaceIml {
      */
     public static Observable<ResponseBody> getCode(String telephone, String type) {
         return getService().getCode(telephone, type).compose(RxHelper.httpRusult());
+    }
+
+    /**
+     * 获取验证码2
+     */
+    public static Observable<Object> getOPTCode(String telephone, String type) {
+        return getService().getOPTCode(telephone, type).compose(RxResultHelper.httpRusult());
     }
 
     /**
@@ -466,7 +474,7 @@ public class HttpInterfaceIml {
     /**
      * 忘记密码
      */
-    public static Observable<ResponseBody> modifyPassword(String token, String otpCode, String password, String username) {
-        return getService().modifyPassword(token, otpCode, password, username).compose(RxHelper.httpRusult());
+    public static Observable<Object> resetPassword(String otpCode, String password, String username) {
+        return getService().resetPassword(otpCode, password, username).compose(RxResultHelper.httpRusult());
     }
 }

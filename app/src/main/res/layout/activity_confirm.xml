@@ -63,9 +63,19 @@
                 android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawablePadding="3dp"
                 android:text="￥0"
                 android:textColor="#D3A952"
                 android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/zhenbi_img"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:visibility="gone"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/zhenbi" />
+
         </LinearLayout>
 
         <Button

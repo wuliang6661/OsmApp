@@ -156,6 +156,7 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/zhifu_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="13dp"
@@ -166,6 +167,7 @@
 
 
         <RelativeLayout
+            android:id="@+id/zhifu_bao"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#ffffff"
@@ -184,6 +186,7 @@
                 app:drawableStartCompat="@mipmap/ali_pay" />
 
             <CheckBox
+                android:id="@+id/zhifu_bao_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

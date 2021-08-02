@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="#F6F6F6">
+    android:background="#F6F6F6"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/banner1Layout"
@@ -22,44 +22,48 @@
             app:isShowIndicatorOnlyOne="false"
             app:isShowNumberIndicator="false"
             app:pageChangeDuration="800"
-            app:viewPagerClipChildren="true"
-            app:pointsContainerBackground="@android:color/transparent" />
+            app:pointsContainerBackground="@android:color/transparent"
+            app:viewPagerClipChildren="true" />
 
         <LinearLayout
             android:id="@+id/paperLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_alignParentEnd="true"
             android:background="#99000000"
-            android:layout_alignParentEnd="true">
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingStart="4dp"
-                android:paddingEnd="4dp"
                 android:paddingTop="2dp"
+                android:paddingEnd="4dp"
                 android:paddingBottom="2dp">
+
                 <TextView
+                    android:id="@+id/nowPage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/nowPage"
                     android:text="1"
-                    android:textSize="13sp"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="/"
-                    android:textSize="13sp"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp" />
+
                 <TextView
+                    android:id="@+id/totalPage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/totalPage"
                     android:text="5"
-                    android:textSize="10sp"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
@@ -68,35 +72,37 @@
         android:id="@+id/noticeLayout"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:orientation="horizontal"
+        android:background="#ffffff"
         android:gravity="center_vertical"
-        android:background="#ffffff">
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:drawablePadding="2dp"
+            android:gravity="center_vertical"
             android:text="公告"
             android:textColor="#F65959"
             android:textSize="11sp"
             android:textStyle="bold"
-            android:drawablePadding="2dp"
-            android:layout_marginStart="7dp"
-            app:drawableStartCompat="@mipmap/notice_img"
-            android:gravity="center_vertical"/>
+            app:drawableStartCompat="@mipmap/notice_img" />
+
         <TextView
             android:id="@+id/noticeTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
             android:layout_marginEnd="20dp"
             android:ellipsize="marquee"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
-            android:textColor="#2B2B2B"
-            android:textSize="12sp"
-            android:layout_marginStart="9dp"
+            android:singleLine="true"
             android:text=""
-            android:singleLine="true" />
+            android:textColor="#2B2B2B"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <RelativeLayout
@@ -118,24 +124,24 @@
             app:isShowNumberIndicator="false"
             app:pageChangeDuration="800"
             app:pointsContainerBackground="@android:color/transparent" />
+
         <TextView
             android:id="@+id/moreBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:background="@drawable/black_bg"
+            android:drawablePadding="2dp"
+            android:gravity="center_vertical"
+            android:paddingStart="5dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="3dp"
             android:text="更多"
             android:textColor="#ffffff"
             android:textSize="12sp"
-            android:drawablePadding="2dp"
-            app:drawableEndCompat="@mipmap/right_img"
-            android:gravity="center_vertical"
-            android:background="@drawable/black_bg"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:layout_marginBottom="4dp"/>
+            app:drawableEndCompat="@mipmap/right_img" />
     </RelativeLayout>
 
 
