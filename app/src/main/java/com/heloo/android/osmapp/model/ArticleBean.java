@@ -11,6 +11,24 @@ public class ArticleBean {
 
     private ArticleInfoListBean ArticleInfoList;
     private List<BannerBean> banner;
+    private RecommendBanner Recommend;
+
+    public RecommendBanner getRecommend() {
+        return Recommend;
+    }
+
+    public void setRecommend(RecommendBanner recommend) {
+        Recommend = recommend;
+    }
+
+    public static class RecommendBanner {
+
+        public String id;
+        public String icon;
+        public String url;
+        public String status;
+    }
+
 
     public ArticleInfoListBean getArticleInfoList() {
         return ArticleInfoList;

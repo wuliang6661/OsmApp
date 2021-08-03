@@ -105,6 +105,15 @@ public class BannerBean {
         private String modifyDate;
         private String content;
         private String description;
+        private String webUrl;
+
+        public String getWebUrl() {
+            return webUrl;
+        }
+
+        public void setWebUrl(String webUrl) {
+            this.webUrl = webUrl;
+        }
 
         public String getId() {
             return id;

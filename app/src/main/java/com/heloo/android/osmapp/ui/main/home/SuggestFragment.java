@@ -3,10 +3,6 @@ package com.heloo.android.osmapp.ui.main.home;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -18,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
@@ -37,6 +36,7 @@ import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.ui.subject.SubjectActivity;
 import com.heloo.android.osmapp.ui.subject.SubjectDetailActivity;
 import com.heloo.android.osmapp.utils.ScreenUtils;
+import com.heloo.android.osmapp.utils.StringUtils;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.stx.xhb.androidx.XBanner;
@@ -103,15 +103,17 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
             typeName = args.getString("typeName");
             categoryId = args.getString("categoryId");
         }
+        initViews();
         if (typeName != null && typeName.equals("五美党建")) {
             newsData.clear();
+            moreBtn.setVisibility(View.GONE);
             mPresenter.getList(MyApplication.spUtils.getString("token", ""), armyPageNo, armyPageSize, categoryId, "", "");
         } else {
             newsData.clear();
+            moreBtn.setVisibility(View.VISIBLE);
             mPresenter.getList(MyApplication.spUtils.getString("token", ""), pageNo, pageSize, "", "Y", "");
             mPresenter.getBanner(MyApplication.spUtils.getString("token", ""));
         }
-        initViews();
     }
 
     private void initViews() {
@@ -318,9 +320,15 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
      */
     private void initBanner2(XBanner banner) {
         banner.setOnItemClickListener((banner12, model, view, position) -> {
-            Intent intent = new Intent(getActivity(), SubjectDetailActivity.class);
-            intent.putExtra("id", bannerData2.get(position).getId());
-            startActivity(intent);
+            if (StringUtils.isEmpty(bannerData2.get(position).getWebUrl())) {
+                Intent intent = new Intent(getActivity(), SubjectDetailActivity.class);
+                intent.putExtra("id", bannerData2.get(position).getId());
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                intent.putExtra("url", bannerData2.get(position).getWebUrl());
+                startActivity(intent);
+            }
         });
         banner.loadImage((banner1, model, view, position) -> {
             ShapeableImageView image = view.findViewById(R.id.image);
@@ -330,7 +338,6 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
                 Glide.with(getActivity()).load(HttpInterface.IMG_URL + bannerData2.get(position).getIcon()).into(image);
             }
         });
-
     }
 
     @Override
@@ -366,6 +373,19 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
                         banner.setPointsIsVisible(false);
                         banner.setData(R.layout.home_banner_layout3, armyBannerData, null);//banner_image_layout
                     }
+                }
+                if (articleBean.getRecommend() != null) {
+                    BannerBean.ArticlespecialBean bean = new BannerBean.ArticlespecialBean();
+                    bean.setIcon(articleBean.getRecommend().icon);
+                    bean.setId(articleBean.getRecommend().id);
+                    bean.setWebUrl(articleBean.getRecommend().url);
+                    bannerData2.clear();
+                    bannerData2.add(bean);
+                    initBanner2(banner2);
+                    banner2.setAutoPlayAble(bannerData2.size() > 1);
+                    banner2.setPointsIsVisible(bannerData2.size() > 1);
+                    banner2.setPointPosition(XBanner.LEFT);
+                    banner2.setData(R.layout.home_banner_layout2, bannerData2, null);//banner_image_layout2
                 }
                 armyNewsData.addAll(articleBean.getArticleInfoList().getData());
                 newsData.addAll(armyNewsData);
