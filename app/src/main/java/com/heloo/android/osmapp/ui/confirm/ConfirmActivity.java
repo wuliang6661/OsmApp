@@ -268,6 +268,9 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
                 addressBean = item;
             }
         }
+        if (addressBean == null && !address.list.isEmpty()) {
+            addressBean = address.list.get(0);
+        }
         if (addressBean == null) {
             selectAddress.setVisibility(View.VISIBLE);
             addressLayout.setVisibility(View.GONE);
