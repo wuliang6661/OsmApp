@@ -34,12 +34,13 @@ public class MyApplication extends Application {
         return instance;
     }
 
+    public static boolean AppInBack = false;  //App 是否在后台
+
     @Override
     public void onCreate() {
         super.onCreate();
         /***初始化工具类*/
         Utils.init(this);
-//        WXUtils.registerWX(this);
         JPushInterface.init(this);
         JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
         UMShareAPI.get(this);
@@ -58,7 +59,7 @@ public class MyApplication extends Application {
         map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
         map.put(TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE, true);
         QbSdk.initTbsSettings(map);
-
+        registerActivityLifecycleCallbacks(new AppLifecycleHandler());
     }
 
     @Override

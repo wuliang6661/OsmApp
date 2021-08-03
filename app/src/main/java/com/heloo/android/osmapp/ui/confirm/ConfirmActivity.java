@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.alipay.sdk.app.PayTask;
 import com.bumptech.glide.Glide;
 import com.heloo.android.osmapp.R;
@@ -45,8 +47,6 @@ import com.zhy.adapter.abslistview.ViewHolder;
 
 import java.util.ArrayList;
 import java.util.Map;
-
-import androidx.annotation.Nullable;
 
 /**
  * 订单确认
@@ -174,8 +174,15 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         switch (v.getId()) {
             case R.id.submitBtn:
 //                payDialog();
-//                startActivity(new Intent(ConfirmActivity.this, PaySuccessActivity.class));
-                createOrder();
+                if (LocalConfiguration.userInfo.getSourceType() != 1001) {
+                    new com.heloo.android.osmapp.widget.AlertDialog(ConfirmActivity.this).builder().setGone().setMsg("是否确认支付？")
+                            .setNegativeButton("取消", null)
+                            .setPositiveButton("确定", v1 -> {
+                                createOrder();
+                            }).show();
+                } else {
+                    createOrder();
+                }
                 break;
             case R.id.backBtn:
                 finish();
@@ -299,7 +306,7 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
     public void pay(PayBean orderInfo, String order) {
         if (LocalConfiguration.userInfo.getSourceType() != 1001) {
             Bundle bundle = new Bundle();
-            bundle.putString("id", orderId);
+            bundle.putString("id", order);
             gotoActivity(PaySuccessActivity.class, bundle, true);
             return;
         }

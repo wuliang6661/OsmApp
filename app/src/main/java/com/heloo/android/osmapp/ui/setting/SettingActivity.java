@@ -41,7 +41,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.addressBtn://收货地址
                 startActivity(new Intent(SettingActivity.this, AddressActivity.class));
                 break;
@@ -58,7 +58,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 MyApplication.isLogin = ConditionEnum.NOLOGIN;
                 LocalConfiguration.userInfo = null;
                 MyApplication.spUtils.clear();
-                JPushInterface.deleteAlias(getApplicationContext(),111);
+                JPushInterface.deleteAlias(this, 1);
+                JPushInterface.cleanTags(this, 1);
                 finish();
                 break;
         }

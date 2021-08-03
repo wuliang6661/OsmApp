@@ -13,6 +13,9 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.webkit.JavascriptInterface;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.alibaba.fastjson.JSON;
 import com.bigkoo.alertview.AlertView;
 import com.heloo.android.osmapp.api.HttpInterfaceIml;
@@ -35,9 +38,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 
 /**
@@ -255,6 +255,9 @@ public class WebAppInterface implements UMShareListener {
                 shareAction.withSubject(shareVo.getTitle()).withText(shareVo.getContent()).
                         setCallback(this).share();
                 articleId = shareVo.getArticleId();
+                if (!StringUtils.isEmpty(articleId)) {
+                    articleforward(articleId);
+                }
             }
         }
     }
@@ -322,9 +325,6 @@ public class WebAppInterface implements UMShareListener {
 
     @Override
     public void onResult(SHARE_MEDIA share_media) {
-        if (!StringUtils.isEmpty(articleId)) {
-            articleforward(articleId);
-        }
     }
 
     @Override

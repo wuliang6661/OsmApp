@@ -24,7 +24,6 @@ import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.LoginContract;
 import com.heloo.android.osmapp.mvp.presenter.LoginPresenter;
 import com.heloo.android.osmapp.ui.main.MainActivity;
-import com.heloo.android.osmapp.ui.password.ModifyActivity;
 import com.heloo.android.osmapp.utils.ScreenUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 
@@ -32,10 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
-import cn.jpush.android.api.JPushInterface;
 import okhttp3.ResponseBody;
 
 /**
@@ -358,16 +354,11 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         if (status.equals("success")) {
             MyApplication.isLogin = ConditionEnum.LOGIN;
             LocalConfiguration.userInfo = JSON.parseObject(jsonObject.optString("data"), UserInfo.class);
-            //极光推送注册
-            JPushInterface.setAlias(getApplicationContext(), 111, LocalConfiguration.userInfo.getPhone());
-            Set<String> tags = new HashSet<>();
-            tags.add(LocalConfiguration.userInfo.getPhone());
-            JPushInterface.setTags(getApplicationContext(), 222, tags);
-            if (getIntent().getStringExtra("tag") != null) {
-                gotoActivity(MainActivity.class, true);
-            } else {
-                finish();
-            }
+//            if (getIntent().getStringExtra("tag") != null) {
+            gotoActivity(MainActivity.class, true);
+//            } else {
+//                finish();
+//            }
         } else {
             MyApplication.isLogin = ConditionEnum.NOLOGIN;
             JSONObject jsonObject1 = jsonObject.getJSONObject("data");

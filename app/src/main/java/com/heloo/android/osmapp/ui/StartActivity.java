@@ -84,11 +84,6 @@ public class StartActivity extends BaseActivity {
                     if (status.equals("success")){
                         MyApplication.isLogin = ConditionEnum.LOGIN;
                         LocalConfiguration.userInfo = JSON.parseObject(jsonObject.optString("data"), UserInfo.class);
-                        //极光推送注册
-                        JPushInterface.setAlias(getApplicationContext(),111,LocalConfiguration.userInfo.getPhone());
-                        Set<String> tags = new HashSet<>();
-                        tags.add(LocalConfiguration.userInfo.getPhone());
-                        JPushInterface.setTags(getApplicationContext(),222,tags);
                         gotoActivity(MainActivity.class, true);
                     }else {
                         MyApplication.isLogin = ConditionEnum.NOLOGIN;

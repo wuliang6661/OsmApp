@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import com.google.android.material.snackbar.Snackbar;
 import com.heloo.android.osmapp.R;
 import com.heloo.android.osmapp.base.MyApplication;
+import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityMainBinding;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.MainContract;
@@ -23,16 +24,18 @@ import com.heloo.android.osmapp.utils.ToastUtils;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.TreeSet;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import cn.jpush.android.api.JPushInterface;
 import cn.jzvd.Jzvd;
 import okhttp3.ResponseBody;
 
 
-
-public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter,ActivityMainBinding>
-    implements MainContract.View{
+public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter, ActivityMainBinding>
+        implements MainContract.View {
 
     Snackbar snackbar;
     private Fragment mContent = null;
@@ -51,6 +54,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViews();
+        registerPush();
     }
 
     @Override
@@ -105,6 +109,18 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         });
     }
 
+
+    private void registerPush() {
+        if (LocalConfiguration.userInfo != null) {
+            //极光推送注册
+            JPushInterface.setAlias(this, 1, LocalConfiguration.userInfo.getPhone());
+            TreeSet<String> treeSet = new TreeSet<>();
+            treeSet.add(LocalConfiguration.userInfo.getPhone());
+            JPushInterface.setTags(this, 1, treeSet);
+        }
+    }
+
+
     @Override
     public void getAddResult(ResponseBody addResult) throws JSONException, IOException {
 
@@ -127,7 +143,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (mContent != to) {
             FragmentTransaction transaction = getSupportFragmentManager()
                     .beginTransaction();
-            transaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
+            transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
             if (!to.isAdded()) { // 先判断是否被add过
                 if (mContent != null)
                     transaction.hide(mContent).add(R.id.fragment_container, to).commitAllowingStateLoss(); // 隐藏当前的fragment，add下一个到Activity中
@@ -184,8 +200,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         return super.onOptionsItemSelected(item);
     }
 
-    private void releaseVideo(){
-        if (Jzvd.CURRENT_JZVD == null){
+    private void releaseVideo() {
+        if (Jzvd.CURRENT_JZVD == null) {
             return;
         }
         if (Jzvd.CURRENT_JZVD.screen != Jzvd.SCREEN_FULLSCREEN) {

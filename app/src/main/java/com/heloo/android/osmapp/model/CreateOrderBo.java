@@ -1,6 +1,6 @@
 package com.heloo.android.osmapp.model;
 
-public class CreateOrderBo {
+public class CreateOrderBo extends ErrorBean {
 
 
     public Double discountFee;
