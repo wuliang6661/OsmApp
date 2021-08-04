@@ -2,14 +2,14 @@ package com.heloo.android.osmapp.base;
 
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
-
 import com.heloo.android.osmapp.utils.webview.WebAppInterface;
 import com.heloo.android.osmapp.utils.webview.WebClient;
 import com.heloo.android.osmapp.utils.webview.WebViewChromeClient;
 import com.tencent.smtt.sdk.CookieSyncManager;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
+
+import androidx.annotation.Nullable;
 
 
 /**

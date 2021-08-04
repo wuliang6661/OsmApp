@@ -13,6 +13,7 @@ import com.heloo.android.osmapp.databinding.ActivityMainBinding;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.MainContract;
 import com.heloo.android.osmapp.mvp.presenter.MainPresenter;
+import com.heloo.android.osmapp.service.PushMessageReceiver;
 import com.heloo.android.osmapp.ui.main.circle.CircleFragment;
 import com.heloo.android.osmapp.ui.main.home.HomeFragment;
 import com.heloo.android.osmapp.ui.main.mine.MineFragment;
@@ -31,6 +32,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import cn.jpush.android.api.JPushInterface;
 import cn.jzvd.Jzvd;
+import me.leolin.shortcutbadger.ShortcutBadger;
 import okhttp3.ResponseBody;
 
 
@@ -49,12 +51,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public static final String MESSAGE_RECEIVED_ACTION = "com.example.jpushdemo.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_EXTRAS = "extras";
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViews();
         registerPush();
+        PushMessageReceiver.num = 0;
+        ShortcutBadger.removeCount(this); //for 1.1.4+
     }
 
     @Override
@@ -82,10 +87,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         viewBinding.bottomNB.setOnNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.home:
+                    count = 0;
                     releaseVideo();
                     goToFragment(homeFragment);
                     break;
                 case R.id.beauty:
+                    count = 1;
                     releaseVideo();
                     goToFragment(niceFragment);
 //                    snackbar = Snackbar.make(viewBinding.getRoot(),"你点击按钮2",Snackbar.LENGTH_SHORT);
@@ -93,14 +100,26 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //                    snackbar.show();
                     break;
                 case R.id.circle:
+                    count = 2;
                     releaseVideo();
                     goToFragment(circleFragment);
                     break;
                 case R.id.store:
                     releaseVideo();
-                    goToFragment(storeFragment);
+                    if (goLogin()) {
+                        count = 3;
+                        goToFragment(storeFragment);
+                    } else {
+                        viewBinding.bottomNB.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                viewBinding.bottomNB.setCurrentItem(count);
+                            }
+                        });
+                    }
                     break;
                 case R.id.mine:
+                    count = 4;
                     releaseVideo();
                     goToFragment(mineFragment);
                     break;

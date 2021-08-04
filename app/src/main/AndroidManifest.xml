@@ -40,7 +40,7 @@
         android:roundIcon="@mipmap/z_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.search.SearchActivity"></activity>
+        <activity android:name=".ui.search.SearchActivity"/>
         <activity
             android:name=".ui.subject.SubjectDetailActivity"
             android:launchMode="standard"

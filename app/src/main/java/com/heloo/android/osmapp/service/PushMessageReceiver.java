@@ -77,7 +77,7 @@ public class PushMessageReceiver extends JPushMessageReceiver {
         }
     }
 
-    static int num = 0;
+    public static int num = 0;
 
     @Override
     public void onNotifyMessageArrived(Context context, NotificationMessage message) {

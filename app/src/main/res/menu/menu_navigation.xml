@@ -19,7 +19,7 @@
     <item
         android:id="@+id/store"
         android:icon="@drawable/store"
-        android:title="员工商城" />
+        android:title="商城" />
 
     <item
         android:id="@+id/mine"
