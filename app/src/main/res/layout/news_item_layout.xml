@@ -92,8 +92,8 @@
             </LinearLayout>
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="120dp"
-                android:layout_height="80dp"
+                android:layout_width="150dp"
+                android:layout_height="88dp"
                 android:background="#f3f3f3"
                 android:id="@+id/image"
                 android:theme="@style/Theme.MaterialComponents"

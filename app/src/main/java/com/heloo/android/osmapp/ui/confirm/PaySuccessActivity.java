@@ -28,7 +28,7 @@ public class PaySuccessActivity extends BaseActivity {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString("id", getIntent().getExtras().getString("id"));
-                gotoActivity(OrderDetailActivity.class, bundle, false);
+                gotoActivity(OrderDetailActivity.class, bundle, true);
             }
         });
     }

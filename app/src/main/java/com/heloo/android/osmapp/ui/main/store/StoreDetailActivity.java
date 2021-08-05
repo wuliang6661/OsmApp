@@ -38,7 +38,6 @@ import com.heloo.android.osmapp.utils.ToastUtils;
 import com.heloo.android.osmapp.utils.webview.WebAppInterface;
 import com.heloo.android.osmapp.utils.webview.WebClient;
 import com.heloo.android.osmapp.utils.webview.WebViewChromeClient;
-import com.stx.xhb.androidx.XBanner;
 import com.tencent.smtt.sdk.CookieSyncManager;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
@@ -88,29 +87,6 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         super.onResume();
         mPresenter.getDetail(getIntent().getStringExtra("id"));
         getNumCar();
-    }
-
-    /**
-     * 轮播图
-     *
-     * @param banner
-     */
-    private void initBanner(XBanner banner) {
-        //设置广告图片点击事件
-        banner.setOnItemClickListener((banner12, model, view, position) -> {
-
-        });
-        //加载广告图片
-        banner.loadImage((banner1, model, view, position) -> {
-            ImageView image = view.findViewById(R.id.image);
-            if (!bannerData.get(position).startsWith("http")) {
-                bannerData.set(position, HttpInterface.IMG_URL + bannerData.get(position));
-            }
-            Glide.with(this).load(bannerData.get(position))
-                    .placeholder(R.drawable.default_head)
-                    .error(R.drawable.default_head).into(image);
-        });
-
     }
 
 
@@ -302,12 +278,17 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
             viewBinding.shichangLayout.setVisibility(productDetailBean.price == 0 ? View.INVISIBLE : View.VISIBLE);
             viewBinding.oldPrice.setText(String.format("￥%s", productDetailBean.price));
             viewBinding.oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
-            bannerData.add(productDetailBean.icon);
+//            bannerData.add(productDetailBean.icon);
+            if (!productDetailBean.icon.startsWith("http")) {
+                productDetailBean.icon = HttpInterface.IMG_URL + productDetailBean.icon;
+            }
+            Glide.with(this)
+                    .load(productDetailBean.icon)
+                    .placeholder(R.drawable.default_head)
+                    .error(R.drawable.default_head)
+                    .into(viewBinding.banner);
             //初始化banner
-            initBanner(viewBinding.banner);
-            viewBinding.banner.setAutoPlayAble(bannerData.size() > 1);
-            viewBinding.banner.setPointsIsVisible(true);
-            viewBinding.banner.setData(R.layout.home_banner_layout, bannerData, null);
+//            initBanner(viewBinding.banner);
             String detailUrl = null;
             try {
                 if (!StringUtils.isEmpty(productDetailBean.description)) {

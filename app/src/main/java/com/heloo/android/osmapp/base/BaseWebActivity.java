@@ -79,6 +79,7 @@ public abstract class BaseWebActivity extends BaseActivity {
         // webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
         webSetting.setCacheMode(WebSettings.LOAD_NO_CACHE);
         webSetting.setAllowFileAccessFromFileURLs(true);
+//        WebView.setWebContentsDebuggingEnabled(true);
         // this.getSettingsExtension().setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);//extension
         // settings 的设计
         webSetting.setAppCachePath(this.getDir("appcache", 0).getPath());

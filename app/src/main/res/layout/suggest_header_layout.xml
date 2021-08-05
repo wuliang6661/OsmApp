@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/banner1Layout"
         android:layout_width="match_parent"
-        android:layout_height="210dp">
+        android:layout_height="220dp">
 
         <com.stx.xhb.androidx.XBanner
             android:id="@+id/banner"
@@ -105,10 +105,17 @@
             android:textSize="12sp" />
     </LinearLayout>
 
+
+    <View
+        android:id="@+id/device"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:visibility="gone" />
+
     <RelativeLayout
         android:id="@+id/banner2Layout"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="93dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp">
 

@@ -16,12 +16,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.annotation.Nullable;
 
 import com.alipay.sdk.app.PayTask;
 import com.bumptech.glide.Glide;
@@ -40,6 +39,7 @@ import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.ConfirmContract;
 import com.heloo.android.osmapp.mvp.presenter.ConfirmPresenter;
 import com.heloo.android.osmapp.ui.address.AddressActivity;
+import com.heloo.android.osmapp.ui.order.OrderDetailActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.zhy.adapter.abslistview.CommonAdapter;
@@ -47,6 +47,8 @@ import com.zhy.adapter.abslistview.ViewHolder;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import androidx.annotation.Nullable;
 
 /**
  * 订单确认
@@ -134,6 +136,16 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
                 Intent intent = new Intent(ConfirmActivity.this, AddressActivity.class);
                 intent.putExtra("type", true);
                 startActivityForResult(intent, 0x11);
+            }
+        });
+        selectImg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    viewBinding.price.setText("￥ " + priceBO.totalDiscountPrice);
+                }else {
+                    viewBinding.price.setText("￥ " + priceBO.totalPrice);
+                }
             }
         });
     }
@@ -288,10 +300,14 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         stopProgress();
         this.priceBO = priceBO;
         if (LocalConfiguration.userInfo.getSourceType() != 1001) {
-            viewBinding.price.setText(priceBO.totalScore + "");
+            viewBinding.price.setText(priceBO.totalDiscountPrice + "");
             viewBinding.zhenbiImg.setVisibility(View.VISIBLE);
         } else {
-            viewBinding.price.setText("￥ " + priceBO.totalPrice + (priceBO.totalScore != 0 ? "  + " + priceBO.totalScore + "珍币" : ""));
+            if(selectImg.isChecked()){
+                viewBinding.price.setText("￥ " + priceBO.totalDiscountPrice);
+            }else {
+                viewBinding.price.setText("￥ " + priceBO.totalPrice);
+            }
         }
         String text = "使用珍币（本单最多可使用珍币" + (priceBO == null ? 0 : priceBO.totalScore) + "，当前用户剩余珍币" + LocalConfiguration.userInfo.getIntegration() + "）";
         all_inter.setText(text);
@@ -354,7 +370,9 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
                         gotoActivity(PaySuccessActivity.class, bundle, true);
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        ToastUtils.showShortToast("支付失败！");
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", orderId);
+                        gotoActivity(OrderDetailActivity.class, bundle, true);
                     }
                     break;
                 default:

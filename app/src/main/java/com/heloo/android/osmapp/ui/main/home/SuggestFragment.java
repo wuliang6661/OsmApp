@@ -85,6 +85,8 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
     private String categoryId;//五美党建id
     private BannerBean bannerBean;
 
+    private View device;
+
 
     public static SuggestFragment newInstance(String typeName, String categoryId) {
         SuggestFragment suggestFragment = new SuggestFragment();
@@ -128,16 +130,8 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
         paperLayout = headView.findViewById(R.id.paperLayout);
         noticeLayout = headView.findViewById(R.id.noticeLayout);
         moreBtn = headView.findViewById(R.id.moreBtn);
+        device = headView.findViewById(R.id.device);
         noticeTxt.setSelected(true);
-        ViewGroup.LayoutParams params = noticeTxt.getLayoutParams();
-        params.width = ScreenUtils.getScreenWidth();
-        noticeTxt.setLayoutParams(params);
-        ViewGroup.LayoutParams paramsBanner1 = banner.getLayoutParams();
-        paramsBanner1.height = (int) (ScreenUtils.getScreenWidth() * 0.56);
-        banner.setLayoutParams(paramsBanner1);
-//        ViewGroup.LayoutParams paramsBanner2 = banner2.getLayoutParams();
-//        paramsBanner2.height = (int) (ScreenUtils.getScreenWidth() * 0.16);
-//        banner2.setLayoutParams(paramsBanner2);
         viewBinding.list.addHeaderView(headView);
         viewBinding.refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
@@ -358,6 +352,7 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
         if (status.equals("success")) {
             articleBean = JSON.parseObject(jsonObject.optString("data"), ArticleBean.class);
             if (typeName != null && typeName.equals("五美党建")) {
+                device.setVisibility(View.VISIBLE);
                 noticeLayout.setVisibility(View.GONE);
                 if (armyPageNo == 1) {
                     armyNewsData.clear();
@@ -394,6 +389,7 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
                 }
             } else {
                 noticeLayout.setVisibility(View.VISIBLE);
+                device.setVisibility(View.GONE);
                 if (pageNo == 1) {
                     suggestNewsData.clear();
                     newsData.clear();

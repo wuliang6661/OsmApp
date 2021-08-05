@@ -8,6 +8,7 @@ public class OrderPriceBO {
     public List<ShopOrderModelsBean> shopOrderModels;
     public Double totalPrice;
     public Integer totalScore;
+    public Double totalDiscountPrice;
 
     public static class ShopOrderModelsBean {
         public String id;

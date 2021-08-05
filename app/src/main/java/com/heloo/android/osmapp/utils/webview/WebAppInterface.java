@@ -13,9 +13,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.webkit.JavascriptInterface;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import com.alibaba.fastjson.JSON;
 import com.bigkoo.alertview.AlertView;
 import com.heloo.android.osmapp.api.HttpInterfaceIml;
@@ -38,6 +35,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
 /**
@@ -92,6 +92,7 @@ public class WebAppInterface implements UMShareListener {
      */
     @JavascriptInterface
     public void saveImg(String base64) {
+        LogUtils.d("wwwww",base64);
         new AlertDialog(mContext).builder().setGone().setMsg("确认保存海报？")
                 .setNegativeButton("取消", null)
                 .setPositiveButton("确定", v -> {
