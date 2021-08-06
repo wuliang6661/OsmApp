@@ -37,6 +37,7 @@ import rx.Subscriber;
 /**
  * Description : SubjectActivity
  * 专题列表
+ *
  * @author WITNESS
  * @date 7/4/21
  */
@@ -79,7 +80,7 @@ public class SubjectActivity extends BaseActivity {
     }
 
     private void getData() {
-        HttpInterfaceIml.getSubject(MyApplication.spUtils.getString("token", ""),pageNo,pageSize).subscribe(new Subscriber<ResponseBody>() {
+        HttpInterfaceIml.getSubject(MyApplication.spUtils.getString("token", ""), pageNo, pageSize).subscribe(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
                 stopProgress();
@@ -97,8 +98,8 @@ public class SubjectActivity extends BaseActivity {
                     String s = new String(body.bytes());
                     JSONObject jsonObject = new JSONObject(s);
                     String status = jsonObject.optString("status");
-                    if (status.equals("success")){
-                        if (pageNo == 1){
+                    if (status.equals("success")) {
+                        if (pageNo == 1) {
                             data.clear();
                         }
                         data.addAll(JSON.parseArray(jsonObject.optString("data"), SubjectBean.class));
@@ -114,27 +115,28 @@ public class SubjectActivity extends BaseActivity {
     }
 
     private void setAdapter() {
-        if (adapter != null){
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
             return;
         }
-        adapter = new CommonAdapter<SubjectBean>(this, R.layout.subject_item_layout,data) {
+        adapter = new CommonAdapter<SubjectBean>(this, R.layout.subject_item_layout, data) {
             @Override
             protected void convert(ViewHolder holder, SubjectBean item, int position) {
                 ImageView subjectImg = holder.getConvertView().findViewById(R.id.subjectImg);
-                ViewGroup.LayoutParams params = subjectImg.getLayoutParams();
-                params.height = (int) (ScreenUtils.getScreenWidth()*0.37);
-                subjectImg.setLayoutParams(params);
                 if (item.getIcon().startsWith("http")) {
-                    Glide.with(SubjectActivity.this).load(item.getIcon()).into(subjectImg);
-                }else {
-                    Glide.with(SubjectActivity.this).load(HttpInterface.IMG_URL+item.getIcon()).into(subjectImg);
+                    Glide.with(SubjectActivity.this)
+                            .load(item.getIcon())
+                            .into(subjectImg);
+                } else {
+                    Glide.with(SubjectActivity.this)
+                            .load(HttpInterface.IMG_URL + item.getIcon())
+                            .into(subjectImg);
                 }
-                holder.setText(R.id.title,item.getSubject());
-                holder.setText(R.id.date,item.getCreateDate());
+                holder.setText(R.id.title, item.getSubject());
+                holder.setText(R.id.date, item.getCreateDate());
                 holder.getView(R.id.button).setOnClickListener(v -> {
-                    Intent intent = new Intent(SubjectActivity.this,SubjectDetailActivity.class);
-                    intent.putExtra("id",item.getId());
+                    Intent intent = new Intent(SubjectActivity.this, SubjectDetailActivity.class);
+                    intent.putExtra("id", item.getId());
                     startActivity(intent);
                 });
             }

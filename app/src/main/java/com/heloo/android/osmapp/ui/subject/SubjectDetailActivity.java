@@ -26,6 +26,7 @@ import com.zhy.adapter.abslistview.ViewHolder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,9 +63,6 @@ public class SubjectDetailActivity extends BaseActivity {
         image = view.findViewById(R.id.image);
         des = view.findViewById(R.id.des);
         nameDetail = view.findViewById(R.id.nameDetail);
-        ViewGroup.LayoutParams params = image.getLayoutParams();
-        params.height = (int)(ScreenUtils.getScreenWidth()*0.37);
-        image.setLayoutParams(params);
         binding.list.addHeaderView(view);
 
     }
@@ -123,10 +121,6 @@ public class SubjectDetailActivity extends BaseActivity {
             @Override
             protected void convert(ViewHolder holder, SubjectDetailBean.ArticlelistBean item, int position) {
                 ImageView image = holder.getConvertView().findViewById(R.id.image);
-                ViewGroup.LayoutParams params = image.getLayoutParams();
-                params.width = (int)(ScreenUtils.getScreenWidth()*0.37);
-                params.height = (int)(ScreenUtils.getScreenWidth()*0.15);
-                image.setLayoutParams(params);
                 if (item.getIcon().startsWith("http")) {
                     Glide.with(SubjectDetailActivity.this).load(item.getIcon()).into(image);
                 }else {

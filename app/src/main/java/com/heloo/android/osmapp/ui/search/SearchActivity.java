@@ -204,8 +204,9 @@ public class SearchActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         showProgress("");
+                        binding.searchView.setQuery(item,true);
                         saveHistory(item);
-                        getData(item);
+//                        getData(item);
                     }
                 });
             }

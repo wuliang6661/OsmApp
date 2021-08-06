@@ -5,12 +5,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.webkit.JavascriptInterface;
 
 import com.alibaba.fastjson.JSON;
@@ -20,6 +20,7 @@ import com.heloo.android.osmapp.api.HttpResultSubscriber;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.model.ShareVo;
 import com.heloo.android.osmapp.ui.WebViewActivity;
+import com.heloo.android.osmapp.utils.BitMapUtils;
 import com.heloo.android.osmapp.utils.LogUtils;
 import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
@@ -123,20 +124,16 @@ public class WebAppInterface implements UMShareListener {
             return;
         OutputStream fos = null;
         try {
-            byte[] b = Base64.decode(base64, Base64.DEFAULT);
-            for (int i = 0; i < b.length; ++i) {
-                if (b[i] < 0) {//调整异常数据
-                    b[i] += 256;
-                }
-            }
+            Bitmap bitmap = BitMapUtils.base64ToBitmap(base64.substring(base64.indexOf(",")+1));
             String path = Environment.getExternalStorageDirectory()
                     + File.separator + Environment.DIRECTORY_DCIM
                     + File.separator + "Camera" + File.separator;
             File currentFile = new File(path, System.currentTimeMillis() + ".jpg");
             fos = new FileOutputStream(currentFile);
-            fos.write(b);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
+            bitmap.recycle();
             // 最后通知图库更新
             mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                     Uri.fromFile(currentFile)));
