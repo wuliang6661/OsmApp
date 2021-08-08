@@ -11,6 +11,7 @@ import com.heloo.android.osmapp.model.ShopBannarBO;
 import com.heloo.android.osmapp.model.ShopCarBO;
 import com.heloo.android.osmapp.model.ShopDetailsBO;
 import com.heloo.android.osmapp.model.ShopListBO;
+import com.heloo.android.osmapp.model.SignBO;
 import com.heloo.android.osmapp.model.UserInfo;
 
 import java.util.List;
@@ -107,6 +108,12 @@ public interface HttpInterface {
      */
     @GET("/articleCategory/listArticleCategory")
     Observable<ResponseBody> getTitle(@Header("Authorization") String token);
+
+    /**
+     * 签到
+     */
+    @POST("/app/usersignin")
+    Observable<BaseResult<SignBO>> sign();
 
 
     /**

@@ -84,7 +84,7 @@
             android:gravity="center_vertical"
             android:text="公告"
             android:textColor="#F65959"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:drawableStartCompat="@mipmap/notice_img" />
 
@@ -102,7 +102,7 @@
             android:singleLine="true"
             android:text=""
             android:textColor="#2B2B2B"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
 

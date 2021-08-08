@@ -12,6 +12,7 @@ import com.heloo.android.osmapp.model.ShopBannarBO;
 import com.heloo.android.osmapp.model.ShopCarBO;
 import com.heloo.android.osmapp.model.ShopDetailsBO;
 import com.heloo.android.osmapp.model.ShopListBO;
+import com.heloo.android.osmapp.model.SignBO;
 import com.heloo.android.osmapp.model.UserInfo;
 import com.heloo.android.osmapp.utils.rx.RxHelper;
 import com.heloo.android.osmapp.utils.rx.RxResultHelper;
@@ -61,6 +62,14 @@ public class HttpInterfaceIml {
     public static Observable<ResponseBody> register(String username, String otpCode, String password) {
         return getService().register(username, otpCode, password).compose(RxHelper.httpRusult());
     }
+
+    /**
+     * 签到
+     */
+    public static Observable<SignBO> sign() {
+        return getService().sign().compose(RxResultHelper.httpRusult());
+    }
+
 
     /**
      * 检测版本更新

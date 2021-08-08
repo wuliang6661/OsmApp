@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="180dp"
+        android:layout_height="150dp"
+        android:background="@drawable/shape_sign_in"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:src="@mipmap/sign_logo" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:text="签到成功"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="积分"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+
+            <TextView
+                android:id="@+id/jifen_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="+5"
+                android:textColor="#D3A952" />
+
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

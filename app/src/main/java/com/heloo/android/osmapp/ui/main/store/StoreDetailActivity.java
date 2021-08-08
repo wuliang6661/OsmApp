@@ -193,6 +193,10 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
             }
             Glide.with(this).load(productDetailBean.icon).placeholder(R.drawable.default_head)
                     .error(R.drawable.default_head).into(productImg);
+            if (productDetailBean.freeNum <= 0) {
+                addCart.setEnabled(false);
+                buyBtn.setEnabled(false);
+            }
         }
         productNum = 1;
         numTxt.setText(String.valueOf(productNum));
