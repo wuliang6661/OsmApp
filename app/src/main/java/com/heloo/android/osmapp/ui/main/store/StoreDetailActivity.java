@@ -145,9 +145,11 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
                 gotoActivity(CartActivity.class, false);
                 break;
             case R.id.addCart:
-            case R.id.buyBtn:
             case R.id.selectSKUBtn:
-                skuDialog(bannerData);
+                skuDialog(bannerData,1);
+                break;
+            case R.id.buyBtn:
+                skuDialog(bannerData,2);
                 break;
         }
     }
@@ -169,7 +171,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
     private int selectPosition = -1;
     private int productNum = 1;
 
-    private void skuDialog(List<String> data) {
+    private void skuDialog(List<String> data,int type) {
         selectPosition = -1;
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialog);
         final LayoutInflater inflater = LayoutInflater.from(this);
@@ -177,13 +179,18 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         ImageButton close = v.findViewById(R.id.closeBtn);
         ImageButton delBtn = v.findViewById(R.id.delBtn);
         ImageButton addBtn = v.findViewById(R.id.addBtn);
-        Button addCart = v.findViewById(R.id.addCart);
-        Button buyBtn = v.findViewById(R.id.buyBtn);
+        Button commit = v.findViewById(R.id.commit);
+//        Button buyBtn = v.findViewById(R.id.buyBtn);
         TextView productName = v.findViewById(R.id.productName);
         TextView price = v.findViewById(R.id.price);
         TextView leftNum = v.findViewById(R.id.leftNum);
         TextView numTxt = v.findViewById(R.id.numTxt);
         ImageView productImg = v.findViewById(R.id.productImg);
+        if(type == 1){
+            commit.setText("加入购物车");
+        }else{
+            commit.setText("立即购买");
+        }
         if (productDetailBean != null) {
             productName.setText(productDetailBean.name);
             price.setText(String.format("¥%s", productDetailBean.preferentialPrice));
@@ -194,8 +201,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
             Glide.with(this).load(productDetailBean.icon).placeholder(R.drawable.default_head)
                     .error(R.drawable.default_head).into(productImg);
             if (productDetailBean.freeNum <= 0) {
-                addCart.setEnabled(false);
-                buyBtn.setEnabled(false);
+                commit.setEnabled(false);
             }
         }
         productNum = 1;
@@ -242,31 +248,29 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
             numTxt.setText(String.valueOf(productNum));
         });
 
-        buyBtn.setOnClickListener(v1 -> {
-            noticeDialog.dismiss();
-            Bundle bundle = new Bundle();
-            ArrayList<ShopCarBO.ShopCarInfoDOSBean> shops = new ArrayList<>();
-            ShopCarBO.ShopCarInfoDOSBean item = new ShopCarBO.ShopCarInfoDOSBean();
-            item.goodsNum = productNum;
-            item.goodsPrice = productDetailBean.preferentialPrice;
-            item.goodsId = getIntent().getStringExtra("id");
-            item.goodsImg = productDetailBean.icon;
-            item.goodsName = productDetailBean.name;
-            item.id = getIntent().getStringExtra("id");
-            shops.add(item);
-            bundle.putSerializable("shops", shops);
-            gotoActivity(ConfirmActivity.class, bundle, false);
-        });
-
-        addCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        commit.setOnClickListener(v1 -> {
+            if(type == 1){
                 showProgress("");
                 if (goLogin()) {
                     mPresenter.addCart(getIntent().getStringExtra("id"), LocalConfiguration.userInfo.getId() + "", String.valueOf(productNum));
                 }
+            }else{
+                noticeDialog.dismiss();
+                Bundle bundle = new Bundle();
+                ArrayList<ShopCarBO.ShopCarInfoDOSBean> shops = new ArrayList<>();
+                ShopCarBO.ShopCarInfoDOSBean item = new ShopCarBO.ShopCarInfoDOSBean();
+                item.goodsNum = productNum;
+                item.goodsPrice = productDetailBean.preferentialPrice;
+                item.goodsId = getIntent().getStringExtra("id");
+                item.goodsImg = productDetailBean.icon;
+                item.goodsName = productDetailBean.name;
+                item.id = getIntent().getStringExtra("id");
+                shops.add(item);
+                bundle.putSerializable("shops", shops);
+                gotoActivity(ConfirmActivity.class, bundle, false);
             }
         });
+
         WindowManager.LayoutParams layoutParams = noticeDialog.getWindow().getAttributes();
         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;

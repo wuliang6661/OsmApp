@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/image"
+        android:src="@drawable/glide_ploce"
         android:scaleType="fitXY"
         app:shapeAppearanceOverlay="@style/roundedCornerImageStyle"/>
 </LinearLayout>

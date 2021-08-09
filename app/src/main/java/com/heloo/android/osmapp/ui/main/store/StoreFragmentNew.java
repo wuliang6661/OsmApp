@@ -103,7 +103,7 @@ public class StoreFragmentNew extends MVPBaseFragment<StoreContract.View, StoreP
     private void initBanner(XBanner banner) {
         //设置广告图片点击事件
         banner.setOnItemClickListener((banner12, model, view, position) -> {
-            if (bannarBO == null) {
+            if (bannarBO == null || bannarBO.banner.get(position).jumpType == 1) {
                 return;
             }
             Intent intent = new Intent(getContext(), WebViewActivity.class);
@@ -133,6 +133,7 @@ public class StoreFragmentNew extends MVPBaseFragment<StoreContract.View, StoreP
         if (body == null) {
             return;
         }
+        bannerData.clear();
         for (ShopBannarBO.BannerBean item : body.banner) {
             bannerData.add(item.imgurl);
         }

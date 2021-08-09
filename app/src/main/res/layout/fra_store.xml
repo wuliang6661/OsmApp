@@ -100,7 +100,7 @@
             <com.stx.xhb.androidx.XBanner
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="210dp"
+                android:layout_height="230dp"
                 android:background="#00000000"
                 app:AutoPlayTime="4000"
                 app:isAutoPlay="true"

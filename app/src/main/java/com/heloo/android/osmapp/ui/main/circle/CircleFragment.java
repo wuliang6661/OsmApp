@@ -13,9 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
@@ -33,6 +30,7 @@ import com.heloo.android.osmapp.utils.BubbleUtils;
 import com.heloo.android.osmapp.utils.GlideSimpleTarget;
 import com.heloo.android.osmapp.utils.MessageEvent;
 import com.heloo.android.osmapp.utils.ScreenUtils;
+import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.utils.Utils;
 import com.heloo.android.osmapp.widget.LoadingProgressDialog;
 import com.heloo.android.osmapp.widget.NineGridView;
@@ -48,10 +46,14 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.ButterKnife;
 import ch.ielse.view.imagewatcher.ImageWatcher;
 import okhttp3.ResponseBody;
@@ -88,8 +90,8 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
         EventBus.getDefault().register(this);
         token = MyApplication.spUtils.getString("token", "");
         initView();
-        startProgressDialog("加载中...",getActivity());
-        getCircleList(token,null,isNewTab);
+        startProgressDialog("加载中...", getActivity());
+        getCircleList(token, null, isNewTab);
         getTopicList();
     }
 
@@ -106,7 +108,7 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
         EventBus.getDefault().unregister(this);
     }
 
-    private void initView(){
+    private void initView() {
         binding.headLayout.post(() -> binding.headLayout.setPadding(0, BubbleUtils.getStatusBarHeight(getActivity()), 0, 0));
         binding.sendCircle.setOnClickListener(this);
         binding.message.setOnClickListener(this);
@@ -126,13 +128,13 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 pageNo = 1;
-                if (tab.getPosition() == 0){
+                if (tab.getPosition() == 0) {
                     isNewTab = "hot";
-                }else {
+                } else {
                     isNewTab = "newest";
                 }
-                startProgressDialog("加载中...",getActivity());
-                getCircleList(token,null,isNewTab);
+                startProgressDialog("加载中...", getActivity());
+                getCircleList(token, null, isNewTab);
             }
 
             @Override
@@ -155,8 +157,8 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
         binding.refreshRoot.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                pageNo ++;
-                getCircleList(token,null,isNewTab);
+                pageNo++;
+                getCircleList(token, null, isNewTab);
                 binding.refreshRoot.finishLoadMore(2000);
                 refreshLayout.finishLoadMore(2000);
             }
@@ -164,7 +166,7 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 pageNo = 1;
-                getCircleList(token,null,isNewTab);
+                getCircleList(token, null, isNewTab);
                 getTopicList();
                 binding.refreshRoot.finishRefresh(2000);
                 refreshLayout.finishRefresh(2000);
@@ -173,49 +175,49 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
         binding.refreshRoot.setRefreshFooter(new ClassicsFooter(getActivity()));
     }
 
-    private void setAdapter(){
-        if (adapter != null ){
+    private void setAdapter() {
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
             return;
         }
-        adapter = new CommonAdapter<CircleBean>(getActivity(),R.layout.circle_item_layout,data) {
+        adapter = new CommonAdapter<CircleBean>(getActivity(), R.layout.circle_item_layout, data) {
             @Override
             protected void convert(final ViewHolder holder, final CircleBean s, int position) {
-                final NineGridView picGridView =holder.getConvertView().findViewById(R.id.picGridView);
+                final NineGridView picGridView = holder.getConvertView().findViewById(R.id.picGridView);
                 final ShapeableImageView headerImage = holder.getConvertView().findViewById(R.id.headerImage);
                 TextView content = holder.getConvertView().findViewById(R.id.content);
                 Glide.with(getActivity()).load(s.getHeader()).placeholder(R.mipmap.header).error(R.mipmap.header).into(headerImage);
                 if (s.getUserName() != null && !s.getUserName().equals("") && s.getAnonymous().equals("0")) {
                     holder.setText(R.id.name, s.getUserName());
-                }else {
-                    holder.setText(R.id.name, String.format("%s%s","欧诗漫会员",s.getUid()));
+                } else {
+                    holder.setText(R.id.name, String.format("%s%s", "欧诗漫会员", s.getUid()));
                 }
-                holder.setText(R.id.commentNum,s.getCommentNum());
+                holder.setText(R.id.commentNum, s.getCommentNum());
                 holder.setText(R.id.time, s.getCreateDate());
                 if (s.getTopicName() != null && !s.getTopicName().equals("")) {
                     SpannableString spannableString = new SpannableString(String.format("#%s#%s", s.getTopicName(), s.getDescr()));
                     spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#D5AC5A")), 0, s.getTopicName().length() + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     content.setText(spannableString);
                     content.setMaxLines(5);
-                }else {
+                } else {
                     content.setText(s.getDescr());
                 }
-                holder.setText(R.id.commentNum,s.getCommentNum());
-                holder.setText(R.id.likeNum,s.getPointNum());
-                if (s.getIsPraise().equals("0")){//点赞过
-                    Glide.with(getActivity()).load(R.mipmap.like_yes).into((ImageView)holder.getView(R.id.likeImage));
-                }else {
-                    Glide.with(getActivity()).load(R.mipmap.like_no).into((ImageView)holder.getView(R.id.likeImage));
+                holder.setText(R.id.commentNum, s.getCommentNum());
+                holder.setText(R.id.likeNum, s.getPointNum());
+                if (s.getIsPraise().equals("0")) {//点赞过
+                    Glide.with(getActivity()).load(R.mipmap.like_yes).into((ImageView) holder.getView(R.id.likeImage));
+                } else {
+                    Glide.with(getActivity()).load(R.mipmap.like_no).into((ImageView) holder.getView(R.id.likeImage));
                 }
-                if (s.getIsComment().equals("0")){//评论过
-                    Glide.with(getActivity()).load(R.mipmap.comment_yes).into((ImageView)holder.getView(R.id.commentImage));
-                }else {
-                    Glide.with(getActivity()).load(R.mipmap.comment_no).into((ImageView)holder.getView(R.id.commentImage));
+                if (s.getIsComment().equals("0")) {//评论过
+                    Glide.with(getActivity()).load(R.mipmap.comment_yes).into((ImageView) holder.getView(R.id.commentImage));
+                } else {
+                    Glide.with(getActivity()).load(R.mipmap.comment_no).into((ImageView) holder.getView(R.id.commentImage));
                 }
-                if (s.getPicList() != null && s.getPicList().size()>0){
+                if (s.getPicList() != null && s.getPicList().size() > 0) {
                     picGridView.setVisibility(View.VISIBLE);
-                    if (s.getPicList().size() == 1){
-                        picGridView.setSingleImageSize((int)(ScreenUtils.getScreenWidth() * 0.6),(int)(ScreenUtils.getScreenWidth() * 0.44));
+                    if (s.getPicList().size() == 1) {
+                        picGridView.setSingleImageSize((int) (ScreenUtils.getScreenWidth() * 0.6), (int) (ScreenUtils.getScreenWidth() * 0.44));
                     }
                     picGridView.setOnImageClickListener(new NineGridView.OnImageClickListener() {
                         @Override
@@ -223,8 +225,8 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
                             binding.imageWatcher.show((ImageView) view, picGridView.getImageViews(), s.getPicList());
                         }
                     });
-                    picGridView.setAdapter(new NineImageAdapter(getActivity(),s.getPicList()));
-                }else {
+                    picGridView.setAdapter(new NineImageAdapter(getActivity(), s.getPicList()));
+                } else {
                     picGridView.setVisibility(View.GONE);
                 }
 
@@ -233,7 +235,7 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), CircleDetailActivity.class);
-                        intent.putExtra("data",s);
+                        intent.putExtra("data", s);
                         startActivity(intent);
                     }
                 });
@@ -241,11 +243,11 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
                 holder.getView(R.id.like).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!s.getIsPraise().equals("0")){
-                            if (goLogin()){
+                        if (!s.getIsPraise().equals("0")) {
+                            if (goLogin()) {
                                 like(token, s.getId());
-                                holder.setText(R.id.likeNum,String.valueOf(Integer.valueOf(s.getPointNum()) + 1));
-                                Glide.with(getActivity()).load(R.mipmap.like_yes).into((ImageView)holder.getView(R.id.likeImage));
+                                holder.setText(R.id.likeNum, String.valueOf(Integer.valueOf(s.getPointNum()) + 1));
+                                Glide.with(getActivity()).load(R.mipmap.like_yes).into((ImageView) holder.getView(R.id.likeImage));
                             }
                         }
                     }
@@ -266,19 +268,23 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
 
     /**
      * 轮播图
+     *
      * @param banner
      */
     private void initBanner(XBanner banner) {
         //设置广告图片点击事件
         banner.setOnItemClickListener((banner12, model, view, position) -> {
             Intent intent = new Intent(getActivity(), TopicDetailActivity.class);
-            intent.putExtra("topicId",bannerData.get(position).getJumpId());
-            intent.putExtra("topicName",bannerData.get(position).getSubject());
-            for (int i=0;i<hotTopicBeanList.size();i++){
-                if (bannerData.get(position).getJumpId().equals(hotTopicBeanList.get(i).getId())){
-                    intent.putExtra("pic",hotTopicBeanList.get(i).getIcon());
-                    intent.putExtra("num",hotTopicBeanList.get(i).getPostNum());
-                    intent.putExtra("des",hotTopicBeanList.get(i).getIntroduce());
+            if (StringUtils.isEmpty(bannerData.get(position).getJumpId()) || bannerData.get(position).getJumpType() == 1) {
+                return;
+            }
+            intent.putExtra("topicId", bannerData.get(position).getJumpId());
+            intent.putExtra("topicName", bannerData.get(position).getSubject());
+            for (int i = 0; i < hotTopicBeanList.size(); i++) {
+                if (bannerData.get(position).getJumpId().equals(hotTopicBeanList.get(i).getId())) {
+                    intent.putExtra("pic", hotTopicBeanList.get(i).getIcon());
+                    intent.putExtra("num", hotTopicBeanList.get(i).getPostNum());
+                    intent.putExtra("des", hotTopicBeanList.get(i).getIntroduce());
                     break;
                 }
             }
@@ -298,7 +304,7 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(getActivity(), TopicDetailActivity.class);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.sendCircle:
                 if (goLogin()) {
                     startActivity(new Intent(getActivity(), SendCircleActivity.class));
@@ -315,53 +321,53 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
                 }
                 break;
             case R.id.hotOne:
-                intent.putExtra("topicId",hotTopicBeanList.get(0).getId());
-                intent.putExtra("topicName",hotTopicBeanList.get(0).getName());
-                intent.putExtra("num",hotTopicBeanList.get(0).getPostNum());
-                intent.putExtra("pic",hotTopicBeanList.get(0).getIcon());
-                intent.putExtra("num",hotTopicBeanList.get(0).getPostNum());
-                intent.putExtra("des",hotTopicBeanList.get(0).getIntroduce());
+                intent.putExtra("topicId", hotTopicBeanList.get(0).getId());
+                intent.putExtra("topicName", hotTopicBeanList.get(0).getName());
+                intent.putExtra("num", hotTopicBeanList.get(0).getPostNum());
+                intent.putExtra("pic", hotTopicBeanList.get(0).getIcon());
+                intent.putExtra("num", hotTopicBeanList.get(0).getPostNum());
+                intent.putExtra("des", hotTopicBeanList.get(0).getIntroduce());
                 startActivity(intent);
                 break;
             case R.id.hotTwo:
-                if (hotTopicBeanList.size()<2) return;
-                intent.putExtra("topicId",hotTopicBeanList.get(2).getId());
-                intent.putExtra("topicName",hotTopicBeanList.get(2).getName());
-                intent.putExtra("num",hotTopicBeanList.get(2).getPostNum());
-                intent.putExtra("pic",hotTopicBeanList.get(2).getIcon());
-                intent.putExtra("num",hotTopicBeanList.get(2).getPostNum());
-                intent.putExtra("des",hotTopicBeanList.get(2).getIntroduce());
+                if (hotTopicBeanList.size() < 2) return;
+                intent.putExtra("topicId", hotTopicBeanList.get(2).getId());
+                intent.putExtra("topicName", hotTopicBeanList.get(2).getName());
+                intent.putExtra("num", hotTopicBeanList.get(2).getPostNum());
+                intent.putExtra("pic", hotTopicBeanList.get(2).getIcon());
+                intent.putExtra("num", hotTopicBeanList.get(2).getPostNum());
+                intent.putExtra("des", hotTopicBeanList.get(2).getIntroduce());
                 startActivity(intent);
 
                 break;
             case R.id.hotThree:
-                if (hotTopicBeanList.size()<4) return;
-                intent.putExtra("topicId",hotTopicBeanList.get(4).getId());
-                intent.putExtra("topicName",hotTopicBeanList.get(4).getName());
-                intent.putExtra("num",hotTopicBeanList.get(4).getPostNum());
-                intent.putExtra("pic",hotTopicBeanList.get(4).getIcon());
-                intent.putExtra("num",hotTopicBeanList.get(4).getPostNum());
-                intent.putExtra("des",hotTopicBeanList.get(4).getIntroduce());
+                if (hotTopicBeanList.size() < 4) return;
+                intent.putExtra("topicId", hotTopicBeanList.get(4).getId());
+                intent.putExtra("topicName", hotTopicBeanList.get(4).getName());
+                intent.putExtra("num", hotTopicBeanList.get(4).getPostNum());
+                intent.putExtra("pic", hotTopicBeanList.get(4).getIcon());
+                intent.putExtra("num", hotTopicBeanList.get(4).getPostNum());
+                intent.putExtra("des", hotTopicBeanList.get(4).getIntroduce());
                 startActivity(intent);
                 break;
             case R.id.hotFour:
-                if (hotTopicBeanList.size()<1) return;
-                intent.putExtra("topicId",hotTopicBeanList.get(1).getId());
-                intent.putExtra("topicName",hotTopicBeanList.get(1).getName());
-                intent.putExtra("num",hotTopicBeanList.get(1).getPostNum());
-                intent.putExtra("pic",hotTopicBeanList.get(1).getIcon());
-                intent.putExtra("num",hotTopicBeanList.get(1).getPostNum());
-                intent.putExtra("des",hotTopicBeanList.get(1).getIntroduce());
+                if (hotTopicBeanList.size() < 1) return;
+                intent.putExtra("topicId", hotTopicBeanList.get(1).getId());
+                intent.putExtra("topicName", hotTopicBeanList.get(1).getName());
+                intent.putExtra("num", hotTopicBeanList.get(1).getPostNum());
+                intent.putExtra("pic", hotTopicBeanList.get(1).getIcon());
+                intent.putExtra("num", hotTopicBeanList.get(1).getPostNum());
+                intent.putExtra("des", hotTopicBeanList.get(1).getIntroduce());
                 startActivity(intent);
                 break;
             case R.id.hotFive:
-                if (hotTopicBeanList.size()<3) return;
-                intent.putExtra("topicId",hotTopicBeanList.get(3).getId());
-                intent.putExtra("topicName",hotTopicBeanList.get(3).getName());
-                intent.putExtra("num",hotTopicBeanList.get(3).getPostNum());
-                intent.putExtra("pic",hotTopicBeanList.get(3).getIcon());
-                intent.putExtra("num",hotTopicBeanList.get(3).getPostNum());
-                intent.putExtra("des",hotTopicBeanList.get(3).getIntroduce());
+                if (hotTopicBeanList.size() < 3) return;
+                intent.putExtra("topicId", hotTopicBeanList.get(3).getId());
+                intent.putExtra("topicName", hotTopicBeanList.get(3).getName());
+                intent.putExtra("num", hotTopicBeanList.get(3).getPostNum());
+                intent.putExtra("pic", hotTopicBeanList.get(3).getIcon());
+                intent.putExtra("num", hotTopicBeanList.get(3).getPostNum());
+                intent.putExtra("des", hotTopicBeanList.get(3).getIntroduce());
                 startActivity(intent);
                 break;
             case R.id.hotMore:
@@ -384,10 +390,11 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
 
     /**
      * 获取圈子列表
+     *
      * @param isNewTab
      */
-    private void getCircleList(String token,String topicId, String isNewTab){
-        HttpInterfaceIml.getCircle(token,pageNo,pagesize,topicId,isNewTab).subscribe(new Subscriber<ResponseBody>() {
+    private void getCircleList(String token, String topicId, String isNewTab) {
+        HttpInterfaceIml.getCircle(token, pageNo, pagesize, topicId, isNewTab).subscribe(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
                 binding.refreshRoot.finishRefresh();
@@ -398,7 +405,7 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
             @Override
             public void onError(Throwable e) {
                 stopProgressDialog();
-                Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -406,10 +413,10 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
                 try {
                     String s = new String(responseBody.bytes());
                     JSONObject jsonObject = new JSONObject(s);
-                    if (pageNo == 1){
+                    if (pageNo == 1) {
                         data.clear();
                     }
-                    data.addAll(JSON.parseArray(jsonObject.optString("data"),CircleBean.class));
+                    data.addAll(JSON.parseArray(jsonObject.optString("data"), CircleBean.class));
                     setAdapter();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -423,8 +430,8 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
     /**
      * 获取热门话题
      */
-    private void getTopicList(){
-        HttpInterfaceIml.getTopicList(token,1,20).subscribe(new Subscriber<ResponseBody>() {
+    private void getTopicList() {
+        HttpInterfaceIml.getTopicList(token, 1, 20).subscribe(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
                 stopProgressDialog();
@@ -433,7 +440,7 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
             @Override
             public void onError(Throwable e) {
                 stopProgressDialog();
-                Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -441,21 +448,21 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
                 try {
                     String s = new String(responseBody.bytes());
                     JSONObject jsonObject = new JSONObject(s);
-                    hotTopicBean = JSON.parseObject(jsonObject.optString("data"),HotTopicBean.class);
+                    hotTopicBean = JSON.parseObject(jsonObject.optString("data"), HotTopicBean.class);
                     hotTopicBeanList.clear();
                     hotTopicBeanList.addAll(hotTopicBean.getList().getData());
 
                     binding.hotOne.setText(hotTopicBeanList.get(0).getName());
-                    if (hotTopicBeanList.size()>1){
+                    if (hotTopicBeanList.size() > 1) {
                         binding.hotFour.setText(hotTopicBeanList.get(1).getName());
                     }
-                    if (hotTopicBeanList.size()>2){
+                    if (hotTopicBeanList.size() > 2) {
                         binding.hotTwo.setText(hotTopicBeanList.get(2).getName());
                     }
-                    if (hotTopicBeanList.size()>3){
+                    if (hotTopicBeanList.size() > 3) {
                         binding.hotFive.setText(hotTopicBeanList.get(3).getName());
                     }
-                    if (hotTopicBeanList.size()>4){
+                    if (hotTopicBeanList.size() > 4) {
                         binding.hotThree.setText(hotTopicBeanList.get(4).getName());
                     }
                     bannerData.clear();
@@ -477,8 +484,8 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
     /**
      * 点赞
      */
-    private void like(String token,String id){
-        HttpInterfaceIml.like(token,id).subscribe(new Subscriber<ResponseBody>() {
+    private void like(String token, String id) {
+        HttpInterfaceIml.like(token, id).subscribe(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
 
@@ -486,7 +493,7 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -530,42 +537,43 @@ public class CircleFragment extends BaseFragment implements ImageWatcher.OnPictu
 
     /**
      * 更新列表数据
+     *
      * @param messageEvent
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(MessageEvent messageEvent){
-        if (messageEvent.getMessageType().equals("point")){
+    public void onEvent(MessageEvent messageEvent) {
+        if (messageEvent.getMessageType().equals("point")) {
             String mdata = messageEvent.getPassValue().toString();
-            String id = mdata.substring(0,mdata.indexOf(":"));
-            String isPoint = mdata.substring(mdata.indexOf(":")+1,mdata.indexOf(","));
-            String pointNum = mdata.substring(mdata.indexOf(",")+1);
-            for (int i=0;i<data.size();i++){
-                if (data.get(i).getId().equals(id)){
+            String id = mdata.substring(0, mdata.indexOf(":"));
+            String isPoint = mdata.substring(mdata.indexOf(":") + 1, mdata.indexOf(","));
+            String pointNum = mdata.substring(mdata.indexOf(",") + 1);
+            for (int i = 0; i < data.size(); i++) {
+                if (data.get(i).getId().equals(id)) {
                     data.get(i).setIsPraise(isPoint);
                     data.get(i).setPointNum(pointNum);
                     adapter.notifyItemChanged(i);
                     break;
                 }
             }
-        }else if (messageEvent.getMessageType().equals("comment")){
+        } else if (messageEvent.getMessageType().equals("comment")) {
             String mdata = messageEvent.getPassValue().toString();
-            String id = mdata.substring(0,mdata.indexOf(":"));
-            String isComment = mdata.substring(mdata.indexOf(":")+1,mdata.indexOf(","));
-            String commentNum = mdata.substring(mdata.indexOf(",")+1);
-            for (int i=0;i<data.size();i++){
-                if (data.get(i).getId().equals(id)){
+            String id = mdata.substring(0, mdata.indexOf(":"));
+            String isComment = mdata.substring(mdata.indexOf(":") + 1, mdata.indexOf(","));
+            String commentNum = mdata.substring(mdata.indexOf(",") + 1);
+            for (int i = 0; i < data.size(); i++) {
+                if (data.get(i).getId().equals(id)) {
                     data.get(i).setIsComment(isComment);
                     data.get(i).setCommentNum(commentNum);
                     adapter.notifyItemChanged(i);
                     break;
                 }
             }
-        }else if (messageEvent.getMessageType().equals("showNew")){
+        } else if (messageEvent.getMessageType().equals("showNew")) {
             binding.tabs.getTabAt(1).select();
             pageNo = 1;
             isNewTab = "1";
-            startProgressDialog("加载中...",getActivity());
-            getCircleList(token,null,isNewTab);
+            startProgressDialog("加载中...", getActivity());
+            getCircleList(token, null, isNewTab);
             binding.circleList.smoothScrollToPosition(0);
         }
     }

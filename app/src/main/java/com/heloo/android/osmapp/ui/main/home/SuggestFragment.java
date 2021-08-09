@@ -8,15 +8,10 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
@@ -35,7 +30,6 @@ import com.heloo.android.osmapp.mvp.presenter.SuggestPresenter;
 import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.ui.subject.SubjectActivity;
 import com.heloo.android.osmapp.ui.subject.SubjectDetailActivity;
-import com.heloo.android.osmapp.utils.ScreenUtils;
 import com.heloo.android.osmapp.utils.StringUtils;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -50,6 +44,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import okhttp3.ResponseBody;
 
 /**
@@ -120,8 +116,6 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
 
     private void initViews() {
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.suggest_header_layout, null);
-        RelativeLayout banner1Layout = headView.findViewById(R.id.banner1Layout);
-        RelativeLayout banner2Layout = headView.findViewById(R.id.banner2Layout);
         banner = headView.findViewById(R.id.banner);
         banner2 = headView.findViewById(R.id.banner2);
         nowPage = headView.findViewById(R.id.nowPage);
@@ -246,6 +240,9 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
     private void initBanner(XBanner banner) {
         banner.setOnItemClickListener((banner12, model, view, position) -> {
             if (typeName != null && typeName.equals("五美党建")) {
+                if (armyBannerData.get(position).getJumpType() == 1) {
+                    return;
+                }
                 if (armyBannerData.get(position).getBannerType() == 1
                         || armyBannerData.get(position).getBannerType() == 2
                         || armyBannerData.get(position).getBannerType() == 5) {
@@ -258,14 +255,16 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
                     }
                     startActivity(intent);
                 } else {
-                    if (armyBannerData.get(position).getJumpUrl() != null
-                            && armyBannerData.get(position).getJumpUrl().length() > 10) {
+                    if (!StringUtils.isEmpty(armyBannerData.get(position).getJumpUrl())) {
                         Intent intent = new Intent(getActivity(), WebViewActivity.class);
                         intent.putExtra("url", armyBannerData.get(position).getJumpUrl());
                         startActivity(intent);
                     }
                 }
             } else {
+                if (bannerData.get(position).getJumpType() == 1) {
+                    return;
+                }
                 if (bannerData.get(position).getJumpUrl() != null
                         && bannerData.get(position).getJumpUrl().length() > 10) {
                     Intent intent = new Intent(getActivity(), WebViewActivity.class);
@@ -292,7 +291,7 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
                 } else {
                     Glide.with(getActivity()).load(HttpInterface.IMG_URL + armyBannerData.get(position).getImgurl()).into(image);
                 }
-//                desc.setText(armyBannerData.get(position).getSubject());
+                desc.setText(armyBannerData.get(position).getSubject());
             } else {
                 if (bannerData.get(position).getImgurl().startsWith("http")) {
                     Glide.with(getActivity()).load(bannerData.get(position).getImgurl()).into(image);
@@ -327,9 +326,13 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
         banner.loadImage((banner1, model, view, position) -> {
             ShapeableImageView image = view.findViewById(R.id.image);
             if (bannerData2.get(position).getIcon().startsWith("http")) {
-                Glide.with(getActivity()).load(bannerData2.get(position).getIcon()).into(image);
+                Glide.with(getActivity()).load(bannerData2.get(position).getIcon())
+                        .placeholder(R.drawable.glide_ploce)
+                        .error(R.drawable.glide_ploce).into(image);
             } else {
-                Glide.with(getActivity()).load(HttpInterface.IMG_URL + bannerData2.get(position).getIcon()).into(image);
+                Glide.with(getActivity()).load(HttpInterface.IMG_URL + bannerData2.get(position).getIcon())
+                        .placeholder(R.drawable.glide_ploce)
+                        .error(R.drawable.glide_ploce).into(image);
             }
         });
     }
