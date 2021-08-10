@@ -61,11 +61,11 @@ public interface HttpInterface {
     /**
      * 注册
      */
-    @FormUrlEncoded
     @POST("/ums/register")
-    Observable<ResponseBody> register(@Field("username") String username,
-                                      @Field("otpCode") String otpCode,
-                                      @Field("password") String password);
+    Observable<BaseResult<Object>> register(@Query("username") String username,
+                                            @Query("otpCode") String otpCode,
+                                            @Query("password") String password,
+                                            @Query("nickname") String nickname);
 
     /**
      * 登录

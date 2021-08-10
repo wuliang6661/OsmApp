@@ -50,37 +50,6 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View>
         });
     }
 
-    @Override
-    public void register(String username, String otpCode, String password) {
-        HttpInterfaceIml.register(username,otpCode,password).subscribe(new Subscriber<ResponseBody>() {
-            @Override
-            public void onCompleted() {
-                if (mView == null)
-                    return;
-                mView.onRequestEnd();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (mView == null)
-                    return;
-                mView.onRequestError(e.getMessage());
-            }
-
-            @Override
-            public void onNext(ResponseBody s) {
-                if (mView == null)
-                    return;
-                try {
-                    mView.register(s);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     @Override
     public void login(String loginType, String username, String otpCode, String password) {

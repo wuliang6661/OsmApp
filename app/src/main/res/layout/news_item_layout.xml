@@ -1,63 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#f6f6f6"
     android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/newItemBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
         android:layout_marginTop="12dp"
-        app:cardBackgroundColor="#ffffff"
-        android:theme="@style/Theme.MaterialComponents"
+        android:layout_marginEnd="12dp"
         android:clickable="true"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="0dp"
-        android:foreground="?android:attr/selectableItemBackground"
         android:focusable="true"
-        android:id="@+id/newItemBtn">
+        android:foreground="?android:attr/selectableItemBackground"
+        android:theme="@style/Theme.MaterialComponents"
+        app:cardBackgroundColor="#ffffff"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="0dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="7dp">
+            android:layout_marginStart="7dp"
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
+                        android:id="@+id/hotTxt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/hotTxt"
-                        android:text="热"
-                        android:textSize="11sp"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="2dp"
                         android:background="#FF5A5A"
                         android:paddingStart="3dp"
                         android:paddingEnd="3dp"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginTop="2dp"/>
+                        android:text="热"
+                        android:textColor="#FFFFFF"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
                     <TextView
+                        android:id="@+id/title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/title"
-                        android:textColor="#2B2B2B"
-                        android:textSize="15sp"
-                        android:maxLines="3"
                         android:ellipsize="end"
+                        android:maxLines="3"
                         android:minLines="3"
-                        android:text=""/>
+                        android:text=""
+                        android:textColor="#2B2B2B"
+                        android:textSize="15sp" />
 
                 </RelativeLayout>
 
@@ -66,41 +71,43 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
                     android:layout_marginBottom="9dp">
+
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:id="@+id/time"
-                        android:textSize="10sp"
-                        android:textColor="#949494"
-                        android:drawablePadding="3dp"
-                        app:drawableStartCompat="@mipmap/clock"
-                        android:gravity="center_vertical"
-                        android:text=""/>
-                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawablePadding="3dp"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="#949494"
+                        android:textSize="10sp"
+                        app:drawableStartCompat="@mipmap/clock" />
+
+                    <TextView
                         android:id="@+id/glance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:drawablePadding="3dp"
+                        android:gravity="center_vertical"
                         android:text="100"
                         android:textColor="#949494"
                         android:textSize="10sp"
-                        app:drawableStartCompat="@mipmap/eye"
-                        android:drawablePadding="3dp"
-                        android:layout_alignParentEnd="true"
-                        android:gravity="center_vertical"/>
+                        app:drawableStartCompat="@mipmap/eye" />
                 </RelativeLayout>
 
             </LinearLayout>
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image"
                 android:layout_width="150dp"
                 android:layout_height="88dp"
-                android:background="#f3f3f3"
-                android:id="@+id/image"
-                android:theme="@style/Theme.MaterialComponents"
-                android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/roundedCornerImageStyle"
                 android:layout_gravity="center_vertical"
-                android:layout_marginEnd="9dp"/>
+                android:layout_marginEnd="9dp"
+                android:background="#f3f3f3"
+                android:scaleType="centerCrop"
+                android:theme="@style/Theme.MaterialComponents"
+                app:shapeAppearanceOverlay="@style/roundedCornerImageStyle" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

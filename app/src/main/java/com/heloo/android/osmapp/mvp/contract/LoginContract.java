@@ -18,8 +18,6 @@ public class LoginContract {
 
         void getCode(ResponseBody data) throws JSONException, IOException;
 
-        void register(ResponseBody data) throws JSONException, IOException;
-
         void login(ResponseBody data) throws JSONException, IOException;
 
         void getUserInfo(ResponseBody data) throws JSONException, IOException;
@@ -33,14 +31,6 @@ public class LoginContract {
          * @param type 注册register,登录login,改密码resetPassword
          */
         void getRegisterCode(String telephone, String type);
-
-        /**
-         * 注册
-         * @param username username
-         * @param otpCode 验证码
-         * @param password 密码
-         */
-        void register(String username, String otpCode, String password);
 
         /**
          * 登录

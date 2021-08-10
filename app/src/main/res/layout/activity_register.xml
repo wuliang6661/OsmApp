@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.login.RegisterActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/login_bg" />
+
+    <include
+        android:id="@+id/head"
+        layout="@layout/header_layout" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/head"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="60dp"
+                android:src="@mipmap/login_logo" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/logo"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="17dp"
+                android:background="#ffffff"
+                android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="45dp"
+                    android:layout_marginEnd="23dp"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/nike_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/login_account" />
+
+                    <EditText
+                        android:id="@+id/edit_nike_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:layout_toEndOf="@id/nike_img"
+                        android:background="@null"
+                        android:hint="请输入昵称"
+                        android:textColor="#333333"
+                        android:textColorHint="#A7A7A7"
+                        android:textSize="12sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#D8AE54" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="23dp">
+
+                    <ImageView
+                        android:id="@+id/accountImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/login_phone" />
+
+                    <EditText
+                        android:id="@+id/accountInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:layout_toEndOf="@id/accountImg"
+                        android:background="@null"
+                        android:hint="输入手机号码"
+                        android:textColor="#333333"
+                        android:textColorHint="#A7A7A7"
+                        android:textSize="12sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#D8AE54" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="23dp">
+
+                    <ImageView
+                        android:id="@+id/passCodeImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/login_code" />
+
+                    <EditText
+                        android:id="@+id/passCodeInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:layout_toEndOf="@id/passCodeImg"
+                        android:background="@null"
+                        android:hint="输入验证码"
+                        android:textColor="#333333"
+                        android:textColorHint="#A7A7A7"
+                        android:textSize="12sp" />
+
+                    <com.heloo.android.osmapp.widget.timebutton.TimeButton
+                        android:id="@+id/codeBtn"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="5dp"
+                        android:background="@drawable/login_btn_bg"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:text="获取验证码"
+                        android:textColor="#ffffff"
+                        android:textSize="12sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#D8AE54" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/setPasswordLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="23dp"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/setPasswordImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/login_password" />
+
+                    <EditText
+                        android:id="@+id/setPasswordInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:layout_toEndOf="@id/setPasswordImg"
+                        android:background="@null"
+                        android:hint="设置新密码"
+                        android:inputType="textPassword"
+                        android:textColor="#333333"
+                        android:textColorHint="#A7A7A7"
+                        android:textSize="12sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#D8AE54" />
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/agreeBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="25dp"
+                    android:gravity="center_vertical"
+                    android:visibility="visible">
+
+                    <CheckBox
+                        android:id="@+id/agreeImg"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_marginStart="10dp"
+                        android:button="@drawable/check_bg" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="我已阅读并同意《欧诗漫协议》"
+                        android:textColor="#A7A7A7"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/submitBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="23dp"
+                    android:layout_marginBottom="50dp"
+                    android:background="@drawable/login_btn_bg"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:text="确定"
+                    android:textColor="#ffffff"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

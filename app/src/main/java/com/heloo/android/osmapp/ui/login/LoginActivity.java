@@ -7,9 +7,6 @@ import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
-import android.widget.LinearLayout;
-
-import androidx.core.content.res.ResourcesCompat;
 
 import com.alibaba.fastjson.JSON;
 import com.google.android.material.tabs.TabLayout;
@@ -24,7 +21,6 @@ import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.LoginContract;
 import com.heloo.android.osmapp.mvp.presenter.LoginPresenter;
 import com.heloo.android.osmapp.ui.main.MainActivity;
-import com.heloo.android.osmapp.utils.ScreenUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 
 import org.json.JSONException;
@@ -32,6 +28,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import androidx.core.content.res.ResourcesCompat;
 import okhttp3.ResponseBody;
 
 /**
@@ -43,7 +40,7 @@ import okhttp3.ResponseBody;
 public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPresenter, ActivityLogin2Binding>
         implements LoginContract.View, View.OnClickListener {
 
-    private int loginWay = 1;//1 手机快捷登录 2 账号密码登录 3 注册
+    private int loginWay = 1;//1 手机快捷登录 2 账号密码登录
     private boolean isAgree = false;
 
     @Override
@@ -113,25 +110,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             }
         });
         findViewById(R.id.registerBtn).setOnClickListener(v -> {
-            loginWay = 3;
-            setTitle("注册");
-            findViewById(R.id.registerBtn).setVisibility(View.GONE);
-            viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_phone, null));
-            viewBinding.accountInput.setHint("输入手机号码");
-            viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_code, null));
-            viewBinding.passCodeInput.setHint("输入验证码");
-            viewBinding.passCodeInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-            viewBinding.codeBtn.setVisibility(View.VISIBLE);
-            viewBinding.setPasswordLayout.setVisibility(View.VISIBLE);
-            viewBinding.forgetBtn.setVisibility(View.GONE);
-            viewBinding.newPersonBtn.setVisibility(View.INVISIBLE);
-            viewBinding.tabLayout.setVisibility(View.INVISIBLE);
-            viewBinding.submitBtn.setText("立即注册");
-            LinearLayout.LayoutParams lp = new
-                    LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(ScreenUtils.dp2px(22), ScreenUtils.dp2px(16), ScreenUtils.dp2px(22), ScreenUtils.dp2px(75));
-            viewBinding.submitBtn.setLayoutParams(lp);
+            gotoActivity(RegisterActivity.class, false);
         });
         findViewById(R.id.backBtn).setOnClickListener(v -> back());
     }
@@ -226,28 +205,6 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
                 showProgress("");
                 mPresenter.login("byPassword", viewBinding.accountInput.getText().toString(), "", viewBinding.passCodeInput.getText().toString());
                 break;
-            case 3://3 注册
-                if (TextUtils.isEmpty(viewBinding.passCodeInput.getText())) {
-                    ToastUtils.showShortToast("请先输入验证码");
-                    return;
-                }
-                if (TextUtils.isEmpty(viewBinding.setPasswordInput.getText())) {
-                    ToastUtils.showShortToast("请先输入密码");
-                    return;
-                }
-                if (viewBinding.setPasswordInput.getText().toString().length() <= 6) {
-                    ToastUtils.showShortToast("密码过短，请完善密码");
-                    return;
-                }
-                if (!isAgree) {
-                    ToastUtils.showShortToast("请先阅读并同意《欧诗漫头条协议》");
-                    return;
-                }
-                showProgress("");
-                mPresenter.register(viewBinding.accountInput.getText().toString(),
-                        viewBinding.passCodeInput.getText().toString(),
-                        viewBinding.setPasswordInput.getText().toString());
-                break;
         }
     }
 
@@ -262,9 +219,6 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             case 2://2 账号密码登录
 
                 break;
-            case 3://3 注册
-                mPresenter.getRegisterCode(viewBinding.accountInput.getText().toString(), "register");
-                break;
         }
     }
 
@@ -272,35 +226,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
      * 返回
      */
     private void back() {
-        if (loginWay == 3) {
-            loginWay = 1;
-            setTitle("登录");
-            findViewById(R.id.registerBtn).setVisibility(View.VISIBLE);
-            viewBinding.tabLayout.getTabAt(0).select();
-            viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_phone, null));
-            viewBinding.accountInput.setHint("输入手机号码");
-            viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_code, null));
-            viewBinding.passCodeInput.setHint("输入验证码");
-            viewBinding.passCodeInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-            viewBinding.codeBtn.setVisibility(View.VISIBLE);
-            viewBinding.setPasswordLayout.setVisibility(View.GONE);
-            viewBinding.forgetBtn.setVisibility(View.GONE);
-            viewBinding.newPersonBtn.setVisibility(View.INVISIBLE);
-            viewBinding.tabLayout.setVisibility(View.VISIBLE);
-            viewBinding.passCodeInput.setText("");
-            viewBinding.setPasswordInput.setText("");
-            viewBinding.agreeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.agree_bg, null));
-            isAgree = false;
-            viewBinding.codeBtn.onDestroy();
-            viewBinding.submitBtn.setText("立即登录");
-            LinearLayout.LayoutParams lp = new
-                    LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(ScreenUtils.dp2px(22), ScreenUtils.dp2px(10), ScreenUtils.dp2px(22), 0);
-            viewBinding.submitBtn.setLayoutParams(lp);
-        } else {
             finish();
-        }
     }
 
     @Override
@@ -315,19 +241,6 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         }
     }
 
-    @Override
-    public void register(ResponseBody data) throws JSONException, IOException {
-        String s = new String(data.bytes());
-        JSONObject jsonObject = new JSONObject(s);
-        String status = jsonObject.optString("status");
-        if (status.equals("success")) {
-            ToastUtils.showShortToast("注册成功");
-            back();
-        } else {
-            JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-            ToastUtils.showShortToast(jsonObject1.optString("errMsg"));
-        }
-    }
 
     @Override
     public void login(ResponseBody data) throws JSONException, IOException {

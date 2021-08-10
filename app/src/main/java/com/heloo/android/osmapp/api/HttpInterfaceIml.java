@@ -59,8 +59,8 @@ public class HttpInterfaceIml {
     /**
      * 注册
      */
-    public static Observable<ResponseBody> register(String username, String otpCode, String password) {
-        return getService().register(username, otpCode, password).compose(RxHelper.httpRusult());
+    public static Observable<Object> register(String username, String otpCode, String password, String nickname) {
+        return getService().register(username, otpCode, password, nickname).compose(RxResultHelper.httpRusult());
     }
 
     /**
