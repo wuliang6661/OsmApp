@@ -11,6 +11,7 @@ import android.view.View;
 import com.alibaba.fastjson.JSON;
 import com.google.android.material.tabs.TabLayout;
 import com.heloo.android.osmapp.R;
+import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.base.MyApplication;
 import com.heloo.android.osmapp.config.ConditionEnum;
 import com.heloo.android.osmapp.config.LocalConfiguration;
@@ -20,6 +21,8 @@ import com.heloo.android.osmapp.model.UserInfo;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.LoginContract;
 import com.heloo.android.osmapp.mvp.presenter.LoginPresenter;
+import com.heloo.android.osmapp.ui.WebActivity;
+import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.ui.main.MainActivity;
 import com.heloo.android.osmapp.utils.ToastUtils;
 
@@ -113,6 +116,11 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             gotoActivity(RegisterActivity.class, false);
         });
         findViewById(R.id.backBtn).setOnClickListener(v -> back());
+        viewBinding.xieyi.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, WebActivity.class);
+            intent.putExtra("url", HttpInterface.URL + LocalConfiguration.xieyiUrl);
+            startActivity(intent);
+        });
     }
 
     @Override

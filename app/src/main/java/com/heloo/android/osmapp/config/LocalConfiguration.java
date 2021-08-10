@@ -33,6 +33,8 @@ public class LocalConfiguration {
     public static String rewordUrl = "/draw/todraw";
     public static String signUrl = "/signin/tosignin";
     public static String liveUrl = "/picarticlelive/getpicarticlelive";
+    //用户隐私协议
+    public static String xieyiUrl = "/Privacy/toPrivacy";
 
 
     public static final String QQ_APP_ID = "1110578145";

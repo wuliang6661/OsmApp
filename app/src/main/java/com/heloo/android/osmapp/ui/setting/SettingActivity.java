@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.heloo.android.osmapp.R;
+import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.base.BaseActivity;
 import com.heloo.android.osmapp.base.MyApplication;
 import com.heloo.android.osmapp.config.ConditionEnum;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivitySettingBinding;
+import com.heloo.android.osmapp.ui.WebActivity;
 import com.heloo.android.osmapp.ui.address.AddressActivity;
 import com.heloo.android.osmapp.ui.password.ModifyActivity;
 import com.heloo.android.osmapp.ui.person.PersonActivity;
@@ -37,6 +39,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         binding.changePasswordBtn.setOnClickListener(this);
         binding.registerBtn.setOnClickListener(this);
         binding.logoutBtn.setOnClickListener(this);
+        binding.xieyi.setOnClickListener(view -> {
+            Intent intent = new Intent(SettingActivity.this, WebActivity.class);
+            intent.putExtra("url", HttpInterface.URL + LocalConfiguration.xieyiUrl);
+            startActivity(intent);
+        });
     }
 
     @Override

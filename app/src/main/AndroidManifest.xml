@@ -40,7 +40,7 @@
         android:roundIcon="@mipmap/z_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.search.SearchActivity"/>
+        <activity android:name=".ui.search.SearchActivity" />
         <activity
             android:name=".ui.subject.SubjectDetailActivity"
             android:launchMode="standard"
@@ -224,6 +224,12 @@
 
         <activity
             android:name=".ui.login.RegisterActivity"
+            android:launchMode="standard"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Mike" />
+
+        <activity
+            android:name=".ui.WebActivity"
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Mike" />

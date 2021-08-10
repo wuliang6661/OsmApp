@@ -1,12 +1,17 @@
 package com.heloo.android.osmapp.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.api.HttpInterfaceIml;
 import com.heloo.android.osmapp.api.HttpResultSubscriber;
 import com.heloo.android.osmapp.base.BaseActivity;
+import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityRegisterBinding;
+import com.heloo.android.osmapp.ui.WebActivity;
+import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 
@@ -70,12 +75,17 @@ public class RegisterActivity extends BaseActivity {
                     ToastUtils.showShortToast("密码过短，请完善密码");
                     return;
                 }
-                if(!binding.agreeImg.isChecked()){
+                if (!binding.agreeImg.isChecked()) {
                     ToastUtils.showShortToast("请先阅读并同意《欧诗漫头条协议》");
                     return;
                 }
                 register(phone, yanzhengma, password, nikeName);
             }
+        });
+        binding.xieyi.setOnClickListener(view -> {
+            Intent intent = new Intent(RegisterActivity.this, WebActivity.class);
+            intent.putExtra("url", HttpInterface.URL + LocalConfiguration.xieyiUrl);
+            startActivity(intent);
         });
     }
 

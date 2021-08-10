@@ -196,8 +196,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="我已阅读并同意《欧诗漫协议》"
+                        android:text="我已阅读并同意"
                         android:textColor="#A7A7A7"
+                        android:textSize="12sp" />
+
+
+                    <TextView
+                        android:id="@+id/xieyi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="《欧诗漫用户隐私协议》"
+                        android:textColor="#D8AE54"
                         android:textSize="12sp" />
 
                 </LinearLayout>
