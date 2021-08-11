@@ -141,6 +141,9 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         selectImg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (priceBO == null) {
+                    return;
+                }
                 if (b) {
                     viewBinding.price.setText("￥ " + priceBO.totalDiscountPrice + "  + " + priceBO.totalScore + "珍币");
                 } else {
@@ -300,7 +303,7 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         stopProgress();
         this.priceBO = priceBO;
         if (LocalConfiguration.userInfo.getSourceType() != 1001) {
-            viewBinding.price.setText(priceBO.totalDiscountPrice + "");
+            viewBinding.price.setText(priceBO.totalScore + "");
             viewBinding.zhenbiImg.setVisibility(View.VISIBLE);
         } else {
             if (selectImg.isChecked()) {

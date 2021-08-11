@@ -51,7 +51,7 @@ import rx.Subscriber;
  */
 
 public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresenter, FragmentMineBinding>
-    implements MineContract.View, View.OnClickListener,UMShareListener {
+        implements MineContract.View, View.OnClickListener, UMShareListener {
 
     private UserInfo userInfo;
     private SignBean signBean;
@@ -66,14 +66,14 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
     public void onResume() {
         super.onResume();
         if (MyApplication.isLogin == ConditionEnum.LOGIN
-                && LocalConfiguration.userInfo != null){
+                && LocalConfiguration.userInfo != null) {
             getInfo();
-        }else {
+        } else {
             viewBinding.name.setText("请登录");
             viewBinding.coinNum.setText("0");
             viewBinding.role.setVisibility(View.INVISIBLE);
             Glide.with(getActivity()).asBitmap().load(R.drawable.default_head).into(viewBinding.headerImg);
-            mPresenter.getSignStatus(MyApplication.spUtils.getString("token", ""),"");
+            mPresenter.getSignStatus(MyApplication.spUtils.getString("token", ""), "");
         }
     }
 
@@ -86,13 +86,15 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
                 .placeholder(R.drawable.default_head).error(R.drawable.default_head).into(viewBinding.headerImg);
         if (userInfo.getNickname() != null && !userInfo.getNickname().equals("")) {
             viewBinding.name.setText(userInfo.getNickname());
-        }else {
+        } else {
             viewBinding.name.setText(userInfo.getUsername());
         }
         viewBinding.coinNum.setText(userInfo.getIntegration());
-        if (userInfo.getSourceType() == 1001){
+        if (userInfo.getSourceType() == 1001) {
             viewBinding.role.setText("员工");
-        }else {
+        } else if (userInfo.getSourceType() == 1003) {
+            viewBinding.role.setText("管理员");
+        } else {
             viewBinding.role.setText("会员");
         }
     }
@@ -126,10 +128,10 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(getActivity(), OrderActivity.class);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.headerImg:
             case R.id.name:
-                if (goLogin()){
+                if (goLogin()) {
                     startActivity(new Intent(getActivity(), PersonActivity.class));
                 }
                 break;
@@ -158,8 +160,8 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
                 }
                 break;
             case R.id.waitPay://待付款
-                if (goLogin()){
-                    intent.putExtra("tag","1");
+                if (goLogin()) {
+                    intent.putExtra("tag", "1");
                     startActivity(intent);
                 }
                 break;
@@ -234,18 +236,18 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
         String s = new String(body.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
-            signBean = JSON.parseObject(jsonObject.optString("data"),SignBean.class);
-            if (signBean != null){
-                if (signBean.getTeamType().equals("1")){
+        if (status.equals("success")) {
+            signBean = JSON.parseObject(jsonObject.optString("data"), SignBean.class);
+            if (signBean != null) {
+                if (signBean.getTeamType().equals("1")) {
                     viewBinding.myTeam.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     viewBinding.myTeam.setVisibility(View.GONE);
                 }
-                if (signBean.getSigninType().equals("0")){//未签到
+                if (signBean.getSigninType().equals("0")) {//未签到
                     Glide.with(getActivity()).load(R.mipmap.sign_no).into(viewBinding.signImg);
                     viewBinding.signTxt.setText("签到有礼");
-                }else {
+                } else {
                     Glide.with(getActivity()).load(R.mipmap.sign_yes).into(viewBinding.signImg);
                     viewBinding.signTxt.setText("今日已签");
                 }
@@ -254,7 +256,7 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
     }
 
 
-    private void getInfo(){
+    private void getInfo() {
         HttpInterfaceIml.getUserInfo(MyApplication.spUtils.getString("token", "")).subscribe(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
@@ -274,12 +276,12 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
                     String s = new String(data.bytes());
                     JSONObject jsonObject = new JSONObject(s);
                     String status = jsonObject.optString("status");
-                    if (status.equals("success")){
+                    if (status.equals("success")) {
                         MyApplication.isLogin = ConditionEnum.LOGIN;
                         LocalConfiguration.userInfo = JSON.parseObject(jsonObject.optString("data"), UserInfo.class);
                         userInfo = LocalConfiguration.userInfo;
                         setUserInfo();
-                        mPresenter.getSignStatus(MyApplication.spUtils.getString("token", ""),LocalConfiguration.userInfo.getUsername());
+                        mPresenter.getSignStatus(MyApplication.spUtils.getString("token", ""), LocalConfiguration.userInfo.getUsername());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
