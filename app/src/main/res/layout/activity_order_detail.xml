@@ -176,10 +176,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="15dp"
                     android:text="￥89"
                     android:textColor="#D3A952"
                     android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/score"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@mipmap/coin_img"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <LinearLayout
@@ -263,7 +271,7 @@
 
                 <Space
                     android:layout_width="14dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
 
                 <TextView
                     android:id="@+id/btn2"

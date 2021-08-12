@@ -53,6 +53,7 @@ public class ShopDetailsBO {
         public String prodId;
         public String picId;
         public String url;
+        public Integer integralPrice;
 
 
     }

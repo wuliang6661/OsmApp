@@ -21,7 +21,7 @@ public class ShopListBO {
                 public String name;
                 public String icon;
                 public Double preferentialPrice;
-                public Double integralPrice;
+                public Integer integralPrice;
 
 
             }

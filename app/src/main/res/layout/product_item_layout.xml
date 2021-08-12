@@ -71,7 +71,6 @@
                 android:layout_marginStart="5dp"
                 android:drawablePadding="3dp"
                 android:gravity="center_vertical"
-                android:text="200"
                 android:textColor="#D3A952"
                 android:textSize="14sp"
                 android:visibility="gone"

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.alipay.sdk.app.PayTask;
 import com.google.android.material.tabs.TabLayout;
 import com.heloo.android.osmapp.R;
+import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityOrderBinding;
 import com.heloo.android.osmapp.model.OrderBO;
 import com.heloo.android.osmapp.model.PayBean;
@@ -147,7 +148,13 @@ public class OrderActivity extends MVPBaseActivity<OrderContract.View, OrderPres
                     public void convert(LGViewHolder holder, OrderBO.OrderItemlistBean orderItemlistBean, int position) {
                         holder.setImageUrl(holder.itemView.getContext(), R.id.productImg, orderItemlistBean.icon);
                         holder.setText(R.id.productTitle, orderItemlistBean.name);
-                        holder.setText(R.id.price, "￥ " + orderItemlistBean.prize);
+                        if (LocalConfiguration.userInfo.getSourceType() == 1002) {
+                            holder.getView(R.id.score).setVisibility(View.VISIBLE);
+                            holder.setText(R.id.price,  orderItemlistBean.integralPrice + "");
+                        } else {
+                            holder.setText(R.id.price, "¥ " + orderItemlistBean.prize);
+                            holder.getView(R.id.score).setVisibility(View.GONE);
+                        }
                         holder.setText(R.id.num, "x" + orderItemlistBean.prodNum);
                         holder.setText(R.id.productSecondTitle, "x" + orderItemlistBean.spec);
                         holder.getView(R.id.selectImg).setVisibility(View.GONE);

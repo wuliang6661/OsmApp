@@ -16,6 +16,6 @@ public class OrderPriceBO {
         public String icon;
         public Integer number;
         public Double discountprice;
-        public Double integralprice;
+        public Integer integralprice;
     }
 }

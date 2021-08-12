@@ -214,7 +214,13 @@ public class StoreFragmentNew extends MVPBaseFragment<StoreContract.View, StoreP
                     @Override
                     public void convert(LGViewHolder holder, ShopListBO.ListBean.TypeGoodsMoelsBean.GoodsMoelsBean goodsMoelsBean, int position) {
                         holder.setText(R.id.tvName, goodsMoelsBean.name);
-                        holder.setText(R.id.tvPrice, String.format("￥%s", goodsMoelsBean.preferentialPrice));
+                        if (LocalConfiguration.userInfo.getSourceType() == 1002) {
+                            holder.setText(R.id.tvPrice, String.format("%s", goodsMoelsBean.integralPrice));
+                            holder.getView(R.id.tvCoin).setVisibility(View.VISIBLE);
+                        } else {
+                            holder.setText(R.id.tvPrice, String.format("￥%s", goodsMoelsBean.preferentialPrice));
+                            holder.getView(R.id.tvCoin).setVisibility(View.GONE);
+                        }
                         if (goodsMoelsBean.icon.startsWith("http")) {
                             holder.setImageUrl(getActivity(), R.id.productImg, goodsMoelsBean.icon);
                         } else {

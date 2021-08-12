@@ -22,5 +22,6 @@ public class ShopCarBO implements Serializable {
         public String createTime;
         public String updateTime;
         public String status;
+        public Integer integralPrice;
     }
 }

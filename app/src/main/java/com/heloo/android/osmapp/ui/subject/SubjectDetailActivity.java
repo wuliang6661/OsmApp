@@ -117,7 +117,7 @@ public class SubjectDetailActivity extends BaseActivity {
             adapter.notifyDataSetChanged();
             return;
         }
-        adapter = new CommonAdapter<SubjectDetailBean.ArticlelistBean>(this,R.layout.subject_detail_item_layout,data) {
+        adapter = new CommonAdapter<SubjectDetailBean.ArticlelistBean>(this,R.layout.news_item_layout,data) {
             @Override
             protected void convert(ViewHolder holder, SubjectDetailBean.ArticlelistBean item, int position) {
                 ImageView image = holder.getConvertView().findViewById(R.id.image);
@@ -127,10 +127,10 @@ public class SubjectDetailActivity extends BaseActivity {
                     Glide.with(SubjectDetailActivity.this).load(HttpInterface.IMG_URL+item.getIcon()).into(image);
                 }
                 holder.setText(R.id.time,item.getCreate_date());
-                holder.setText(R.id.num,item.getRead_num());
+                holder.setText(R.id.glance,item.getRead_num());
                 holder.setText(R.id.title,item.getSubject());
 
-                holder.getView(R.id.button).setOnClickListener(v -> {
+                holder.getView(R.id.newItemBtn).setOnClickListener(v -> {
                     Intent intent = new Intent(SubjectDetailActivity.this, WebViewActivity.class);
                     if (MyApplication.isLogin == ConditionEnum.LOGIN) {
                         intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticle_id()

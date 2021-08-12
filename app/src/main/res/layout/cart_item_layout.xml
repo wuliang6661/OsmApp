@@ -84,14 +84,32 @@
                                 android:visibility="invisible"
                                 tools:text="珍珠白精萃焕白礼盒（洁面+水+乳+原液）" />
 
-                            <TextView
-                                android:id="@+id/price"
+
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="14dp"
-                                android:textColor="#D3A952"
-                                android:textSize="14sp"
-                                tools:text="￥10" />
+                                android:layout_marginTop="12dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+
+                                <TextView
+                                    android:id="@+id/price"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#D3A952"
+                                    android:text="¥ 1000"
+                                    android:textSize="14sp" />
+
+                                <ImageView
+                                    android:id="@+id/score"
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
+                                    android:layout_marginLeft="3dp"
+                                    android:src="@mipmap/coin_img"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 

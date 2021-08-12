@@ -161,7 +161,13 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
                 holder.getView(R.id.editBtn).setVisibility(View.INVISIBLE);
                 holder.setText(R.id.productTitle, s.name);
                 holder.setText(R.id.editTitle, s.name);
-                holder.setText(R.id.price, "¥ " + s.discountprice);
+                if (LocalConfiguration.userInfo.getSourceType() == 1002) {
+                    holder.getView(R.id.score).setVisibility(View.VISIBLE);
+                    holder.setText(R.id.price, s.integralprice + "");
+                } else {
+                    holder.setText(R.id.price, "¥ " + s.discountprice);
+                    holder.getView(R.id.score).setVisibility(View.GONE);
+                }
                 holder.setText(R.id.num, "x " + s.number);
                 holder.setText(R.id.editNum, s.number + "");
                 if (!s.icon.startsWith("http")) {

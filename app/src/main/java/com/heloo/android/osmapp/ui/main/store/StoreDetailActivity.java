@@ -146,10 +146,10 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
                 break;
             case R.id.addCart:
             case R.id.selectSKUBtn:
-                skuDialog(bannerData,1);
+                skuDialog(bannerData, 1);
                 break;
             case R.id.buyBtn:
-                skuDialog(bannerData,2);
+                skuDialog(bannerData, 2);
                 break;
         }
     }
@@ -171,7 +171,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
     private int selectPosition = -1;
     private int productNum = 1;
 
-    private void skuDialog(List<String> data,int type) {
+    private void skuDialog(List<String> data, int type) {
         selectPosition = -1;
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialog);
         final LayoutInflater inflater = LayoutInflater.from(this);
@@ -183,17 +183,23 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
 //        Button buyBtn = v.findViewById(R.id.buyBtn);
         TextView productName = v.findViewById(R.id.productName);
         TextView price = v.findViewById(R.id.price);
+        TextView scope = v.findViewById(R.id.score);
         TextView leftNum = v.findViewById(R.id.leftNum);
         TextView numTxt = v.findViewById(R.id.numTxt);
         ImageView productImg = v.findViewById(R.id.productImg);
-        if(type == 1){
+        if (type == 1) {
             commit.setText("加入购物车");
-        }else{
+        } else {
             commit.setText("立即购买");
         }
         if (productDetailBean != null) {
             productName.setText(productDetailBean.name);
-            price.setText(String.format("¥%s", productDetailBean.preferentialPrice));
+            if (LocalConfiguration.userInfo.getSourceType() == 1002) {
+                scope.setVisibility(View.VISIBLE);
+                price.setText(String.format("%s", productDetailBean.integralPrice));
+            } else {
+                price.setText(String.format("¥%s", productDetailBean.preferentialPrice));
+            }
             leftNum.setText(String.format("库存%s件", productDetailBean.freeNum));
             if (!productDetailBean.icon.startsWith("http")) {
                 productDetailBean.icon = HttpInterface.IMG_URL + productDetailBean.icon;
@@ -249,12 +255,12 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         });
 
         commit.setOnClickListener(v1 -> {
-            if(type == 1){
+            if (type == 1) {
                 showProgress("");
                 if (goLogin()) {
                     mPresenter.addCart(getIntent().getStringExtra("id"), LocalConfiguration.userInfo.getId() + "", String.valueOf(productNum));
                 }
-            }else{
+            } else {
                 noticeDialog.dismiss();
                 Bundle bundle = new Bundle();
                 ArrayList<ShopCarBO.ShopCarInfoDOSBean> shops = new ArrayList<>();
@@ -282,7 +288,13 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         productDetailBean = body.list;
         if (productDetailBean != null) {
             viewBinding.title.setText(productDetailBean.name);
-            viewBinding.price.setText(String.format("￥%s", productDetailBean.preferentialPrice));
+            if (LocalConfiguration.userInfo.getSourceType() == 1002) {
+                viewBinding.score.setVisibility(View.VISIBLE);
+                viewBinding.price.setText(String.format("%s", productDetailBean.integralPrice));
+            } else {
+                viewBinding.score.setVisibility(View.GONE);
+                viewBinding.price.setText(String.format("￥%s", productDetailBean.preferentialPrice));
+            }
             viewBinding.shichangLayout.setVisibility(productDetailBean.price == 0 ? View.INVISIBLE : View.VISIBLE);
             viewBinding.oldPrice.setText(String.format("￥%s", productDetailBean.price));
             viewBinding.oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线

@@ -43,7 +43,7 @@ public class WebViewActivity extends BaseWebActivity {
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         url = getIntent().getExtras().getString("url");
         mTitle = getIntent().getStringExtra("title");
-        setTitle(mTitle);
+//        setTitle(mTitle);
         if (getIntent().getStringExtra("tag") != null){
             initWebView(binding.webview,1);
             binding.webview.getSettings().setTextZoom(100);
@@ -100,19 +100,19 @@ public class WebViewActivity extends BaseWebActivity {
     }
 
     private void setListener(){
-        binding.backBtn.setOnClickListener(v -> {
-            if (binding.webview.canGoBack()) {
-                String back = getIntent().getExtras().getString("back");
-                if (back == null) {
-                    binding.webview.goBack();
-
-                } else {
-                    finish();
-                }
-            } else {
-                finish();
-            }
-        });
+//        binding.backBtn.setOnClickListener(v -> {
+//            if (binding.webview.canGoBack()) {
+//                String back = getIntent().getExtras().getString("back");
+//                if (back == null) {
+//                    binding.webview.goBack();
+//
+//                } else {
+//                    finish();
+//                }
+//            } else {
+//                finish();
+//            }
+//        });
 //        goBack();
     }
 }

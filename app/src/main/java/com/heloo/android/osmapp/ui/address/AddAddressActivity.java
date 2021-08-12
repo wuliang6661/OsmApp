@@ -41,7 +41,7 @@ import okhttp3.ResponseBody;
  * 添加地址
  */
 public class AddAddressActivity extends MVPBaseActivity<AddAddressContract.View, AddAddressPresenter, ActivityAddAddressBinding>
-    implements AddAddressContract.View, View.OnClickListener {
+        implements AddAddressContract.View, View.OnClickListener {
 
     private static boolean isLoaded = false;
     private Thread thread;
@@ -61,7 +61,7 @@ public class AddAddressActivity extends MVPBaseActivity<AddAddressContract.View,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHandler.sendEmptyMessage(MSG_LOAD_DATA);
-        if (getIntent().getSerializableExtra("address") != null){
+        if (getIntent().getSerializableExtra("address") != null) {
             addressBean = (AddressBean) getIntent().getSerializableExtra("address");
         }
         initView();
@@ -81,20 +81,20 @@ public class AddAddressActivity extends MVPBaseActivity<AddAddressContract.View,
         viewBinding.selectAddressBtn.setOnClickListener(this);
         viewBinding.defaultBtn.setOnClickListener(this);
         viewBinding.submitBtn.setOnClickListener(this);
-        if (addressBean != null){
+        if (addressBean != null) {
             addProvince = addressBean.getProvince();
             addCity = addressBean.getCity();
             addArea = addressBean.getArea();
             viewBinding.nameInput.setText(addressBean.getName());
             viewBinding.phoneInput.setText(addressBean.getPhone());
-            viewBinding.addressSelect.setText(String.format("%s%s%s",addressBean.getProvince(),addressBean.getCity(),addressBean.getArea()));
+            viewBinding.addressSelect.setText(String.format("%s%s%s", addressBean.getProvince(), addressBean.getCity(), addressBean.getArea()));
             viewBinding.detailAddressInput.setText(addressBean.getAddress());
             viewBinding.codeInput.setText(addressBean.getPostcode());
-            if (addressBean.getStatus() == 1){
-                viewBinding.defaultImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.address_select_yes,null));
+            if (addressBean.getStatus() == 1) {
+                viewBinding.defaultImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.address_select_yes, null));
                 isDefault = true;
-            }else {
-                viewBinding.defaultImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.address_select_no,null));
+            } else {
+                viewBinding.defaultImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.address_select_no, null));
                 isDefault = false;
             }
         }
@@ -102,43 +102,43 @@ public class AddAddressActivity extends MVPBaseActivity<AddAddressContract.View,
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.selectAddressBtn:
                 if (isLoaded) {
                     showPickerView();
                 }
                 break;
             case R.id.defaultBtn:
-                if (isDefault){
-                    viewBinding.defaultImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.address_select_no,null));
+                if (isDefault) {
+                    viewBinding.defaultImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.address_select_no, null));
                     isDefault = false;
-                }else {
-                    viewBinding.defaultImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.mipmap.address_select_yes,null));
+                } else {
+                    viewBinding.defaultImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.address_select_yes, null));
                     isDefault = true;
                 }
                 break;
             case R.id.submitBtn:
                 if (verify()) {
                     String defaultAddress;
-                    if (isDefault){
+                    if (isDefault) {
                         defaultAddress = "1";
-                    }else {
+                    } else {
                         defaultAddress = "2";
                     }
                     showProgress("");
-                    if (addressBean != null){
+                    if (addressBean != null) {
                         mPresenter.modifyAddress(MyApplication.spUtils.getString("token", ""),
                                 addressBean.getId(),
                                 viewBinding.detailAddressInput.getText().toString(),
-                                addProvince,addCity,addArea,viewBinding.nameInput.getText().toString(),
-                                viewBinding.phoneInput.getText().toString(),viewBinding.codeInput.getText().toString(),
+                                addProvince, addCity, addArea, viewBinding.nameInput.getText().toString(),
+                                viewBinding.phoneInput.getText().toString(), viewBinding.codeInput.getText().toString(),
                                 defaultAddress);
                         return;
                     }
                     mPresenter.addAddress(MyApplication.spUtils.getString("token", ""),
                             viewBinding.detailAddressInput.getText().toString(),
-                            addProvince,addCity,addArea,viewBinding.nameInput.getText().toString(),
-                            viewBinding.phoneInput.getText().toString(),viewBinding.codeInput.getText().toString(),
+                            addProvince, addCity, addArea, viewBinding.nameInput.getText().toString(),
+                            viewBinding.phoneInput.getText().toString(), viewBinding.codeInput.getText().toString(),
                             defaultAddress);
                 }
                 break;
@@ -149,28 +149,32 @@ public class AddAddressActivity extends MVPBaseActivity<AddAddressContract.View,
      * 校验输入
      */
     private boolean verify() {
-        if (TextUtils.isEmpty(viewBinding.nameInput.getText())){
+        if (TextUtils.isEmpty(viewBinding.nameInput.getText())) {
             ToastUtils.showShortToast("请输入姓名");
             return false;
         }
-        if (TextUtils.isEmpty(viewBinding.phoneInput.getText())){
+        if (viewBinding.nameInput.getText().toString().contains(" ")) {
+            ToastUtils.showShortToast("昵称中不能包含空格！");
+            return false;
+        }
+        if (TextUtils.isEmpty(viewBinding.phoneInput.getText())) {
             ToastUtils.showShortToast("请输入联系电话");
             return false;
         }
         if (!viewBinding.phoneInput.getText().toString().startsWith("1") ||
-                viewBinding.phoneInput.getText().toString().length() != 11){
+                viewBinding.phoneInput.getText().toString().length() != 11) {
             ToastUtils.showShortToast("请输入正确格式的联系电话");
             return false;
         }
-        if (addProvince.equals("")){
+        if (addProvince.equals("")) {
             ToastUtils.showShortToast("请选择地址");
             return false;
         }
-        if (TextUtils.isEmpty(viewBinding.detailAddressInput.getText())){
+        if (TextUtils.isEmpty(viewBinding.detailAddressInput.getText())) {
             ToastUtils.showShortToast("请输入详细地址");
             return false;
         }
-        if (TextUtils.isEmpty(viewBinding.codeInput.getText())){
+        if (TextUtils.isEmpty(viewBinding.codeInput.getText())) {
             ToastUtils.showShortToast("请输入邮政编码");
             return false;
         }
@@ -182,7 +186,7 @@ public class AddAddressActivity extends MVPBaseActivity<AddAddressContract.View,
         String s = new String(addResult.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
+        if (status.equals("success")) {
             finish();
         }
     }
@@ -192,7 +196,7 @@ public class AddAddressActivity extends MVPBaseActivity<AddAddressContract.View,
         String s = new String(body.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
+        if (status.equals("success")) {
             finish();
         }
     }
@@ -253,7 +257,7 @@ public class AddAddressActivity extends MVPBaseActivity<AddAddressContract.View,
                 addCity = opt2tx;
                 addArea = opt3tx;
 
-                viewBinding.addressSelect.setText(String.format("%s %s %s",opt1tx,opt2tx,opt3tx));
+                viewBinding.addressSelect.setText(String.format("%s %s %s", opt1tx, opt2tx, opt3tx));
             }
         })
 

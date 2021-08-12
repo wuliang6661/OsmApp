@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.alipay.sdk.app.PayTask;
 import com.heloo.android.osmapp.R;
+import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityOrderDetailBinding;
 import com.heloo.android.osmapp.model.OrderBO;
 import com.heloo.android.osmapp.model.PayBean;
@@ -72,7 +73,13 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderContract.View, Ord
             public void convert(LGViewHolder holder, OrderBO.OrderItemlistBean orderItemlistBean, int position) {
                 holder.setImageUrl(holder.itemView.getContext(), R.id.productImg, orderItemlistBean.icon);
                 holder.setText(R.id.productTitle, orderItemlistBean.name);
-                holder.setText(R.id.price, "￥ " + orderItemlistBean.prize);
+                if (LocalConfiguration.userInfo.getSourceType() == 1002) {
+                    holder.getView(R.id.score).setVisibility(View.VISIBLE);
+                    holder.setText(R.id.price,  orderItemlistBean.integralPrice + "");
+                } else {
+                    holder.setText(R.id.price, "¥ " + orderItemlistBean.prize);
+                    holder.getView(R.id.score).setVisibility(View.GONE);
+                }
                 holder.setText(R.id.num, "x" + orderItemlistBean.prodNum);
                 holder.setText(R.id.productSecondTitle, "x" + orderItemlistBean.spec);
                 holder.getView(R.id.selectImg).setVisibility(View.GONE);
@@ -121,6 +128,13 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderContract.View, Ord
         viewBinding.oldPrice.setText("¥ " + orderBO.totalPrice);
         viewBinding.delPrice.setText("-¥ " + orderBO.discountFee);
         viewBinding.nowPrice.setText("¥ " + orderBO.payFee);
+        if (LocalConfiguration.userInfo.getSourceType() == 1002) {
+            viewBinding.score.setVisibility(View.VISIBLE);
+            viewBinding.totalPrice.setText(orderBO.integralPrice);
+        } else {
+            viewBinding.totalPrice.setText("¥ " + orderBO.totalFee);
+            viewBinding.score.setVisibility(View.GONE);
+        }
         viewBinding.totalPrice.setText("¥ " + orderBO.totalFee);
         viewBinding.orderNum2.setText("订单编号：" + orderBO.orderNo);
         viewBinding.orderTime.setText("提交时间：" + orderBO.createDate);

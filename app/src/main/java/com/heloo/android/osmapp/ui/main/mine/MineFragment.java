@@ -94,7 +94,7 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
             viewBinding.role.setText("员工");
         } else if (userInfo.getSourceType() == 1003) {
             viewBinding.role.setText("管理员");
-        } else {
+        } else {  //1002
             viewBinding.role.setText("会员");
         }
     }

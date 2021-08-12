@@ -16,6 +16,8 @@ public class OrderBO {
     public Integer createUid;
     public String createDate;
     public Integer goodsNumber;
+    public Integer integralPrice;
+
     public List<OrderItemlistBean> orderItemlist;
 
     public static class OrderItemlistBean {
@@ -27,5 +29,6 @@ public class OrderBO {
         public Double totalPrice;
         public String name;
         public String icon;
+        public Integer integralPrice;
     }
 }

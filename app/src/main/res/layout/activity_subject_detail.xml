@@ -3,32 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.subject.SubjectActivity"
+    android:background="#f3f3f3"
     android:orientation="vertical"
-    android:background="#f3f3f3">
+    tools:context=".ui.subject.SubjectActivity">
 
-    <include layout="@layout/header_layout"/>
+    <include layout="@layout/header_layout" />
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff">
+        android:layout_height="match_parent">
 
         <com.scwang.smartrefresh.layout.header.FalsifyHeader
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <ListView
+            android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@null"
-            android:id="@+id/list"/>
+            android:divider="@null" />
 
 
         <com.scwang.smartrefresh.layout.footer.FalsifyFooter
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </LinearLayout>

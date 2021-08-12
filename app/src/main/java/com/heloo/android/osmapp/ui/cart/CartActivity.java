@@ -73,7 +73,12 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
                 CheckBox selectImg = holder.getView(R.id.selectImg);
                 holder.setText(R.id.productTitle, s.goodsName);
                 holder.setText(R.id.editTitle, s.goodsName);
-                holder.setText(R.id.price, "¥ " + s.goodsPrice);
+                if (LocalConfiguration.userInfo.getSourceType() == 1002) {
+                    holder.getView(R.id.score).setVisibility(View.VISIBLE);
+                    holder.setText(R.id.price,  s.integralPrice + "");
+                } else {
+                    holder.setText(R.id.price, "¥ " + s.goodsPrice);
+                }
                 holder.setText(R.id.num, "x " + s.goodsNum);
                 holder.setText(R.id.editNum, s.goodsNum + "");
                 Glide.with(CartActivity.this).load(s.goodsImg)
@@ -178,9 +183,19 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
         } else {
             double price = 0;
             for (String key : selectShop.keySet()) {
-                price += (selectShop.get(key).goodsPrice * selectShop.get(key).goodsNum);
+                if (LocalConfiguration.userInfo.getSourceType() == 1002) {
+                    price += (selectShop.get(key).integralPrice * selectShop.get(key).goodsNum);
+                } else {
+                    price += (selectShop.get(key).goodsPrice * selectShop.get(key).goodsNum);
+                }
             }
-            viewBinding.totalPrice.setText("¥ " + price);
+            if (LocalConfiguration.userInfo.getSourceType() == 1002) {
+                viewBinding.totalPrice.setText((int) price + "");
+                viewBinding.score.setVisibility(View.VISIBLE);
+            } else {
+                viewBinding.totalPrice.setText("¥ " + price);
+                viewBinding.score.setVisibility(View.GONE);
+            }
         }
         viewBinding.submitBtn.setText("结算");
     }
