@@ -30,5 +30,6 @@ public class OrderBO {
         public String name;
         public String icon;
         public Integer integralPrice;
+        public Integer discountnumber;
     }
 }

@@ -75,7 +75,7 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderContract.View, Ord
                 holder.setText(R.id.productTitle, orderItemlistBean.name);
                 if (LocalConfiguration.userInfo.getSourceType() == 1002) {
                     holder.getView(R.id.score).setVisibility(View.VISIBLE);
-                    holder.setText(R.id.price,  orderItemlistBean.integralPrice + "");
+                    holder.setText(R.id.price,  orderItemlistBean.discountnumber + "");
                 } else {
                     holder.setText(R.id.price, "¥ " + orderItemlistBean.prize);
                     holder.getView(R.id.score).setVisibility(View.GONE);
@@ -130,7 +130,7 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderContract.View, Ord
         viewBinding.nowPrice.setText("¥ " + orderBO.payFee);
         if (LocalConfiguration.userInfo.getSourceType() == 1002) {
             viewBinding.score.setVisibility(View.VISIBLE);
-            viewBinding.totalPrice.setText(orderBO.integralPrice + "");
+            viewBinding.totalPrice.setText(orderBO.discountnumber + "");
         } else {
             viewBinding.totalPrice.setText("¥ " + orderBO.totalFee);
             viewBinding.score.setVisibility(View.GONE);
