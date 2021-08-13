@@ -15,6 +15,7 @@ import com.umeng.socialize.UMShareAPI;
 
 import java.util.HashMap;
 
+import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import cn.jpush.android.api.JPushInterface;
 
 
@@ -39,6 +40,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        CustomActivityOnCrash.install(this);
         /***初始化工具类*/
         Utils.init(this);
         JPushInterface.init(this);
