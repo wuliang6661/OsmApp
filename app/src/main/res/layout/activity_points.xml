@@ -4,46 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.points.PointsActivity"
+    android:background="#f3f3f3"
     android:orientation="vertical"
-    android:background="#f3f3f3">
+    tools:context=".ui.points.PointsActivity">
 
     <RelativeLayout
         android:id="@+id/headLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="45dp">
+
             <ImageButton
+                android:id="@+id/backBtn"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:id="@+id/backBtn"
                 android:background="@null"
-                android:src="@mipmap/back_icon"
-                android:foreground="?android:attr/selectableItemBackground"/>
+                android:foreground="?android:attr/selectableItemBackground"
+                android:src="@mipmap/back_icon" />
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/title"
+                android:layout_centerInParent="true"
                 android:text="标题"
                 android:textColor="#333333"
-                android:textSize="18sp"
-                android:layout_centerInParent="true"/>
+                android:textSize="18sp" />
 
             <TextView
+                android:id="@+id/registerBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/registerBtn"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
                 android:gravity="center_vertical"
                 android:text="说明"
-                android:textSize="13sp"
                 android:textColor="#222222"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="15dp"/>
+                android:textSize="13sp" />
         </RelativeLayout>
     </RelativeLayout>
 
@@ -56,27 +58,29 @@
 
         <com.scwang.smartrefresh.layout.header.ClassicsHeader
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <ListView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
+
             <ListView
                 android:id="@+id/listAdd"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
 
 
         <com.scwang.smartrefresh.layout.footer.FalsifyFooter
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
