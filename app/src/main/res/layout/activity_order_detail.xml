@@ -155,17 +155,21 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="49dp"
                 android:layout_marginTop="1dp"
-                android:background="#ffffff">
+                android:background="#ffffff"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="15dp"
+                    android:layout_weight="1"
+                    android:gravity="right"
                     android:text="合计:"
                     android:textColor="#272727"
                     android:textSize="12sp" />
@@ -174,8 +178,6 @@
                     android:id="@+id/totalPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
                     android:text="￥89"
                     android:textColor="#D3A952"
                     android:textSize="14sp" />
@@ -185,10 +187,9 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginLeft="3dp"
-                    android:layout_marginEnd="15dp"
                     android:src="@mipmap/coin_img"
                     android:visibility="gone" />
-            </RelativeLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

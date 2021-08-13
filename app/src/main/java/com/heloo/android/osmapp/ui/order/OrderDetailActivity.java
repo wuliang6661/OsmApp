@@ -130,7 +130,7 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderContract.View, Ord
         viewBinding.nowPrice.setText("¥ " + orderBO.payFee);
         if (LocalConfiguration.userInfo.getSourceType() == 1002) {
             viewBinding.score.setVisibility(View.VISIBLE);
-            viewBinding.totalPrice.setText(orderBO.integralPrice);
+            viewBinding.totalPrice.setText(orderBO.integralPrice + "");
         } else {
             viewBinding.totalPrice.setText("¥ " + orderBO.totalFee);
             viewBinding.score.setVisibility(View.GONE);
