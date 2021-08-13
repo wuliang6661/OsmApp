@@ -23,13 +23,16 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.zhy.adapter.abslistview.CommonAdapter;
 import com.zhy.adapter.abslistview.ViewHolder;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import okhttp3.ResponseBody;
+
 /**
  * Description : 我的积分
  *
@@ -37,7 +40,7 @@ import okhttp3.ResponseBody;
  * @date 4/26/21
  */
 public class PointsActivity extends MVPBaseActivity<PointsContract.View, PointsPresenter, ActivityPointsBinding>
-    implements PointsContract.View{
+        implements PointsContract.View {
 
     private CommonAdapter<ScoreListBean> adapter;
     private List<ScoreListBean> data = new ArrayList<>();
@@ -49,12 +52,13 @@ public class PointsActivity extends MVPBaseActivity<PointsContract.View, PointsP
     private int pageSize = 20;
     private int pageNoAdd = 1;
     private String tag = "1";//1 增加  2 消费
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         showProgress("");
         initView();
-        mPresenter.getAddData(MyApplication.spUtils.getString("token", ""),pageNoAdd,pageSize);
+        mPresenter.getAddData(MyApplication.spUtils.getString("token", ""), pageNoAdd, pageSize);
         viewBinding.list.setVisibility(View.GONE);
         viewBinding.listAdd.setVisibility(View.VISIBLE);
     }
@@ -63,9 +67,9 @@ public class PointsActivity extends MVPBaseActivity<PointsContract.View, PointsP
         setHeader();
         setTitle("我的珍币");
         goBack();
-        View headView = LayoutInflater.from(this).inflate(R.layout.points_head_layout,null);
-        myPoints = headView.findViewById(R.id.myPoints);
-        tabLayout = headView.findViewById(R.id.tabLayout);
+//        View headView = LayoutInflater.from(this).inflate(R.layout.points_head_layout,null);
+        myPoints = findViewById(R.id.myPoints);
+        tabLayout = findViewById(R.id.tabLayout);
         tabLayout.addTab(tabLayout.newTab().setText("珍币获取"));
         tabLayout.addTab(tabLayout.newTab().setText("珍币消费"));
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
@@ -82,15 +86,15 @@ public class PointsActivity extends MVPBaseActivity<PointsContract.View, PointsP
 //                TextView name = view.findViewById(R.id.name);
 //                name.setText(tab.getText());
 //                tab.setCustomView(view);
-                if (tab.getPosition() == 0){
+                if (tab.getPosition() == 0) {
                     showProgress("");
-                    mPresenter.getAddData(MyApplication.spUtils.getString("token", ""),pageNoAdd,pageSize);
+                    mPresenter.getAddData(MyApplication.spUtils.getString("token", ""), pageNoAdd, pageSize);
                     viewBinding.list.setVisibility(View.GONE);
                     viewBinding.listAdd.setVisibility(View.VISIBLE);
                     tag = "1";
-                }else {
+                } else {
                     showProgress("");
-                    mPresenter.getDelData(MyApplication.spUtils.getString("token", ""),pageNo,pageSize);
+                    mPresenter.getDelData(MyApplication.spUtils.getString("token", ""), pageNo, pageSize);
                     viewBinding.list.setVisibility(View.VISIBLE);
                     viewBinding.listAdd.setVisibility(View.GONE);
                     tag = "2";
@@ -108,15 +112,15 @@ public class PointsActivity extends MVPBaseActivity<PointsContract.View, PointsP
             }
         });
         myPoints.setText(LocalConfiguration.userInfo.getIntegration());
-        viewBinding.list.addHeaderView(headView);
-        viewBinding.listAdd.addHeaderView(headView);
+//        viewBinding.list.addHeaderView(headView);
+//        viewBinding.listAdd.addHeaderView(headView);
         viewBinding.refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                if (tag.equals("1")){
+                if (tag.equals("1")) {
                     pageNoAdd++;
                     mPresenter.getAddData(MyApplication.spUtils.getString("token", ""), pageNoAdd, pageSize);
-                }else {
+                } else {
                     pageNo++;
                     mPresenter.getDelData(MyApplication.spUtils.getString("token", ""), pageNo, pageSize);
                 }
@@ -125,39 +129,39 @@ public class PointsActivity extends MVPBaseActivity<PointsContract.View, PointsP
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                if (tag.equals("1")){
-                    pageNoAdd = 1;
-                    mPresenter.getAddData(MyApplication.spUtils.getString("token", ""), pageNoAdd, pageSize);
-                }else {
-                    pageNo = 1;
-                    mPresenter.getDelData(MyApplication.spUtils.getString("token", ""), pageNo, pageSize);
-                }
-                refreshLayout.finishRefresh(1000);
+//                if (tag.equals("1")) {
+//                    pageNoAdd = 1;
+//                    mPresenter.getAddData(MyApplication.spUtils.getString("token", ""), pageNoAdd, pageSize);
+//                } else {
+//                    pageNo = 1;
+//                    mPresenter.getDelData(MyApplication.spUtils.getString("token", ""), pageNo, pageSize);
+//                }
+//                refreshLayout.finishRefresh(1000);
             }
         });
-        viewBinding.registerBtn.setOnClickListener(v -> startActivity(new Intent(PointsActivity.this,PointsDesActivity.class)));
+        viewBinding.registerBtn.setOnClickListener(v -> startActivity(new Intent(PointsActivity.this, PointsDesActivity.class)));
     }
 
     /**
      * 积分消费
      */
     private void setAdapter() {
-        if (adapter != null){
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
             return;
         }
-        adapter = new CommonAdapter<ScoreListBean>(this,R.layout.points_item_layout,data) {
+        adapter = new CommonAdapter<ScoreListBean>(this, R.layout.points_item_layout, data) {
             @Override
             protected void convert(ViewHolder holder, ScoreListBean item, int position) {
-                holder.setText(R.id.name,item.getSubject());
-                holder.setText(R.id.time,item.getCreateDate());
-                holder.setText(R.id.pointsNum,"-"+item.getConsumeScore());
+                holder.setText(R.id.name, item.getSubject());
+                holder.setText(R.id.time, item.getCreateDate());
+                holder.setText(R.id.pointsNum, "-" + item.getConsumeScore());
                 holder.getView(R.id.button).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(PointsActivity.this,PointsDetailActivity.class);
-                        intent.putExtra("tag","2");
-                        intent.putExtra("data",item);
+                        Intent intent = new Intent(PointsActivity.this, PointsDetailActivity.class);
+                        intent.putExtra("tag", "2");
+                        intent.putExtra("data", item);
                         startActivity(intent);
                     }
                 });
@@ -170,22 +174,22 @@ public class PointsActivity extends MVPBaseActivity<PointsContract.View, PointsP
      * 积分增加
      */
     private void setAddAdapter() {
-        if (addAdapter != null){
+        if (addAdapter != null) {
             addAdapter.notifyDataSetChanged();
             return;
         }
-        addAdapter = new CommonAdapter<AddScoreBean>(this,R.layout.points_item_layout,addData) {
+        addAdapter = new CommonAdapter<AddScoreBean>(this, R.layout.points_item_layout, addData) {
             @Override
             protected void convert(ViewHolder holder, AddScoreBean item, int position) {
-                holder.setText(R.id.name,item.getDescription());
-                holder.setText(R.id.time,item.getCreateDate());
-                holder.setText(R.id.pointsNum,"+"+item.getScore());
+                holder.setText(R.id.name, item.getDescription());
+                holder.setText(R.id.time, item.getCreateDate());
+                holder.setText(R.id.pointsNum, "+" + item.getScore());
                 holder.getView(R.id.button).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(PointsActivity.this,PointsDetailActivity.class);
-                        intent.putExtra("tag","1");
-                        intent.putExtra("data",item);
+                        Intent intent = new Intent(PointsActivity.this, PointsDetailActivity.class);
+                        intent.putExtra("tag", "1");
+                        intent.putExtra("data", item);
                         startActivity(intent);
                     }
                 });
@@ -209,13 +213,13 @@ public class PointsActivity extends MVPBaseActivity<PointsContract.View, PointsP
         String s = new String(body.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
+        if (status.equals("success")) {
             JSONObject jsonObject1 = new JSONObject(jsonObject.optString("data"));
-            if (pageNo == 1){
+            if (pageNo == 1) {
                 data.clear();
             }
             JSONObject jsonObject2 = new JSONObject(jsonObject1.optString("consuptionscorelist"));
-            data.addAll(JSON.parseArray(jsonObject2.optString("data"),ScoreListBean.class));
+            data.addAll(JSON.parseArray(jsonObject2.optString("data"), ScoreListBean.class));
             setAdapter();
         }
     }
@@ -225,13 +229,13 @@ public class PointsActivity extends MVPBaseActivity<PointsContract.View, PointsP
         String s = new String(body.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
+        if (status.equals("success")) {
             JSONObject jsonObject1 = new JSONObject(jsonObject.optString("data"));
-            if (pageNoAdd == 1){
+            if (pageNoAdd == 1) {
                 addData.clear();
             }
             JSONObject jsonObject2 = new JSONObject(jsonObject1.optString("getscorelist"));
-            addData.addAll(JSON.parseArray(jsonObject2.optString("data"),AddScoreBean.class));
+            addData.addAll(JSON.parseArray(jsonObject2.optString("data"), AddScoreBean.class));
             setAddAdapter();
         }
     }

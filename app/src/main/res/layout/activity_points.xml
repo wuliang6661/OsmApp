@@ -49,11 +49,13 @@
         </RelativeLayout>
     </RelativeLayout>
 
+    <include layout="@layout/points_head_layout" />
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:srlEnableRefresh="false"
         android:background="#ffffff">
 
         <com.scwang.smartrefresh.layout.header.ClassicsHeader
