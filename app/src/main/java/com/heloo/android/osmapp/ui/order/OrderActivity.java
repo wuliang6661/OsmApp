@@ -133,7 +133,13 @@ public class OrderActivity extends MVPBaseActivity<OrderContract.View, OrderPres
             public void convert(LGViewHolder holder, OrderBO orderBO, int position) {
                 holder.setText(R.id.orderNum, "订单号: " + orderBO.orderNo);
                 setTextStatus((TextView) holder.getView(R.id.orderStatus), orderBO.status, holder, orderBO);
-                holder.setText(R.id.price, "共" + orderBO.goodsNumber + "件商品合计:￥ " + orderBO.totalFee);
+                if (LocalConfiguration.userInfo.getSourceType() == 1002) {
+                    holder.getView(R.id.score).setVisibility(View.VISIBLE);
+                    holder.setText(R.id.price, "共" + orderBO.goodsNumber + "件商品合计: " + orderBO.discountnumber);
+                } else {
+                    holder.setText(R.id.price, "共" + orderBO.goodsNumber + "件商品合计:￥ " + orderBO.totalFee);
+                    holder.getView(R.id.score).setVisibility(View.GONE);
+                }
                 RecyclerView productList = (RecyclerView) holder.getView(R.id.productList);
                 productList.setLayoutManager(new LinearLayoutManager(OrderActivity.this));
                 productList.setNestedScrollingEnabled(false);
@@ -150,7 +156,7 @@ public class OrderActivity extends MVPBaseActivity<OrderContract.View, OrderPres
                         holder.setText(R.id.productTitle, orderItemlistBean.name);
                         if (LocalConfiguration.userInfo.getSourceType() == 1002) {
                             holder.getView(R.id.score).setVisibility(View.VISIBLE);
-                            holder.setText(R.id.price,  orderItemlistBean.integralPrice + "");
+                            holder.setText(R.id.price, orderItemlistBean.discountnumber + "");
                         } else {
                             holder.setText(R.id.price, "¥ " + orderItemlistBean.prize);
                             holder.getView(R.id.score).setVisibility(View.GONE);

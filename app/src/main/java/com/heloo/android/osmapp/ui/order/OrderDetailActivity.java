@@ -135,7 +135,6 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderContract.View, Ord
             viewBinding.totalPrice.setText("¥ " + orderBO.totalFee);
             viewBinding.score.setVisibility(View.GONE);
         }
-        viewBinding.totalPrice.setText("¥ " + orderBO.totalFee);
         viewBinding.orderNum2.setText("订单编号：" + orderBO.orderNo);
         viewBinding.orderTime.setText("提交时间：" + orderBO.createDate);
         switch (orderBO.status) {

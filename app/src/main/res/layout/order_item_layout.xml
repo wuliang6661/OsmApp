@@ -44,21 +44,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="45dp"
+        android:layout_marginRight="15dp"
+        android:gravity="right|center_vertical">
 
         <TextView
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="15dp"
             android:text="共4件商品合计:￥89.00"
             android:textColor="#272727"
             android:textSize="12sp" />
-    </RelativeLayout>
+
+
+        <ImageView
+            android:id="@+id/score"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginLeft="3dp"
+            android:src="@mipmap/coin_img"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -79,8 +87,8 @@
             android:layout_marginEnd="16dp"
             android:background="@drawable/cancel_order_bg"
             android:foreground="?android:attr/selectableItemBackground"
-            android:text="取消订单"
             android:gravity="center"
+            android:text="取消订单"
             android:textColor="#B5B5B5"
             android:textSize="13sp" />
 
@@ -89,9 +97,9 @@
             android:layout_width="84dp"
             android:layout_height="27dp"
             android:layout_marginEnd="16dp"
-            android:gravity="center"
             android:background="@drawable/submit_bg"
             android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
             android:text="付款"
             android:textColor="#FFFFFF"
             android:textSize="13sp" />
@@ -101,9 +109,9 @@
             android:layout_width="84dp"
             android:layout_height="27dp"
             android:layout_marginEnd="16dp"
-            android:gravity="center"
             android:background="@drawable/see_order_bg"
             android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
             android:text="确认提货"
             android:textColor="#D4AB56"
             android:textSize="13sp" />
