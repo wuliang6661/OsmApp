@@ -61,6 +61,7 @@ public class OrderActivity extends MVPBaseActivity<OrderContract.View, OrderPres
             pageNum++;
             mPresenter.getOrder(pageNum, type);
         });
+
     }
 
     private void initView() {
