@@ -94,13 +94,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <com.stx.xhb.androidx.XBanner
                     android:id="@+id/banner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/glide_ploce" />
+                    android:background="#00000000"
+                    app:AutoPlayTime="4000"
+                    app:isAutoPlay="true"
+                    app:isHandLoop="true"
+                    app:isShowIndicatorOnlyOne="true"
+                    app:isShowNumberIndicator="false"
+                    app:layout_scrollFlags="scroll|snap"
+                    app:pageChangeDuration="800"
+                    app:pointsContainerBackground="@android:color/transparent" />
+
 
                 <ImageButton
                     android:id="@+id/backBtn"

@@ -115,7 +115,6 @@ public class StoreFragmentNew extends MVPBaseFragment<StoreContract.View, StoreP
             ImageView image = view.findViewById(R.id.image);
             Glide.with(getActivity()).load(bannerData.get(position)).into(image);
         });
-
     }
 
 

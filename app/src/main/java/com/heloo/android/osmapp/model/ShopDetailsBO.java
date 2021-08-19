@@ -1,5 +1,7 @@
 package com.heloo.android.osmapp.model;
 
+import java.util.ArrayList;
+
 public class ShopDetailsBO {
 
 
@@ -54,7 +56,7 @@ public class ShopDetailsBO {
         public String picId;
         public String url;
         public Integer integralPrice;
-
+        public ArrayList<String> piclist;
 
     }
 

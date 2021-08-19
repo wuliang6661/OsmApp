@@ -17,6 +17,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.heloo.android.osmapp.R;
 import com.heloo.android.osmapp.api.HttpInterface;
@@ -38,6 +42,7 @@ import com.heloo.android.osmapp.utils.ToastUtils;
 import com.heloo.android.osmapp.utils.webview.WebAppInterface;
 import com.heloo.android.osmapp.utils.webview.WebClient;
 import com.heloo.android.osmapp.utils.webview.WebViewChromeClient;
+import com.stx.xhb.androidx.XBanner;
 import com.tencent.smtt.sdk.CookieSyncManager;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
@@ -47,10 +52,6 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * 商品详情
@@ -79,6 +80,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         paramsBanner1.height = ScreenUtils.getScreenWidth();
         viewBinding.banner.setLayoutParams(paramsBanner1);
         initWebView(viewBinding.webView);
+        initBanner(viewBinding.banner);
     }
 
 
@@ -298,17 +300,8 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
             viewBinding.shichangLayout.setVisibility(productDetailBean.price == 0 ? View.INVISIBLE : View.VISIBLE);
             viewBinding.oldPrice.setText(String.format("￥%s", productDetailBean.price));
             viewBinding.oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
-//            bannerData.add(productDetailBean.icon);
-            if (!productDetailBean.icon.startsWith("http")) {
-                productDetailBean.icon = HttpInterface.IMG_URL + productDetailBean.icon;
-            }
-            Glide.with(this)
-                    .load(productDetailBean.icon)
-                    .placeholder(R.drawable.default_head)
-                    .error(R.drawable.default_head)
-                    .into(viewBinding.banner);
-            //初始化banner
-//            initBanner(viewBinding.banner);
+            bannerData = productDetailBean.piclist;
+            viewBinding.banner.setData(R.layout.banner_img, bannerData, null);
             String detailUrl = null;
             try {
                 if (!StringUtils.isEmpty(productDetailBean.description)) {
@@ -320,6 +313,22 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
             viewBinding.webView.loadDataWithBaseURL(null, HtmlFormat.getNewContent(detailUrl), "text/html", "utf-8", null);//加载html数据
 
         }
+    }
+
+
+    private void initBanner(XBanner banner) {
+        //加载广告图片
+        banner.loadImage((banner1, model, view, position) -> {
+            ImageView image = (ImageView) view;
+            if (!bannerData.get(position).startsWith("http")) {
+                bannerData.set(position, HttpInterface.IMG_URL + bannerData.get(position));
+            }
+            Glide.with(this)
+                    .load(bannerData.get(position))
+                    .placeholder(R.drawable.default_head)
+                    .error(R.drawable.default_head)
+                    .into(image);
+        });
     }
 
     @Override
