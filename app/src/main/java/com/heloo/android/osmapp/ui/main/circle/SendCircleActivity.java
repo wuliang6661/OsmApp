@@ -26,6 +26,7 @@ import com.heloo.android.osmapp.base.BaseActivity;
 import com.heloo.android.osmapp.base.MyApplication;
 import com.heloo.android.osmapp.databinding.SendCircleLayoutBinding;
 import com.heloo.android.osmapp.utils.MessageEvent;
+import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.heloo.android.osmapp.widget.LoadingProgressDialog;
 
@@ -198,10 +199,10 @@ public class SendCircleActivity extends BaseActivity implements EasyPermissions.
                 finish();
                 break;
             case R.id.sendBtn:
-//                if (topicId.equals("")){
-//                    ToastsKt.toast(SendCircleActivity.this,"清先选择一个话题");
-//                    return;
-//                }
+                if (StringUtils.isEmpty(topicId)){
+                    ToastUtils.showShortToast("请选择话题！");
+                    return;
+                }
                 if (TextUtils.isEmpty(binding.edittext.getText())){
                     ToastUtils.showShortToast("请输入想发表的想法");
                     return;
