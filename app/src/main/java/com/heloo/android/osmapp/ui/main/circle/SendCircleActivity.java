@@ -86,6 +86,17 @@ public class SendCircleActivity extends BaseActivity implements EasyPermissions.
         binding.picView.setSortable(true);
         // 设置拖拽排序控件的代理
         binding.picView.setDelegate(this);
+        binding.edittext.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    if (StringUtils.isEmpty(topicId)) {
+                        ToastUtils.showShortToast("请选择话题！");
+                        binding.edittext.clearFocus();
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -165,10 +176,10 @@ public class SendCircleActivity extends BaseActivity implements EasyPermissions.
         } else if (requestCode == RC_PHOTO_PREVIEW) {
             binding.picView.setData(BGAPhotoPickerPreviewActivity.getSelectedPhotos(data));
         }
-        if (requestCode == 666 && data != null){
+        if (requestCode == 666 && data != null) {
             topicId = data.getStringExtra("topicId");
             topicName = data.getStringExtra("topicName");
-            binding.chooseTopic.setText(String.format("#%s#",topicName));
+            binding.chooseTopic.setText(String.format("#%s#", topicName));
         }
     }
 
@@ -194,33 +205,33 @@ public class SendCircleActivity extends BaseActivity implements EasyPermissions.
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.cancle:
                 finish();
                 break;
             case R.id.sendBtn:
-                if (StringUtils.isEmpty(topicId)){
+                if (StringUtils.isEmpty(topicId)) {
                     ToastUtils.showShortToast("请选择话题！");
                     return;
                 }
-                if (TextUtils.isEmpty(binding.edittext.getText())){
+                if (TextUtils.isEmpty(binding.edittext.getText())) {
                     ToastUtils.showShortToast("请输入想发表的想法");
                     return;
                 }
-                startProgressDialog("提交评论中...",SendCircleActivity.this);
+                startProgressDialog("提交评论中...", SendCircleActivity.this);
                 sendCircle(topicId, binding.edittext.getText().toString());
                 break;
             case R.id.chooseTopic:
-                Intent intent = new Intent(SendCircleActivity.this,HotTopicActivity.class);
-                intent.putExtra("tag","selected");
-                startActivityForResult(intent,666);
+                Intent intent = new Intent(SendCircleActivity.this, HotTopicActivity.class);
+                intent.putExtra("tag", "selected");
+                startActivityForResult(intent, 666);
                 break;
             case R.id.defaultName:
-                if (!isDefault){
+                if (!isDefault) {
                     isDefault = true;
                     Glide.with(SendCircleActivity.this).load(R.mipmap.select_true).into(binding.selectImg);
                     anonymous = "1";
-                }else {
+                } else {
                     isDefault = false;
                     Glide.with(SendCircleActivity.this).load(R.mipmap.item_notselect).into(binding.selectImg);
                     anonymous = "0";
@@ -230,7 +241,7 @@ public class SendCircleActivity extends BaseActivity implements EasyPermissions.
     }
 
     /**
-     * 获取指定文件大小 　　
+     * 获取指定文件大小
      */
     public long getFileSize(File file) throws Exception {
         long size = 0;
@@ -246,7 +257,7 @@ public class SendCircleActivity extends BaseActivity implements EasyPermissions.
     /**
      * 发送圈子
      */
-    private void sendCircle(String topicId,String descr) {
+    private void sendCircle(String topicId, String descr) {
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM);//表单类型
         if (binding.picView.getData() != null && binding.picView.getData().size() > 0) {
@@ -268,7 +279,7 @@ public class SendCircleActivity extends BaseActivity implements EasyPermissions.
         builder.addFormDataPart("anonymous", anonymous);
         List<MultipartBody.Part> parts = builder.build().parts();
 
-        HttpInterfaceIml.sendCircle(token,parts).subscribe(new Subscriber<ResponseBody>() {
+        HttpInterfaceIml.sendCircle(token, parts).subscribe(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
                 stopProgressDialog();
@@ -286,11 +297,11 @@ public class SendCircleActivity extends BaseActivity implements EasyPermissions.
                     String s = new String(responseBody.bytes());
                     JSONObject jsonObject = new JSONObject(s);
                     String code = jsonObject.optString("status");
-                    if (code.equals("success")){
+                    if (code.equals("success")) {
                         ToastUtils.showShortToast("发布成功");
-                        EventBus.getDefault().post(new MessageEvent("showNew","yes"));
+                        EventBus.getDefault().post(new MessageEvent("showNew", "yes"));
                         finish();
-                    }else {
+                    } else {
                         ToastUtils.showShortToast(jsonObject.optString("errMsg"));
                     }
 
