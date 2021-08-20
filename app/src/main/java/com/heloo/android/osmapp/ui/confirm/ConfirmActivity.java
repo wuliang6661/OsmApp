@@ -89,7 +89,7 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         showProgress(null);
         mPresenter.getshopInter(shopIds.substring(0, shopIds.length() - 1), shopNums.substring(0, shopNums.length() - 1));
 
-        if (LocalConfiguration.userInfo.getSourceType() != 1001) {
+        if (LocalConfiguration.userInfo.getSourceType() == 1002) {
             selectImg.setChecked(true);
             selectImg.setEnabled(false);
             zhifu.setVisibility(View.GONE);
@@ -195,7 +195,7 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         switch (v.getId()) {
             case R.id.submitBtn:
 //                payDialog();
-                if (LocalConfiguration.userInfo.getSourceType() != 1001) {
+                if (LocalConfiguration.userInfo.getSourceType() == 1002) {
                     new com.heloo.android.osmapp.widget.AlertDialog(ConfirmActivity.this).builder().setGone().setMsg("是否确认支付？")
                             .setNegativeButton("取消", null)
                             .setPositiveButton("确定", v1 -> {
@@ -218,7 +218,7 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
     private void createOrder() {
         String remark = edit_remark.getText().toString().trim();
         //会员
-        if (LocalConfiguration.userInfo.getSourceType() != 1001) {
+        if (LocalConfiguration.userInfo.getSourceType() == 1002) {
             if (addressBean == null) {
                 ToastUtils.showShortToast("请选择收货地址！");
                 return;
@@ -308,7 +308,7 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
     public void getshopInter(OrderPriceBO priceBO) {
         stopProgress();
         this.priceBO = priceBO;
-        if (LocalConfiguration.userInfo.getSourceType() != 1001) {
+        if (LocalConfiguration.userInfo.getSourceType() == 1002) {
             viewBinding.price.setText(priceBO.totalScore + "");
             viewBinding.zhenbiImg.setVisibility(View.VISIBLE);
         } else {
@@ -332,7 +332,7 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
 
 
     public void pay(PayBean orderInfo, String order) {
-        if (LocalConfiguration.userInfo.getSourceType() != 1001) {
+        if (LocalConfiguration.userInfo.getSourceType() == 1002) {
             Bundle bundle = new Bundle();
             bundle.putString("id", order);
             gotoActivity(PaySuccessActivity.class, bundle, true);

@@ -2,8 +2,13 @@ package com.heloo.android.osmapp.ui.main.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 import com.alibaba.fastjson.JSON;
 import com.google.android.material.tabs.TabLayout;
@@ -34,9 +39,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 import okhttp3.ResponseBody;
 
 /**
@@ -155,6 +157,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         AlertDialog dialog = builder.create();
         dialog.show();//显示Dialog对话框
         //此处设置位置窗体大小
+        dialog.getWindow().setGravity(Gravity.CENTER);
         dialog.getWindow().setDimAmount(0f);
         dialog.getWindow().setLayout(ScreenUtils.dp2px(180), ScreenUtils.dp2px(150));
     }

@@ -93,6 +93,8 @@ public class SendCircleActivity extends BaseActivity implements EasyPermissions.
                     if (StringUtils.isEmpty(topicId)) {
                         ToastUtils.showShortToast("请选择话题！");
                         binding.edittext.clearFocus();
+                    } else {
+                        binding.edittext.requestFocus();
                     }
                 }
             }
