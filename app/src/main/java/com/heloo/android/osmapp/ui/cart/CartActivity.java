@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.heloo.android.osmapp.R;
+import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityCartBinding;
 import com.heloo.android.osmapp.model.ShopCarBO;
@@ -81,6 +82,9 @@ public class CartActivity extends MVPBaseActivity<CartContract.View, CartPresent
                 }
                 holder.setText(R.id.num, "x " + s.goodsNum);
                 holder.setText(R.id.editNum, s.goodsNum + "");
+                if(!s.goodsImg.startsWith("http")){
+                    s.goodsImg = HttpInterface.IMG_URL + s.goodsImg;
+                }
                 Glide.with(CartActivity.this).load(s.goodsImg)
                         .placeholder(R.drawable.default_head)
                         .error(R.drawable.default_head)

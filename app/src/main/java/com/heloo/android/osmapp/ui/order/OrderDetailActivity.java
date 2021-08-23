@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.alipay.sdk.app.PayTask;
 import com.heloo.android.osmapp.R;
+import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityOrderDetailBinding;
 import com.heloo.android.osmapp.model.OrderBO;
@@ -71,6 +72,9 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderContract.View, Ord
 
             @Override
             public void convert(LGViewHolder holder, OrderBO.OrderItemlistBean orderItemlistBean, int position) {
+                if(!orderItemlistBean.icon.startsWith("http")){
+                    orderItemlistBean.icon = HttpInterface.IMG_URL + orderItemlistBean.icon;
+                }
                 holder.setImageUrl(holder.itemView.getContext(), R.id.productImg, orderItemlistBean.icon);
                 holder.setText(R.id.productTitle, orderItemlistBean.name);
                 if (LocalConfiguration.userInfo.getSourceType() == 1002) {

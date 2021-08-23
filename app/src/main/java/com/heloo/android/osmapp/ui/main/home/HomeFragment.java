@@ -57,9 +57,16 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPresenter.getTitle(MyApplication.spUtils.getString("token", ""));
-        sign();
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(MyApplication.isLogin == ConditionEnum.LOGIN){
+            sign();
+        }
+    }
 
     private void initViews() {
         viewBinding.headLayout.post(() -> viewBinding.headLayout.setPadding(0, BubbleUtils.getStatusBarHeight(getActivity()), 0, 0));
