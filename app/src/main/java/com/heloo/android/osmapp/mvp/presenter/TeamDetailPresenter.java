@@ -1,6 +1,8 @@
 package com.heloo.android.osmapp.mvp.presenter;
 
 import com.heloo.android.osmapp.api.HttpInterfaceIml;
+import com.heloo.android.osmapp.api.HttpResultSubscriber;
+import com.heloo.android.osmapp.model.TeamDetailBean;
 import com.heloo.android.osmapp.mvp.BasePresenterImpl;
 import com.heloo.android.osmapp.mvp.contract.TeamDetailContract;
 
@@ -18,32 +20,19 @@ import rx.Subscriber;
 public class TeamDetailPresenter extends BasePresenterImpl<TeamDetailContract.View>
         implements TeamDetailContract.Presenter{
     @Override
-    public void getData(String token, int pageNum, int pageSize, String username) {
-        HttpInterfaceIml.getTeamDetail(token,pageNum,pageSize,username).subscribe(new Subscriber<ResponseBody>() {
+    public void getData( String username) {
+        HttpInterfaceIml.getTeamDetail(username).subscribe(new HttpResultSubscriber<TeamDetailBean>() {
             @Override
-            public void onCompleted() {
-                if (mView == null)
-                    return;
-                mView.onRequestEnd();
+            public void onSuccess(TeamDetailBean teamDetailBean) {
+                if(mView != null){
+                    mView.getData(teamDetailBean);
+                }
             }
 
             @Override
-            public void onError(Throwable e) {
-                if (mView == null)
-                    return;
-                mView.onRequestError(e.getMessage());
-            }
-
-            @Override
-            public void onNext(ResponseBody s) {
-                if (mView == null)
-                    return;
-                try {
-                    mView.getData(s);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            public void onFiled(String message) {
+                if(mView != null){
+                    mView.onRequestError(message);
                 }
             }
         });

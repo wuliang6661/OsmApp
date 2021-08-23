@@ -16,6 +16,7 @@ import com.heloo.android.osmapp.ui.address.AddressActivity;
 import com.heloo.android.osmapp.ui.password.ModifyActivity;
 import com.heloo.android.osmapp.ui.person.PersonActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
+import com.heloo.android.osmapp.widget.AlertDialog;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -62,12 +63,17 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
                 break;
             case R.id.logoutBtn://退出登录
-                MyApplication.isLogin = ConditionEnum.NOLOGIN;
-                LocalConfiguration.userInfo = null;
-                MyApplication.spUtils.clear();
-                JPushInterface.deleteAlias(this, 1);
-                JPushInterface.cleanTags(this, 1);
-                finish();
+                new AlertDialog(this).builder().setGone().setMsg("是否确定退出登录？")
+                        .setNegativeButton("取消", null)
+                        .setPositiveButton("确定", v1 -> {
+                            MyApplication.isLogin = ConditionEnum.NOLOGIN;
+                            LocalConfiguration.userInfo = null;
+                            MyApplication.spUtils.clear();
+                            JPushInterface.deleteAlias(this, 1);
+                            JPushInterface.cleanTags(this, 1);
+                            finish();
+                        }).show();
+
                 break;
         }
     }

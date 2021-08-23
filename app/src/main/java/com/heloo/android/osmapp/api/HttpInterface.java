@@ -12,6 +12,7 @@ import com.heloo.android.osmapp.model.ShopCarBO;
 import com.heloo.android.osmapp.model.ShopDetailsBO;
 import com.heloo.android.osmapp.model.ShopListBO;
 import com.heloo.android.osmapp.model.SignBO;
+import com.heloo.android.osmapp.model.TeamDetailBean;
 import com.heloo.android.osmapp.model.UserInfo;
 
 import java.util.List;
@@ -491,7 +492,7 @@ public interface HttpInterface {
      */
     @FormUrlEncoded
     @POST("/temp/gtemytemp")
-    Observable<ResponseBody> getTeamList(@Header("Authorization") String token,
+    Observable<ResponseBody> getTeamList(
                                          @Field("deptId") String deptId,
                                          @Field("type") String type);
 
@@ -500,10 +501,7 @@ public interface HttpInterface {
      */
     @FormUrlEncoded
     @POST("/temp/getUserDaite")
-    Observable<ResponseBody> getTeamDetail(@Header("Authorization") String token,
-                                           @Field("pageNum") int pageNum,
-                                           @Field("pageSize") int pageSize,
-                                           @Field("username") String username);
+    Observable<BaseResult<TeamDetailBean>> getTeamDetail(@Field("username") String username);
 
     /**
      * 专题列表

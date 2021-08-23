@@ -24,6 +24,7 @@ import com.heloo.android.osmapp.mvp.contract.ArticleContract;
 import com.heloo.android.osmapp.mvp.presenter.ArticlePresenter;
 import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
+import com.heloo.android.osmapp.utils.StringUtils;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -42,7 +43,7 @@ import okhttp3.ResponseBody;
  * 热门文章
  */
 public class ArticleActivity extends MVPBaseActivity<ArticleContract.View, ArticlePresenter, ActivityArticleBinding>
-    implements ArticleContract.View, View.OnClickListener {
+        implements ArticleContract.View, View.OnClickListener {
 
     private CommonAdapter<HotArticleBean> adapter;
     private List<HotArticleBean> data = new ArrayList<>();
@@ -52,7 +53,7 @@ public class ArticleActivity extends MVPBaseActivity<ArticleContract.View, Artic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        mPresenter.getData(MyApplication.spUtils.getString("token", ""),type);
+        mPresenter.getData(MyApplication.spUtils.getString("token", ""), type);
     }
 
     private void initView() {
@@ -67,38 +68,38 @@ public class ArticleActivity extends MVPBaseActivity<ArticleContract.View, Artic
         viewBinding.refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getData(MyApplication.spUtils.getString("token", ""),type);
+                mPresenter.getData(MyApplication.spUtils.getString("token", ""), type);
                 refreshLayout.finishRefresh(1000);
             }
         });
     }
 
     private void setAdapter() {
-        if (adapter != null){
-            adapter.notifyDataSetChanged();
-            return;
-        }
-        adapter = new CommonAdapter<HotArticleBean>(this,R.layout.article_item_layout,data) {
+        adapter = new CommonAdapter<HotArticleBean>(this, R.layout.article_item_layout, data) {
             @Override
             protected void convert(ViewHolder holder, HotArticleBean item, int position) {
                 ImageView articleImg = holder.getConvertView().findViewById(R.id.articleImg);
-                if (item.getIcon().startsWith("http")) {
-                    Glide.with(ArticleActivity.this).load(item.getIcon()).into(articleImg);
-                }else {
-                    Glide.with(ArticleActivity.this).load(HttpInterface.IMG_URL+item.getIcon()).into(articleImg);
+                if (!StringUtils.isEmpty(item.getIcon())) {
+                    if (item.getIcon().startsWith("http")) {
+                        Glide.with(ArticleActivity.this).load(item.getIcon()).into(articleImg);
+                    } else {
+                        Glide.with(ArticleActivity.this).load(HttpInterface.IMG_URL + item.getIcon()).into(articleImg);
+                    }
+                }else{
+                    Glide.with(ArticleActivity.this).load(item.getIcon()).error(R.drawable.glide_ploce).into(articleImg);
                 }
-                holder.setText(R.id.title,item.getSubject());
-                holder.setText(R.id.time,item.getCreateDate());
-                holder.setText(R.id.number,item.getHeatsumber());
+                holder.setText(R.id.title, item.getSubject());
+                holder.setText(R.id.time, item.getCreateDate());
+                holder.setText(R.id.number, item.getHeatsumber());
                 holder.getView(R.id.button).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(ArticleActivity.this, WebViewActivity.class);
                         if (MyApplication.isLogin == ConditionEnum.LOGIN) {
                             intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticleId()
-                                    + "&uid=" + LocalConfiguration.userInfo.getUid()+ "&username=" + LocalConfiguration.userInfo.getUsername()+"&app=1");
-                        }else {
-                            intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticleId()+"&app=1");
+                                    + "&uid=" + LocalConfiguration.userInfo.getUid() + "&username=" + LocalConfiguration.userInfo.getUsername() + "&app=1");
+                        } else {
+                            intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticleId() + "&app=1");
                         }
                         startActivity(intent);
                     }
@@ -120,54 +121,54 @@ public class ArticleActivity extends MVPBaseActivity<ArticleContract.View, Artic
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.todayBtn:
-                viewBinding.todayBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.today_article_yes_bg,null));
-                viewBinding.weekBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.week_article_no_bg,null));
-                viewBinding.monthBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.week_article_no_bg,null));
-                viewBinding.yearBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.year_article_no_bg,null));
+                viewBinding.todayBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.today_article_yes_bg, null));
+                viewBinding.weekBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.week_article_no_bg, null));
+                viewBinding.monthBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.week_article_no_bg, null));
+                viewBinding.yearBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.year_article_no_bg, null));
                 viewBinding.todayBtn.setTextColor(Color.parseColor("#FFFFFF"));
                 viewBinding.weekBtn.setTextColor(Color.parseColor("#D8AE54"));
                 viewBinding.monthBtn.setTextColor(Color.parseColor("#D8AE54"));
                 viewBinding.yearBtn.setTextColor(Color.parseColor("#D8AE54"));
                 type = "1";
-                mPresenter.getData(MyApplication.spUtils.getString("token", ""),type);
+                mPresenter.getData(MyApplication.spUtils.getString("token", ""), type);
                 break;
             case R.id.weekBtn:
-                viewBinding.todayBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.today_article_no_bg,null));
-                viewBinding.weekBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.week_article_yes_bg,null));
-                viewBinding.monthBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.week_article_no_bg,null));
-                viewBinding.yearBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.year_article_no_bg,null));
+                viewBinding.todayBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.today_article_no_bg, null));
+                viewBinding.weekBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.week_article_yes_bg, null));
+                viewBinding.monthBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.week_article_no_bg, null));
+                viewBinding.yearBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.year_article_no_bg, null));
                 viewBinding.todayBtn.setTextColor(Color.parseColor("#D8AE54"));
                 viewBinding.weekBtn.setTextColor(Color.parseColor("#ffffff"));
                 viewBinding.monthBtn.setTextColor(Color.parseColor("#D8AE54"));
                 viewBinding.yearBtn.setTextColor(Color.parseColor("#D8AE54"));
                 type = "2";
-                mPresenter.getData(MyApplication.spUtils.getString("token", ""),type);
+                mPresenter.getData(MyApplication.spUtils.getString("token", ""), type);
                 break;
             case R.id.monthBtn:
-                viewBinding.todayBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.today_article_no_bg,null));
-                viewBinding.weekBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.week_article_no_bg,null));
-                viewBinding.monthBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.week_article_yes_bg,null));
-                viewBinding.yearBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.year_article_no_bg,null));
+                viewBinding.todayBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.today_article_no_bg, null));
+                viewBinding.weekBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.week_article_no_bg, null));
+                viewBinding.monthBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.week_article_yes_bg, null));
+                viewBinding.yearBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.year_article_no_bg, null));
                 viewBinding.todayBtn.setTextColor(Color.parseColor("#D8AE54"));
                 viewBinding.weekBtn.setTextColor(Color.parseColor("#D8AE54"));
                 viewBinding.monthBtn.setTextColor(Color.parseColor("#ffffff"));
                 viewBinding.yearBtn.setTextColor(Color.parseColor("#D8AE54"));
                 type = "3";
-                mPresenter.getData(MyApplication.spUtils.getString("token", ""),type);
+                mPresenter.getData(MyApplication.spUtils.getString("token", ""), type);
                 break;
             case R.id.yearBtn:
-                viewBinding.todayBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.today_article_no_bg,null));
-                viewBinding.weekBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.week_article_no_bg,null));
-                viewBinding.monthBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.week_article_no_bg,null));
-                viewBinding.yearBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.year_article_yes_bg,null));
+                viewBinding.todayBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.today_article_no_bg, null));
+                viewBinding.weekBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.week_article_no_bg, null));
+                viewBinding.monthBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.week_article_no_bg, null));
+                viewBinding.yearBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.year_article_yes_bg, null));
                 viewBinding.todayBtn.setTextColor(Color.parseColor("#D8AE54"));
                 viewBinding.weekBtn.setTextColor(Color.parseColor("#D8AE54"));
                 viewBinding.monthBtn.setTextColor(Color.parseColor("#D8AE54"));
                 viewBinding.yearBtn.setTextColor(Color.parseColor("#ffffff"));
                 type = "4";
-                mPresenter.getData(MyApplication.spUtils.getString("token", ""),type);
+                mPresenter.getData(MyApplication.spUtils.getString("token", ""), type);
                 break;
         }
     }
@@ -177,10 +178,10 @@ public class ArticleActivity extends MVPBaseActivity<ArticleContract.View, Artic
         String s = new String(body.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
+        if (status.equals("success")) {
             JSONObject jsonObject1 = new JSONObject(jsonObject.optString("data"));
             data.clear();
-            data.addAll(JSON.parseArray(jsonObject1.optString("list"),HotArticleBean.class));
+            data.addAll(JSON.parseArray(jsonObject1.optString("list"), HotArticleBean.class));
             setAdapter();
         }
     }

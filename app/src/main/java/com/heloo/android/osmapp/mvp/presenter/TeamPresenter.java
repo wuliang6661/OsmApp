@@ -16,11 +16,11 @@ import rx.Subscriber;
  * Describe:
  */
 public class TeamPresenter extends BasePresenterImpl<TeamContract.View>
-        implements TeamContract.Presenter{
+        implements TeamContract.Presenter {
 
     @Override
-    public void getData(String token, String deptId, String type) {
-        HttpInterfaceIml.getTeamList(token,deptId,type).subscribe(new Subscriber<ResponseBody>() {
+    public void getData(String deptId, String type) {
+        HttpInterfaceIml.getTeamList(deptId, type).subscribe(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
                 if (mView == null)

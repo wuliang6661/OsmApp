@@ -1,70 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <include layout="@layout/view_stick_head"/>
+    <include layout="@layout/view_stick_head" />
 
-    <RelativeLayout
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="95dp">
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="64dp"
-            android:layout_height="48dp"
-            android:id="@+id/teamImg"
-            app:shapeAppearanceOverlay="@style/roundedCornerImageStyle10"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="13dp"
-            android:background="#f3f3f3"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/title"
-            android:textColor="#2B2B2B"
-            android:textSize="14sp"
-            android:layout_toEndOf="@id/teamImg"
-            android:layout_marginStart="9dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="15dp"
-            android:maxLines="2"
-            android:minLines="2"
-            android:ellipsize="end"
-            android:text="德清珍珠入选中国重要农业文化遗产名德清珍珠入选中国重要农业文化遗产名..."/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="14dp"
-            android:layout_marginBottom="13dp"
-            android:gravity="center_vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="当日浏览量: "
-                android:textSize="11sp"
-                android:textColor="#888888"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/num"
-                android:textColor="#D3A952"
-                android:textSize="12sp"
-                android:text="0"
-                android:layout_marginStart="5dp"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#f3f3f3"
-            android:layout_alignParentBottom="true"/>
-    </RelativeLayout>
+        android:layout_height="wrap_content" />
 
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.heloo.android.osmapp.mvp.contract;
 
+import com.heloo.android.osmapp.model.TeamDetailBean;
 import com.heloo.android.osmapp.mvp.BasePresenter;
 import com.heloo.android.osmapp.mvp.BaseRequestView;
 
@@ -16,12 +17,12 @@ import okhttp3.ResponseBody;
 public class TeamDetailContract {
     public interface View extends BaseRequestView {
 
-        void getData(ResponseBody body) throws JSONException, IOException;
+        void getData(TeamDetailBean body);
 
     }
 
-    public  interface Presenter extends BasePresenter<View> {
+    public interface Presenter extends BasePresenter<View> {
 
-        void getData(String token,int pageNum,int pageSize,String username);
+        void getData(String username);
     }
 }

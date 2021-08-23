@@ -13,6 +13,7 @@ import com.heloo.android.osmapp.model.ShopCarBO;
 import com.heloo.android.osmapp.model.ShopDetailsBO;
 import com.heloo.android.osmapp.model.ShopListBO;
 import com.heloo.android.osmapp.model.SignBO;
+import com.heloo.android.osmapp.model.TeamDetailBean;
 import com.heloo.android.osmapp.model.UserInfo;
 import com.heloo.android.osmapp.utils.rx.RxHelper;
 import com.heloo.android.osmapp.utils.rx.RxResultHelper;
@@ -448,15 +449,15 @@ public class HttpInterfaceIml {
     /**
      * 我的团队
      */
-    public static Observable<ResponseBody> getTeamList(String token, String deptId, String type) {
-        return getService().getTeamList(token, deptId, type).compose(RxHelper.httpRusult());
+    public static Observable<ResponseBody> getTeamList(String deptId, String type) {
+        return getService().getTeamList(deptId, type).compose(RxHelper.httpRusult());
     }
 
     /**
      * 我的团队详情
      */
-    public static Observable<ResponseBody> getTeamDetail(String token, int pageNum, int pageSize, String username) {
-        return getService().getTeamDetail(token, pageNum, pageSize, username).compose(RxHelper.httpRusult());
+    public static Observable<TeamDetailBean> getTeamDetail(String username) {
+        return getService().getTeamDetail(username).compose(RxResultHelper.httpRusult());
     }
 
     /**

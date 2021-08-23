@@ -20,9 +20,9 @@ public class TeamContract {
 
     }
 
-    public  interface Presenter extends BasePresenter<View> {
+    public interface Presenter extends BasePresenter<View> {
 
-        void getData(String token, String deptId,String type);
+        void getData(String deptId, String type);
 
     }
 }
