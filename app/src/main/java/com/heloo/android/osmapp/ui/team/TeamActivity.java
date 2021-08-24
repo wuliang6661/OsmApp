@@ -143,8 +143,7 @@ public class TeamActivity extends MVPBaseActivity<TeamContract.View, TeamPresent
      * 部门
      */
     private void setDepAdapter() {
-        if (adapterDep != null) {
-            adapterDep.notifyDataSetChanged();
+        if(!StringUtils.isEmpty(deptId)){
             return;
         }
         adapterDep = new CommonAdapter<TeamBean.DeptlistBean>(this, R.layout.team_item_layout, dataDep) {

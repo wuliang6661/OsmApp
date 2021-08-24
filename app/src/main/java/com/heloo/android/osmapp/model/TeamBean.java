@@ -87,27 +87,27 @@ public class TeamBean {
 
     public static class DeptlistBean {
 
-        private String forwardnumber;
-        private String readnumber;
+        private Integer forwardnumber;
+        private Integer readnumber;
         private String clickNumber;
         private String userNumber;
         private String name;
         private String deptId;
         private String icon;
 
-        public String getForwardnumber() {
-            return forwardnumber;
+        public int getForwardnumber() {
+            return forwardnumber == null ? 0 : forwardnumber;
         }
 
-        public void setForwardnumber(String forwardnumber) {
+        public void setForwardnumber(Integer forwardnumber) {
             this.forwardnumber = forwardnumber;
         }
 
-        public String getReadnumber() {
-            return readnumber;
+        public int getReadnumber() {
+            return readnumber == null ? 0 : readnumber;
         }
 
-        public void setReadnumber(String readnumber) {
+        public void setReadnumber(Integer readnumber) {
             this.readnumber = readnumber;
         }
 
