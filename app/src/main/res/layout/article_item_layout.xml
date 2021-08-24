@@ -1,67 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/button"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:id="@+id/button">
+    android:foreground="?android:attr/selectableItemBackground">
+
 
     <ImageView
         android:id="@+id/articleImg"
         android:layout_width="94dp"
         android:layout_height="62dp"
-        android:scaleType="centerCrop"
+        android:layout_marginStart="14dp"
         android:layout_marginTop="11dp"
         android:layout_marginBottom="11dp"
-        android:layout_marginStart="14dp"
-        android:background="#f3f3f3"/>
+        android:background="#f3f3f3"
+        android:scaleType="centerCrop" />
+
+
+    <jp.shts.android.library.TriangleLabelView
+        android:id="@+id/labeled"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_alignLeft="@+id/articleImg"
+        android:layout_alignTop="@+id/articleImg"
+        app:backgroundColor="#FF0404"
+        app:corner="leftTop"
+        app:labelBottomPadding="2dp"
+        app:labelTopPadding="15dp"
+        app:secondaryText="NO.1"
+        app:secondaryTextColor="@color/white"
+        app:secondaryTextSize="8sp" />
+
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/title"
-        android:textSize="14sp"
-        android:textColor="#2B2B2B"
-        android:layout_toEndOf="@id/articleImg"
         android:layout_marginStart="7dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
+        android:layout_toEndOf="@id/articleImg"
+        android:ellipsize="end"
         android:maxLines="2"
         android:minLines="2"
-        android:ellipsize="end"
-        android:text=""/>
+        android:text=""
+        android:textColor="#2B2B2B"
+        android:textSize="14sp" />
 
     <TextView
+        android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/time"
-        android:textColor="#999999"
-        android:textSize="11sp"
-        android:text=""
-        android:drawablePadding="3dp"
-        app:drawableStartCompat="@mipmap/clock"
-        android:layout_toEndOf="@id/articleImg"
         android:layout_below="@id/title"
         android:layout_marginStart="7dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/articleImg"
+        android:drawablePadding="3dp"
+        android:text=""
+        android:textColor="#999999"
+        android:textSize="11sp"
+        app:drawableStartCompat="@mipmap/clock" />
 
     <TextView
+        android:id="@+id/number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/number"
-        android:textSize="18sp"
-        android:textColor="#D8AE54"
-        android:textStyle="bold"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="48dp"
-        android:text=""/>
+        android:layout_marginEnd="16dp"
+        android:text=""
+        android:textColor="#D8AE54"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#F5F5F5"
-        android:layout_below="@id/articleImg"/>
+        android:layout_below="@id/articleImg"
+        android:background="#F5F5F5" />
 
 </RelativeLayout>

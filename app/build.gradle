@@ -134,4 +134,5 @@ dependencies {
     api 'org.jsoup:jsoup:1.10.1'
     implementation "me.leolin:ShortcutBadger:1.1.22@aar"
     implementation 'cat.ereza:customactivityoncrash:1.5.0'
+    implementation 'com.github.shts:TriangleLabelView:1.1.2'
 }

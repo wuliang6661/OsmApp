@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.heloo.android.osmapp.R;
 import com.heloo.android.osmapp.adapter.NineImageAdapter;
+import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.api.HttpInterfaceIml;
 import com.heloo.android.osmapp.base.BaseActivity;
 import com.heloo.android.osmapp.base.MyApplication;
@@ -29,6 +30,7 @@ import com.heloo.android.osmapp.model.CircleBean;
 import com.heloo.android.osmapp.utils.GlideSimpleTarget;
 import com.heloo.android.osmapp.utils.MessageEvent;
 import com.heloo.android.osmapp.utils.ScreenUtils;
+import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.utils.Utils;
 import com.heloo.android.osmapp.widget.NineGridView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -76,10 +78,14 @@ public class TopicDetailActivity extends BaseActivity implements ImageWatcher.On
         binding.imageWatcher.setErrorImageRes(R.mipmap.error_picture);
         binding.imageWatcher.setOnPictureLongPressListener(this);
         binding.imageWatcher.setLoader(this);
-        getCircleList(token,pageNo,pagesize,getIntent().getStringExtra("topicId"),isNewTab);
-        binding.topicName.setText(String.format("#%s#",getIntent().getStringExtra("topicName")));
+        getCircleList(token, pageNo, pagesize, getIntent().getStringExtra("topicId"), isNewTab);
+        binding.topicName.setText(String.format("#%s#", getIntent().getStringExtra("topicName")));
         binding.topicNum.setText(getIntent().getStringExtra("num"));
-        Glide.with(this).load(getIntent().getStringExtra("pic")).into(binding.topicPic);
+        String pic = getIntent().getStringExtra("pic");
+        if (!StringUtils.isEmpty(pic) && !pic.startsWith("http")) {
+            pic = HttpInterface.IMG_URL + pic;
+        }
+        Glide.with(this).load(pic).into(binding.topicPic);
         binding.topicDes.setText(getIntent().getStringExtra("des"));
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -96,7 +102,7 @@ public class TopicDetailActivity extends BaseActivity implements ImageWatcher.On
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.rlBack:
                 finish();
                 break;
@@ -104,48 +110,48 @@ public class TopicDetailActivity extends BaseActivity implements ImageWatcher.On
     }
 
     private void setAdapter() {
-        if (adapter != null){
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
             return;
         }
         adapter = new CommonAdapter<CircleBean>(this, R.layout.circle_item_layout, data) {
             @Override
             protected void convert(final com.zhy.adapter.recyclerview.base.ViewHolder holder, final CircleBean s, int position) {
-                final NineGridView picGridView =holder.getConvertView().findViewById(R.id.picGridView);
+                final NineGridView picGridView = holder.getConvertView().findViewById(R.id.picGridView);
                 final ShapeableImageView headerImage = holder.getConvertView().findViewById(R.id.headerImage);
                 Glide.with(TopicDetailActivity.this).load(s.getHeader()).placeholder(R.mipmap.header).error(R.mipmap.header).into(headerImage);
                 TextView name = holder.getConvertView().findViewById(R.id.name);
                 TextView content = holder.getConvertView().findViewById(R.id.content);
-                SpannableString spannableString = new SpannableString(String.format("#%s#%s",getIntent().getStringExtra("topicName"),s.getDescr()));
-                spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#D5AC5A")), 0, getIntent().getStringExtra("topicName").length()+2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                SpannableString spannableString = new SpannableString(String.format("#%s#%s", getIntent().getStringExtra("topicName"), s.getDescr()));
+                spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#D5AC5A")), 0, getIntent().getStringExtra("topicName").length() + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 if (s.getUserName() != null && !s.getUserName().equals("") && s.getAnonymous().equals("0")) {
                     name.setText(s.getUserName());
-                }else {
-                    name.setText(String.format("%s%s","欧诗漫会员",s.getUid()));
+                } else {
+                    name.setText(String.format("%s%s", "欧诗漫会员", s.getUid()));
                 }
-                holder.setText(R.id.commentNum,s.getCommentNum());
-                holder.setText(R.id.time,s.getCreateTime());
+                holder.setText(R.id.commentNum, s.getCommentNum());
+                holder.setText(R.id.time, s.getCreateTime());
                 content.setText(spannableString);
-                holder.setText(R.id.commentNum,s.getCommentNum());
-                holder.setText(R.id.likeNum,s.getPointNum());
+                holder.setText(R.id.commentNum, s.getCommentNum());
+                holder.setText(R.id.likeNum, s.getPointNum());
 
-                if (s.getIsPraise().equals("0")){//点赞过
-                    Glide.with(TopicDetailActivity.this).load(R.mipmap.like_yes).into((ImageView)holder.getView(R.id.likeImage));
-                }else {
-                    Glide.with(TopicDetailActivity.this).load(R.mipmap.like_no).into((ImageView)holder.getView(R.id.likeImage));
+                if (s.getIsPraise().equals("0")) {//点赞过
+                    Glide.with(TopicDetailActivity.this).load(R.mipmap.like_yes).into((ImageView) holder.getView(R.id.likeImage));
+                } else {
+                    Glide.with(TopicDetailActivity.this).load(R.mipmap.like_no).into((ImageView) holder.getView(R.id.likeImage));
                 }
-                if (s.getIsComment().equals("0")){//评论过
-                    Glide.with(TopicDetailActivity.this).load(R.mipmap.comment_yes).into((ImageView)holder.getView(R.id.commentImage));
-                }else {
-                    Glide.with(TopicDetailActivity.this).load(R.mipmap.comment_no).into((ImageView)holder.getView(R.id.commentImage));
+                if (s.getIsComment().equals("0")) {//评论过
+                    Glide.with(TopicDetailActivity.this).load(R.mipmap.comment_yes).into((ImageView) holder.getView(R.id.commentImage));
+                } else {
+                    Glide.with(TopicDetailActivity.this).load(R.mipmap.comment_no).into((ImageView) holder.getView(R.id.commentImage));
                 }
 
-                if (s.getPicList() != null && s.getPicList().size()>0){
+                if (s.getPicList() != null && s.getPicList().size() > 0) {
                     picGridView.setVisibility(View.VISIBLE);
-                    if (s.getPicList().size() == 1){
-                        picGridView.setSingleImageSize((int)(ScreenUtils.getScreenWidth() * 0.6),(int)(ScreenUtils.getScreenWidth() * 0.44));
+                    if (s.getPicList().size() == 1) {
+                        picGridView.setSingleImageSize((int) (ScreenUtils.getScreenWidth() * 0.6), (int) (ScreenUtils.getScreenWidth() * 0.44));
                     }
-                    picGridView.setAdapter(new NineImageAdapter(TopicDetailActivity.this,s.getPicList()));
+                    picGridView.setAdapter(new NineImageAdapter(TopicDetailActivity.this, s.getPicList()));
                     picGridView.setOnImageClickListener(new NineGridView.OnImageClickListener() {
                         @Override
                         public void onImageClick(int position, View view) {
@@ -153,20 +159,20 @@ public class TopicDetailActivity extends BaseActivity implements ImageWatcher.On
                         }
                     });
 
-                }else {
+                } else {
                     picGridView.setVisibility(View.GONE);
                 }
 
 
                 holder.getView(R.id.itemLayout).setOnClickListener(v -> {
                     Intent intent = new Intent(TopicDetailActivity.this, CircleDetailActivity.class);
-                    intent.putExtra("data",s);
+                    intent.putExtra("data", s);
                     startActivity(intent);
                 });
 
                 holder.getView(R.id.likeImage).setOnClickListener(v -> {
-                    like(token,s.getTopicId());
-                    Glide.with(TopicDetailActivity.this).load(R.mipmap.like_yes).into((ImageView)holder.getView(R.id.likeImage));
+                    like(token, s.getTopicId());
+                    Glide.with(TopicDetailActivity.this).load(R.mipmap.like_yes).into((ImageView) holder.getView(R.id.likeImage));
                 });
 
             }
@@ -188,11 +194,12 @@ public class TopicDetailActivity extends BaseActivity implements ImageWatcher.On
 
     /**
      * 获取圈子列表
+     *
      * @param pageNo
      * @param isNewTab
      */
-    private void getCircleList(String token,final int pageNo, int pagesize, String topicId, String isNewTab){
-        HttpInterfaceIml.getCircle(token,pageNo,pagesize,topicId,isNewTab).subscribe(new Subscriber<ResponseBody>() {
+    private void getCircleList(String token, final int pageNo, int pagesize, String topicId, String isNewTab) {
+        HttpInterfaceIml.getCircle(token, pageNo, pagesize, topicId, isNewTab).subscribe(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
                 binding.refreshRoot.finishRefresh();
@@ -201,7 +208,7 @@ public class TopicDetailActivity extends BaseActivity implements ImageWatcher.On
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(TopicDetailActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(TopicDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -209,10 +216,10 @@ public class TopicDetailActivity extends BaseActivity implements ImageWatcher.On
                 try {
                     String s = new String(responseBody.bytes());
                     JSONObject jsonObject = new JSONObject(s);
-                    if (pageNo == 1){
+                    if (pageNo == 1) {
                         data.clear();
                     }
-                    data.addAll(JSON.parseArray(jsonObject.optString("data"),CircleBean.class));
+                    data.addAll(JSON.parseArray(jsonObject.optString("data"), CircleBean.class));
                     setAdapter();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -227,8 +234,8 @@ public class TopicDetailActivity extends BaseActivity implements ImageWatcher.On
     /**
      * 点赞
      */
-    private void like(String uid,String postId){
-        HttpInterfaceIml.like(uid,postId).subscribe(new Subscriber<ResponseBody>() {
+    private void like(String uid, String postId) {
+        HttpInterfaceIml.like(uid, postId).subscribe(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
 
@@ -236,7 +243,7 @@ public class TopicDetailActivity extends BaseActivity implements ImageWatcher.On
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(TopicDetailActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(TopicDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -256,16 +263,17 @@ public class TopicDetailActivity extends BaseActivity implements ImageWatcher.On
 
     /**
      * 更新列表数据
+     *
      * @param messageEvent
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(MessageEvent messageEvent){
-        if (messageEvent.getMessageType().equals("point")){
+    public void onEvent(MessageEvent messageEvent) {
+        if (messageEvent.getMessageType().equals("point")) {
             String mdata = messageEvent.getPassValue().toString();
-            String id = mdata.substring(0,mdata.indexOf(":"));
-            String isPoint = mdata.substring(mdata.indexOf(":")+1,mdata.indexOf(","));
-            String pointNum = mdata.substring(mdata.indexOf(",")+1);
-            if (data != null && data.size()>0) {
+            String id = mdata.substring(0, mdata.indexOf(":"));
+            String isPoint = mdata.substring(mdata.indexOf(":") + 1, mdata.indexOf(","));
+            String pointNum = mdata.substring(mdata.indexOf(",") + 1);
+            if (data != null && data.size() > 0) {
                 for (int i = 0; i < data.size(); i++) {
                     if (data.get(i).getId().equals(id)) {
                         data.get(i).setIsPraise(isPoint);
@@ -277,12 +285,12 @@ public class TopicDetailActivity extends BaseActivity implements ImageWatcher.On
                     }
                 }
             }
-        }else if (messageEvent.getMessageType().equals("comment")){
+        } else if (messageEvent.getMessageType().equals("comment")) {
             String mdata = messageEvent.getPassValue().toString();
-            String id = mdata.substring(0,mdata.indexOf(":"));
-            String isComment = mdata.substring(mdata.indexOf(":")+1,mdata.indexOf(","));
-            String commentNum = mdata.substring(mdata.indexOf(",")+1);
-            if (data != null && data.size()>0) {
+            String id = mdata.substring(0, mdata.indexOf(":"));
+            String isComment = mdata.substring(mdata.indexOf(":") + 1, mdata.indexOf(","));
+            String commentNum = mdata.substring(mdata.indexOf(",") + 1);
+            if (data != null && data.size() > 0) {
                 for (int i = 0; i < data.size(); i++) {
                     if (data.get(i).getId().equals(id)) {
                         data.get(i).setIsComment(isComment);

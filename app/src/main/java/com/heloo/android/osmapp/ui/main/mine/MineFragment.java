@@ -184,7 +184,9 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
                 }
                 break;
             case R.id.hotArticle://热门文章
-                startActivity(new Intent(getActivity(), ArticleActivity.class));
+                if(goLogin()){
+                    startActivity(new Intent(getActivity(), ArticleActivity.class));
+                }
                 break;
             case R.id.hero://英雄榜
                 if (goLogin()) {

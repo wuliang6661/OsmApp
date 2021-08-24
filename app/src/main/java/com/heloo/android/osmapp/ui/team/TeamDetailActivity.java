@@ -92,7 +92,9 @@ public class TeamDetailActivity extends MVPBaseActivity<TeamDetailContract.View,
     @Override
     public void getData(TeamDetailBean body) {
         teamDetailBean = body;
-        Glide.with(this).load(body.user.getIcon()).into(viewBinding.image);
+        Glide.with(this).load(body.user.getIcon())
+                .placeholder(R.drawable.default_head)
+                .error(R.drawable.default_head).into(viewBinding.image);
         viewBinding.teamName.setText(body.user.getRealName());
         viewBinding.coinNum.setText(body.user.getIntegration());
         viewBinding.sendNum.setText(body.user.getForwardnumber());
@@ -132,14 +134,15 @@ public class TeamDetailActivity extends MVPBaseActivity<TeamDetailContract.View,
                                 holder.setText(R.id.zhuanfa, listDataBean.forwardNum + "");
                             }
                         };
-//                adapter1.setOnItemClickListener(R.id.item_layout, new ItemClickListener() {
-//                    @Override
-//                    public void onItemClicked(View view, int position) {
-//                        Intent intent3 = new Intent(TeamDetailActivity.this, WebViewActivity.class);
-//                        intent3.putExtra("url", HttpInterface.URL + LocalConfiguration.signUrl);
-//                        startActivity(intent3);
-//                    }
-//                });
+                adapter1.setOnItemClickListener(R.id.item_layout, new ItemClickListener() {
+                    @Override
+                    public void onItemClicked(View view, int position) {
+                        Intent intent3 = new Intent(TeamDetailActivity.this, WebViewActivity.class);
+                        intent3.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + collect.listData.get(position).articleId
+                                + "&uid=" + LocalConfiguration.userInfo.getUid() + "&username=" + LocalConfiguration.userInfo.getUsername() + "&app=1");
+                        startActivity(intent3);
+                    }
+                });
                 recyclerView.setAdapter(adapter1);
             }
         };

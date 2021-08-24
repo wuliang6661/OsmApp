@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.shts.android.library.TriangleLabelView;
 import okhttp3.ResponseBody;
 
 /**
@@ -79,15 +80,36 @@ public class ArticleActivity extends MVPBaseActivity<ArticleContract.View, Artic
             @Override
             protected void convert(ViewHolder holder, HotArticleBean item, int position) {
                 ImageView articleImg = holder.getConvertView().findViewById(R.id.articleImg);
+                TriangleLabelView labeled = holder.getView(R.id.labeled);
                 if (!StringUtils.isEmpty(item.getIcon())) {
                     if (item.getIcon().startsWith("http")) {
                         Glide.with(ArticleActivity.this).load(item.getIcon()).into(articleImg);
                     } else {
                         Glide.with(ArticleActivity.this).load(HttpInterface.IMG_URL + item.getIcon()).into(articleImg);
                     }
-                }else{
+                } else {
                     Glide.with(ArticleActivity.this).load(item.getIcon()).error(R.drawable.glide_ploce).into(articleImg);
                 }
+                switch (position) {
+                    case 0:
+                        labeled.setTriangleBackgroundColor(Color.parseColor("#FF0404"));
+                        break;
+                    case 1:
+                        labeled.setTriangleBackgroundColor(Color.parseColor("#FE9602"));
+                        break;
+                    case 2:
+                        labeled.setTriangleBackgroundColor(Color.parseColor("#FFD155"));
+                        break;
+                    default:
+                        labeled.setTriangleBackgroundColor(Color.parseColor("#C2C2C2"));
+                        break;
+                }
+                if (position > 9) {
+                    labeled.setVisibility(View.GONE);
+                } else {
+                    labeled.setVisibility(View.VISIBLE);
+                }
+                labeled.setSecondaryText("NO." + (position + 1));
                 holder.setText(R.id.title, item.getSubject());
                 holder.setText(R.id.time, item.getCreateDate());
                 holder.setText(R.id.number, item.getHeatsumber());

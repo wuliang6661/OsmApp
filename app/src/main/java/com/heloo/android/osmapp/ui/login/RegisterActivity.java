@@ -117,7 +117,7 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void onFiled(String message) {
-
+                ToastUtils.showShortToast(message);
             }
         });
     }

@@ -105,7 +105,7 @@ public class HotTopicActivity extends BaseActivity implements View.OnClickListen
         binding.titleLayout.setLayoutParams(lp);
         View view = LayoutInflater.from(this).inflate(R.layout.hot_topic_head_layout, null);
         headImage = view.findViewById(R.id.headImage);
-        rlBackback= view.findViewById(R.id.rlBack);
+        rlBackback = view.findViewById(R.id.rlBack);
         ViewGroup.LayoutParams params = headImage.getLayoutParams();
         params.height = (int) (ScreenUtils.getScreenWidth() * 0.49);
         headImage.setLayoutParams(params);
@@ -128,7 +128,7 @@ public class HotTopicActivity extends BaseActivity implements View.OnClickListen
         binding.refreshRoot.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                pageNo ++;
+                pageNo++;
                 getTopicList(pageNo);
             }
 
@@ -183,7 +183,7 @@ public class HotTopicActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void setAdapter() {
-        if (adapter != null){
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
             return;
         }
@@ -191,20 +191,21 @@ public class HotTopicActivity extends BaseActivity implements View.OnClickListen
             @Override
             protected void convert(ViewHolder holder, final HotTopicBean.ListBean.DataBean item, int position) {
                 holder.setText(R.id.num, String.valueOf(position + 1));
-                holder.setText(R.id.topicName,item.getName());
+                holder.setText(R.id.topicName, item.getName());
                 holder.getView(R.id.itemBtn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (getIntent().getStringExtra("tag") != null){//选择话题
+                        if (getIntent().getStringExtra("tag") != null) {//选择话题
                             Intent i = new Intent();
                             i.putExtra("topicId", item.getId());
                             i.putExtra("topicName", item.getName());
                             setResult(666, i);
                             finish();
-                        }else {
+                        } else {
                             Intent intent = new Intent(HotTopicActivity.this, TopicDetailActivity.class);
                             intent.putExtra("topicId", item.getId());
                             intent.putExtra("topicName", item.getName());
+                            intent.putExtra("pic", item.getIcon());
                             intent.putExtra("num", item.getPostNum());
                             startActivity(intent);
                         }
@@ -218,17 +219,18 @@ public class HotTopicActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.rlBack:
                 finish();
                 break;
         }
     }
+
     /**
      * 获取热门话题
      */
-    private void getTopicList(final int pageNo){
-        HttpInterfaceIml.getTopicList(token,pageNo,20).subscribe(new Subscriber<ResponseBody>() {
+    private void getTopicList(final int pageNo) {
+        HttpInterfaceIml.getTopicList(token, pageNo, 20).subscribe(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
                 binding.refreshRoot.finishLoadMore();
@@ -237,7 +239,7 @@ public class HotTopicActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(HotTopicActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(HotTopicActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -245,8 +247,8 @@ public class HotTopicActivity extends BaseActivity implements View.OnClickListen
                 try {
                     String s = new String(responseBody.bytes());
                     JSONObject jsonObject = new JSONObject(s);
-                    hotTopicBean = JSON.parseObject(jsonObject.optString("data"),HotTopicBean.class);
-                    if (pageNo == 1){
+                    hotTopicBean = JSON.parseObject(jsonObject.optString("data"), HotTopicBean.class);
+                    if (pageNo == 1) {
                         data.clear();
                     }
                     data.addAll(hotTopicBean.getList().getData());
