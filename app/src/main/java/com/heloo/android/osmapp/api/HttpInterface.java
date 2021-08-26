@@ -37,7 +37,7 @@ import rx.Observable;
 
 public interface HttpInterface {
 
-    String URL = "http://osm.happydoit.com";
+    String URL = "https://osm.happydoit.com";
     String URLS = "https://osm.happydoit.com";
     String IMG_URL = "https://app.osm.cn/appfile";
 //    String URL = "http://192.168.1.115:8090";
