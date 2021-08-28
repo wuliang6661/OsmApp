@@ -1,19 +1,23 @@
 package com.heloo.android.osmapp.ui.main;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.heloo.android.osmapp.R;
+import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.base.MyApplication;
+import com.heloo.android.osmapp.config.ConditionEnum;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityMainBinding;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.MainContract;
 import com.heloo.android.osmapp.mvp.presenter.MainPresenter;
 import com.heloo.android.osmapp.service.PushMessageReceiver;
+import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.ui.main.circle.CircleFragment;
 import com.heloo.android.osmapp.ui.main.home.HomeFragment;
 import com.heloo.android.osmapp.ui.main.mine.MineFragment;
@@ -29,7 +33,6 @@ import java.util.TreeSet;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import cn.jpush.android.api.JPushInterface;
 import cn.jzvd.Jzvd;
 import me.leolin.shortcutbadger.ShortcutBadger;
@@ -66,6 +69,18 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     protected void onResume() {
         super.onResume();
         isForeground = true;
+        if (getIntent().getExtras() != null) {
+            String value = getIntent().getExtras().getString("value");
+            Intent intent = new Intent(this, WebViewActivity.class);
+            if (MyApplication.isLogin == ConditionEnum.LOGIN) {
+                intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + value
+                        + "&uid=" + LocalConfiguration.userInfo.getUid() + "&username=" + LocalConfiguration.userInfo.getUsername() + "&app=1");
+            } else {
+                intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + value + "&app=1");
+            }
+            startActivity(intent);
+            getIntent().getExtras().remove("value");
+        }
     }
 
     @Override

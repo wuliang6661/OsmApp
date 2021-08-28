@@ -46,8 +46,8 @@ public class PushMessageReceiver extends JPushMessageReceiver {
                 Bundle bundle = new Bundle();
                 bundle.putString(JPushInterface.EXTRA_NOTIFICATION_TITLE, message.notificationTitle);
                 bundle.putString(JPushInterface.EXTRA_ALERT, message.notificationContent);
+                bundle.putString("value",mValue);
                 i.putExtras(bundle);
-                //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 context.startActivity(i);
             } catch (Throwable throwable) {
