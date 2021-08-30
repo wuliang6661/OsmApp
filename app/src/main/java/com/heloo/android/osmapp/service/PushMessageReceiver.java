@@ -5,11 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.heloo.android.osmapp.base.MyApplication;
+import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.ui.main.MainActivity;
-import com.heloo.android.osmapp.utils.AppManager;
-import com.heloo.android.osmapp.utils.SystemHelper;
-import com.heloo.android.osmapp.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -34,25 +31,22 @@ public class PushMessageReceiver extends JPushMessageReceiver {
         Log.e(TAG, "[onNotifyMessageOpened] " + message);
         num = 0;
         ShortcutBadger.removeCount(context); //for 1.1.4+
-        if (MyApplication.AppInBack) {   //App在后台
-            SystemHelper.setTopApp(Utils.getContext());
-            AppManager.getAppManager().goHome();
-        } else {
-            try {
-                String value = message.notificationExtras;
-                JSONObject jsonObject = new JSONObject(value);
-                String mValue = jsonObject.optString("value");
-                Intent i = new Intent(context, MainActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(JPushInterface.EXTRA_NOTIFICATION_TITLE, message.notificationTitle);
-                bundle.putString(JPushInterface.EXTRA_ALERT, message.notificationContent);
-                bundle.putString("value",mValue);
-                i.putExtras(bundle);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                context.startActivity(i);
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-            }
+        try {
+            String value = message.notificationExtras;
+            Log.e(TAG, "[onNotifyMessageOpened] " + value);
+            JSONObject jsonObject = new JSONObject(value);
+            String mValue = jsonObject.optString("url");
+            Intent i = new Intent(context, MainActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(JPushInterface.EXTRA_NOTIFICATION_TITLE, message.notificationTitle);
+            bundle.putString(JPushInterface.EXTRA_ALERT, message.notificationContent);
+            bundle.putString("value", mValue);
+            i.putExtras(bundle);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            MainActivity.lastUrlCount++;
+            context.startActivity(i);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
         }
     }
 

@@ -2,9 +2,9 @@ package com.heloo.android.osmapp.ui.subject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +20,8 @@ import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivitySubjectDetailBinding;
 import com.heloo.android.osmapp.model.SubjectDetailBean;
 import com.heloo.android.osmapp.ui.WebViewActivity;
-import com.heloo.android.osmapp.utils.ScreenUtils;
+import com.heloo.android.osmapp.utils.ShareUtils;
+import com.heloo.android.osmapp.widget.PopShare;
 import com.zhy.adapter.abslistview.CommonAdapter;
 import com.zhy.adapter.abslistview.ViewHolder;
 
@@ -43,6 +44,7 @@ public class SubjectDetailActivity extends BaseActivity {
     private SubjectDetailBean subjectDetailBean;
     private CommonAdapter<SubjectDetailBean.ArticlelistBean> adapter;
     private List<SubjectDetailBean.ArticlelistBean> data = new ArrayList<>();
+    ImageView share;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,66 @@ public class SubjectDetailActivity extends BaseActivity {
         des = view.findViewById(R.id.des);
         nameDetail = view.findViewById(R.id.nameDetail);
         binding.list.addHeaderView(view);
+        share = findViewById(R.id.share_btn);
+        share.setVisibility(View.VISIBLE);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopShare share = new PopShare(SubjectDetailActivity.this);
+                String url = HttpInterface.URL + "/articleSpecial/specialdateilShow?id=" + subjectDetailBean.getSpecial().getId();
+                share.setListener(new PopShare.onCommitListener() {
+                    @Override
+                    public void shareFriend() {
+                        String image = "";
+                        if (subjectDetailBean.getSpecial().getIcon().startsWith("http")) {
+                            image = subjectDetailBean.getSpecial().getIcon();
+                        }else {
+                            image = HttpInterface.IMG_URL+subjectDetailBean.getSpecial().getIcon();
+                        }
+                        ShareUtils.shareWeChat(SubjectDetailActivity.this,subjectDetailBean.getSpecial().getSubject(),subjectDetailBean.getSpecial().getDescription(),
+                                image,url);
+                    }
 
+                    @Override
+                    public void shareMenmens() {
+                        String image = "";
+                        if (subjectDetailBean.getSpecial().getIcon().startsWith("http")) {
+                            image = subjectDetailBean.getSpecial().getIcon();
+                        }else {
+                            image = HttpInterface.IMG_URL+subjectDetailBean.getSpecial().getIcon();
+                        }
+                        ShareUtils.shareWeCommont(SubjectDetailActivity.this,subjectDetailBean.getSpecial().getSubject(),subjectDetailBean.getSpecial().getDescription(),
+                                image,url);
+                    }
+
+                    @Override
+                    public void shareQQ() {
+                        String image = "";
+                        if (subjectDetailBean.getSpecial().getIcon().startsWith("http")) {
+                            image = subjectDetailBean.getSpecial().getIcon();
+                        }else {
+                            image = HttpInterface.IMG_URL+subjectDetailBean.getSpecial().getIcon();
+                        }
+                        ShareUtils.shareQQ(SubjectDetailActivity.this,subjectDetailBean.getSpecial().getSubject(),subjectDetailBean.getSpecial().getDescription(),
+                                image,url);
+
+                    }
+
+                    @Override
+                    public void shareQQZone() {
+                        String image = "";
+                        if (subjectDetailBean.getSpecial().getIcon().startsWith("http")) {
+                            image = subjectDetailBean.getSpecial().getIcon();
+                        }else {
+                            image = HttpInterface.IMG_URL+subjectDetailBean.getSpecial().getIcon();
+                        }
+                        ShareUtils.shareQQZone(SubjectDetailActivity.this,subjectDetailBean.getSpecial().getSubject(),subjectDetailBean.getSpecial().getDescription(),
+                                image,url);
+                    }
+                });
+                share.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+            }
+        });
     }
 
     private void getData() {

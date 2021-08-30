@@ -6,10 +6,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-
 import com.alibaba.fastjson.JSON;
 import com.google.android.material.tabs.TabLayout;
 import com.heloo.android.osmapp.R;
@@ -39,6 +35,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import okhttp3.ResponseBody;
 
 /**
@@ -56,6 +55,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewBinding.headLayout.post(() -> viewBinding.headLayout.setPadding(0, BubbleUtils.getStatusBarHeight(getActivity()), 0, 0));
         mPresenter.getTitle(MyApplication.spUtils.getString("token", ""));
     }
 
@@ -63,13 +63,12 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
     @Override
     public void onResume() {
         super.onResume();
-        if(MyApplication.isLogin == ConditionEnum.LOGIN){
+        if (MyApplication.isLogin == ConditionEnum.LOGIN) {
             sign();
         }
     }
 
     private void initViews() {
-        viewBinding.headLayout.post(() -> viewBinding.headLayout.setPadding(0, BubbleUtils.getStatusBarHeight(getActivity()), 0, 0));
         mFragments = new ArrayList<>();
         mFragments.clear();
         mFragments.add(suggestFragment);

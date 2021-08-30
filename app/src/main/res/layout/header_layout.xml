@@ -41,6 +41,17 @@
                 android:textColor="#222222"
                 android:textSize="16sp"
                 android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/share_btn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/share_img"
+                android:visibility="gone" />
+
         </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>
