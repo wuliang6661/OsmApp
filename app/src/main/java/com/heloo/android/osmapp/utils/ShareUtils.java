@@ -1,7 +1,6 @@
 package com.heloo.android.osmapp.utils;
 
 import android.app.Activity;
-import android.content.Context;
 
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.bean.SHARE_MEDIA;
