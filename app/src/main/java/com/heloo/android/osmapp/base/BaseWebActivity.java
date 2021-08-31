@@ -1,15 +1,16 @@
 package com.heloo.android.osmapp.base;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.webkit.WebSettings;
+
+import androidx.annotation.Nullable;
 
 import com.heloo.android.osmapp.utils.webview.WebAppInterface;
 import com.heloo.android.osmapp.utils.webview.WebClient;
 import com.heloo.android.osmapp.utils.webview.WebViewChromeClient;
 import com.tencent.smtt.sdk.CookieSyncManager;
-import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
-
-import androidx.annotation.Nullable;
 
 
 /**
@@ -57,34 +58,49 @@ public abstract class BaseWebActivity extends BaseActivity {
      * 初始化webview的各种属性
      */
     private void initWebViewSettings(WebView mWebView) {
-        WebSettings webSetting = mWebView.getSettings();
-        webSetting.setJavaScriptEnabled(true);
-        webSetting.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSetting.setAllowFileAccess(true);
-        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
-        webSetting.setSupportZoom(true);
-        webSetting.setTextZoom(100);
-        webSetting.setBuiltInZoomControls(true);
-//        webSetting.setUserAgentString("oushiman-Android");
-        webSetting.setUseWideViewPort(true);
-        webSetting.setSupportMultipleWindows(true);
-        // webSetting.setLoadWithOverviewMode(true);
-        webSetting.setAppCacheEnabled(true);
-        // webSetting.setDatabaseEnabled(true);
-        webSetting.setDomStorageEnabled(true);
-        webSetting.setGeolocationEnabled(true);
-        webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
-        // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
-        webSetting.setPluginState(WebSettings.PluginState.ON);
-        // webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
-        webSetting.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        webSetting.setAllowFileAccessFromFileURLs(true);
-//        WebView.setWebContentsDebuggingEnabled(true);
-        // this.getSettingsExtension().setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);//extension
-        // settings 的设计
-        webSetting.setAppCachePath(this.getDir("appcache", 0).getPath());
-        webSetting.setDatabasePath(this.getDir("databases", 0).getPath());
-        webSetting.setGeolocationDatabasePath(this.getDir("geolocation", 0)
+        com.tencent.smtt.sdk.WebSettings settings = mWebView.getSettings();
+        //支持获取手势焦点
+        mWebView.requestFocusFromTouch();
+        //支持Js
+        settings.setJavaScriptEnabled(true);
+        //设置适应屏幕
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        //支持缩放
+        settings.setSupportZoom(true);
+//设置出现缩放工具
+        settings.setBuiltInZoomControls(true);
+//设定缩放控件隐藏
+        settings.setDisplayZoomControls(false);
+
+        //隐藏原生的缩放控件
+        settings.setDisplayZoomControls(false);
+        settings.setSupportMultipleWindows(true);
+        settings.supportMultipleWindows();
+        //设置缓存模式
+        settings.setDomStorageEnabled(true);
+        settings.setDatabaseEnabled(true);
+        settings.setCacheMode(android.webkit.WebSettings.LOAD_DEFAULT);
+        settings.setAppCacheEnabled(true);
+        settings.setAppCachePath(mWebView.getContext().getCacheDir().getAbsolutePath());
+        //设置可访问文件
+        settings.setAllowFileAccess(true);
+        //当webView调用requestFocus时为webview设置节点
+        settings.setNeedInitialFocus(true);
+        //设置支持自动加载图片
+        if (Build.VERSION.SDK_INT >= 19) {
+            settings.setLoadsImagesAutomatically(true);
+        } else {
+            settings.setLoadsImagesAutomatically(false);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+        }
+        //设置编码格式
+        settings.setDefaultTextEncodingName("UTF-8");
+        settings.setAppCachePath(this.getDir("appcache", 0).getPath());
+        settings.setDatabasePath(this.getDir("databases", 0).getPath());
+        settings.setGeolocationDatabasePath(this.getDir("geolocation", 0)
                 .getPath());
         CookieSyncManager.createInstance(this);
         CookieSyncManager.getInstance().sync();
