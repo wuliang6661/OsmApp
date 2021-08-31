@@ -1,13 +1,31 @@
 package com.heloo.android.osmapp.ui.main;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.heloo.android.osmapp.R;
+import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.base.MyApplication;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityMainBinding;
@@ -15,6 +33,7 @@ import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.MainContract;
 import com.heloo.android.osmapp.mvp.presenter.MainPresenter;
 import com.heloo.android.osmapp.service.PushMessageReceiver;
+import com.heloo.android.osmapp.ui.WebActivity;
 import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.ui.main.circle.CircleFragment;
 import com.heloo.android.osmapp.ui.main.home.HomeFragment;
@@ -22,6 +41,7 @@ import com.heloo.android.osmapp.ui.main.mine.MineFragment;
 import com.heloo.android.osmapp.ui.main.nice.NiceFragment;
 import com.heloo.android.osmapp.ui.main.store.StoreFragmentNew;
 import com.heloo.android.osmapp.utils.AppManager;
+import com.heloo.android.osmapp.utils.ScreenUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 
 import org.json.JSONException;
@@ -29,8 +49,6 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.TreeSet;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import cn.jpush.android.api.JPushInterface;
 import cn.jzvd.Jzvd;
 import me.leolin.shortcutbadger.ShortcutBadger;
@@ -64,6 +82,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         registerPush();
         PushMessageReceiver.num = 0;
         ShortcutBadger.removeCount(this); //for 1.1.4+
+        if (MyApplication.spUtils.getString("read") == null
+                || !MyApplication.spUtils.getString("read").equals("yes")) {
+            infoDialog();
+        }
     }
 
 
@@ -240,5 +262,94 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (Jzvd.CURRENT_JZVD.screen != Jzvd.SCREEN_FULLSCREEN) {
             Jzvd.releaseAllVideos();
         }
+    }
+
+
+    /**
+     * 协议
+     */
+    private void infoDialog() {
+        // 构造对话框
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialog);
+        final LayoutInflater inflater = LayoutInflater.from(this);
+        View v = inflater.inflate(R.layout.information_dialog_layout, null);
+        TextView cancle = v.findViewById(R.id.cancle);
+        TextView sure = v.findViewById(R.id.sure);
+        TextView txt = v.findViewById(R.id.txt2);
+
+        // SpannableStringBuilder 用法
+        SpannableStringBuilder spannableBuilder = new SpannableStringBuilder();
+        spannableBuilder.append(txt.getText().toString());
+        //设置部分文字点击事件
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                Bundle bundle = new Bundle();
+                bundle.putString("url", HttpInterface.URL + LocalConfiguration.xieyiUrl);
+                gotoActivity(WebActivity.class, bundle, false);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+//                设定的是span超链接的文本颜色，而不是点击后的颜色
+                ds.setColor(Color.parseColor("#009FFF"));
+                ds.setUnderlineText(false);    //去除超链接的下划线
+                ds.clearShadowLayer();//清除阴影
+            }
+
+        };
+        spannableBuilder.setSpan(clickableSpan, 0, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        //设置部分文字点击事件
+        ClickableSpan clickableSpan2 = new ClickableSpan() {//隐私声明
+            @Override
+            public void onClick(View widget) {
+                Bundle bundle = new Bundle();
+                bundle.putString("url", HttpInterface.URL + LocalConfiguration.xieyiUrl);
+                gotoActivity(WebActivity.class, bundle, false);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+//                设定的是span超链接的文本颜色，而不是点击后的颜色
+                ds.setColor(Color.parseColor("#009FFF"));
+                ds.setUnderlineText(false);    //去除超链接的下划线
+                ds.clearShadowLayer();//清除阴影
+            }
+
+        };
+//        spannableBuilder.setSpan(clickableSpan2, 16, 22, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        txt.setText(spannableBuilder);
+        txt.setHighlightColor(getResources().getColor(android.R.color.transparent));//点击后的背景颜色，Android4.0以上默认是淡绿色，低版本的是黄色
+        txt.setMovementMethod(LinkMovementMethod.getInstance());
+
+        builder.setView(v);
+        builder.setCancelable(true);
+        final Dialog noticeDialog = builder.create();
+        noticeDialog.getWindow().setGravity(Gravity.CENTER);
+        noticeDialog.setCancelable(false);
+        noticeDialog.show();
+
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noticeDialog.dismiss();
+                System.exit(0);
+            }
+        });
+
+        sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noticeDialog.dismiss();
+                MyApplication.spUtils.put("read", "yes");
+            }
+        });
+
+        WindowManager.LayoutParams layoutParams = noticeDialog.getWindow().getAttributes();
+        layoutParams.width = (int) (ScreenUtils.getScreenWidth() * 0.75);
+        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        noticeDialog.getWindow().setAttributes(layoutParams);
     }
 }
