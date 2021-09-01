@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ffffff"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
@@ -10,118 +10,123 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginStart="17dp"
         android:layout_marginTop="12dp"
-        android:layout_marginStart="17dp">
+        android:orientation="horizontal">
+
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/headerImage"
             android:layout_width="39dp"
             android:layout_height="39dp"
-            android:id="@+id/headerImage"
-            app:shapeAppearanceOverlay="@style/circleImageStyle"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/circleImageStyle" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/name"
-                android:layout_marginTop="3dp"
-                android:layout_marginStart="10dp"
-                android:textSize="14sp"
-                android:textColor="#000000"
-                android:singleLine="true"
-                android:ellipsize="end" />
 
             <TextView
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/time"
-                android:textColor="#8E8E8E"
-                android:textSize="10sp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:textColor="#8E8E8E"
+                android:textSize="10sp" />
         </LinearLayout>
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="9dp"
         android:layout_marginStart="45dp"
-        android:gravity="top">
+        android:layout_marginTop="9dp"
+        android:gravity="top"
+        android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/reply"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/reply"
-            android:text="回复"
-            android:textSize="14sp"
-            android:textColor="#D5AC5A"
-            android:layout_marginStart="14dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"/>
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="20dp"
+            android:text="回复"
+            android:textColor="#D5AC5A"
+            android:textSize="14sp" />
 
 
         <TextView
+            android:id="@+id/replyContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/replyContent"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:gravity="start"
+            android:layout_marginEnd="10dp"
             android:layout_toStartOf="@id/reply"
-            android:layout_marginEnd="10dp"/>
+            android:gravity="start"
+            android:textColor="#000000"
+            android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/delete"
-            android:text="删除"
-            android:textSize="14sp"
-            android:textColor="#D5AC5A"
-            android:layout_marginStart="14dp"
-            android:visibility="gone"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"/>
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="20dp"
+            android:text="删除"
+            android:textColor="#D5AC5A"
+            android:textSize="14sp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/message_item__bg"
-        android:layout_marginEnd="42dp"
+        android:layout_marginStart="45dp"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="45dp">
+        android:layout_marginEnd="42dp"
+        android:background="@drawable/message_item__bg">
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/topicImg"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentEnd="true"
             android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/rightCircleImageStyle"/>
+            app:shapeAppearanceOverlay="@style/rightCircleImageStyle" />
+
         <TextView
+            android:id="@+id/topicText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/topicText"
-            android:gravity="start"
-            android:textSize="11sp"
-            android:textColor="#333333"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@id/topicImg"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="18dp"
+            android:layout_toStartOf="@id/topicImg"
+            android:ellipsize="end"
+            android:gravity="start"
             android:maxLines="2"
-            android:ellipsize="end"/>
+            android:textColor="#333333"
+            android:textSize="11sp" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E6E6E6"
-        android:layout_marginTop="28dp"/>
+        android:layout_marginTop="28dp"
+        android:background="#E6E6E6" />
 
 </LinearLayout>

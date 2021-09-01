@@ -8,6 +8,8 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import com.alibaba.fastjson.JSON;
 import com.google.android.material.tabs.TabLayout;
 import com.heloo.android.osmapp.R;
@@ -22,7 +24,6 @@ import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.LoginContract;
 import com.heloo.android.osmapp.mvp.presenter.LoginPresenter;
 import com.heloo.android.osmapp.ui.WebActivity;
-import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.ui.main.MainActivity;
 import com.heloo.android.osmapp.utils.ToastUtils;
 
@@ -31,7 +32,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import androidx.core.content.res.ResourcesCompat;
 import okhttp3.ResponseBody;
 
 /**
@@ -261,7 +261,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             showProgress("");
             mPresenter.getUserInfo(LocalConfiguration.tokenBean.getTokenHead() + LocalConfiguration.tokenBean.getToken());
         } else {
-            MyApplication.spUtils.clear();
+            MyApplication.spUtils.remove("token");
             JSONObject jsonObject1 = jsonObject.getJSONObject("data");
             ToastUtils.showShortToast(jsonObject1.optString("errMsg"));
         }

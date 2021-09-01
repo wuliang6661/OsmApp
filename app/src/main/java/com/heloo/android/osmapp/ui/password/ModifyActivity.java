@@ -32,7 +32,7 @@ import okhttp3.ResponseBody;
  */
 
 public class ModifyActivity extends MVPBaseActivity<ModifyContract.View, ModifyPresenter, ActivityModifyBinding>
-    implements ModifyContract.View, View.OnClickListener {
+        implements ModifyContract.View, View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,27 +49,27 @@ public class ModifyActivity extends MVPBaseActivity<ModifyContract.View, ModifyP
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.submitBtn:
-                if (TextUtils.isEmpty(viewBinding.oldPassword.getText())){
+                if (TextUtils.isEmpty(viewBinding.oldPassword.getText())) {
                     ToastUtils.showShortToast("请输入原密码");
                     return;
                 }
-                if (TextUtils.isEmpty(viewBinding.newPassword.getText())){
+                if (TextUtils.isEmpty(viewBinding.newPassword.getText())) {
                     ToastUtils.showShortToast("请输入新密码");
                     return;
                 }
-                if (TextUtils.isEmpty(viewBinding.confirmNewPassword.getText())){
+                if (TextUtils.isEmpty(viewBinding.confirmNewPassword.getText())) {
                     ToastUtils.showShortToast("请确认新密码");
                     return;
                 }
-                if (!viewBinding.newPassword.getText().toString().equals(viewBinding.confirmNewPassword.getText().toString())){
+                if (!viewBinding.newPassword.getText().toString().equals(viewBinding.confirmNewPassword.getText().toString())) {
                     ToastUtils.showShortToast("两次输入的密码不一致，请重新输入");
                     return;
                 }
                 showProgress("");
                 mPresenter.modify(MyApplication.spUtils.getString("token", ""),
-                        viewBinding.newPassword.getText().toString(),viewBinding.oldPassword.getText().toString());
+                        viewBinding.newPassword.getText().toString(), viewBinding.oldPassword.getText().toString());
                 break;
         }
     }
@@ -89,13 +89,13 @@ public class ModifyActivity extends MVPBaseActivity<ModifyContract.View, ModifyP
         String s = new String(body.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
+        if (status.equals("success")) {
             ToastUtils.showShortToast("修改成功,请重新登录");
             MyApplication.isLogin = ConditionEnum.NOLOGIN;
             LocalConfiguration.userInfo = null;
-            MyApplication.spUtils.clear();
-            JPushInterface.deleteAlias(getApplicationContext(),111);
-            gotoActivity(LoginActivity.class,true);
+            MyApplication.spUtils.remove("token");
+            JPushInterface.deleteAlias(getApplicationContext(), 111);
+            gotoActivity(LoginActivity.class, true);
         }
     }
 }

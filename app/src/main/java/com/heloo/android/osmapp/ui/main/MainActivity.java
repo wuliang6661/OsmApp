@@ -82,8 +82,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         registerPush();
         PushMessageReceiver.num = 0;
         ShortcutBadger.removeCount(this); //for 1.1.4+
-        if (MyApplication.spUtils.getString("read") == null
-                || !MyApplication.spUtils.getString("read").equals("yes")) {
+        if (!MyApplication.spUtils.getBoolean("isRead", false)) {
             infoDialog();
         }
     }
@@ -342,8 +341,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MyApplication.spUtils.put("isRead", true);
                 noticeDialog.dismiss();
-                MyApplication.spUtils.put("read", "yes");
             }
         });
 

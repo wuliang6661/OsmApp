@@ -68,7 +68,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                         .setPositiveButton("确定", v1 -> {
                             MyApplication.isLogin = ConditionEnum.NOLOGIN;
                             LocalConfiguration.userInfo = null;
-                            MyApplication.spUtils.clear();
+                            MyApplication.spUtils.remove("token");
                             JPushInterface.deleteAlias(this, 1);
                             JPushInterface.cleanTags(this, 1);
                             finish();

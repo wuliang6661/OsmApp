@@ -1,5 +1,9 @@
 package com.heloo.android.osmapp.ui.main.circle;
 
+import static android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE;
+import static com.heloo.android.osmapp.ui.main.circle.CircleFragment.startProgressDialog;
+import static com.heloo.android.osmapp.ui.main.circle.CircleFragment.stopProgressDialog;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -44,6 +48,7 @@ import com.heloo.android.osmapp.utils.ScreenUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.zhy.adapter.abslistview.CommonAdapter;
 import com.zhy.adapter.abslistview.ViewHolder;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,10 +58,6 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 import rx.Subscriber;
-
-import static android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE;
-import static com.heloo.android.osmapp.ui.main.circle.CircleFragment.startProgressDialog;
-import static com.heloo.android.osmapp.ui.main.circle.CircleFragment.stopProgressDialog;
 
 /**
  * Created by Witness on 2020-03-11
@@ -263,13 +264,14 @@ public class ReplyDetailActivity extends BaseActivity {
                         }
                         time.setText(commentDetailBean.getPostCommentModel().getCreateTime());
                         replyContent.setText(commentDetailBean.getPostCommentModel().getWord());
-                        if (commentDetailBean.getPostCommentModel().getUid().equals(uid)){//是自己发的显示删除,不是自己的显示回复
-                            delete.setVisibility(View.VISIBLE);
-                            reply.setVisibility(View.GONE);
-                        }else {
-                            delete.setVisibility(View.GONE);
-                            reply.setVisibility(View.VISIBLE);
-                        }
+//                        if (commentDetailBean.getPostCommentModel().getUid().equals(uid)){//是自己发的显示删除,不是自己的显示回复
+//                            delete.setVisibility(View.VISIBLE);
+//                            reply.setVisibility(View.GONE);
+//                        }else {
+//                            delete.setVisibility(View.GONE);
+//                            reply.setVisibility(View.VISIBLE);
+//                        }
+                        reply.setVisibility(View.VISIBLE);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
