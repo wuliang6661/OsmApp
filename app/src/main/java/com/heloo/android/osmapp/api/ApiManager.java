@@ -56,6 +56,7 @@ public class ApiManager {
         ClearableCookieJar cookieJar =    //此操作将后台的cookie持久化，避免上传文件清空了后台的cookie
                 new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(Utils.getContext()));
         builder = new OkHttpClient.Builder();
+        OkHttpClientNoVerifyUtil.createClientBuilder_noVerify(builder);
         //手动创建一个OkHttpClient并设置超时时间
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         builder.writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
