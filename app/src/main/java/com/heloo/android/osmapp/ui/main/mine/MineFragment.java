@@ -90,10 +90,12 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
             viewBinding.name.setText(userInfo.getUsername());
         }
         viewBinding.coinNum.setText(userInfo.getIntegration());
+        viewBinding.myTeam.setVisibility(View.GONE);
         if (userInfo.getSourceType() == 1001) {
             viewBinding.role.setText("员工");
         } else if (userInfo.getSourceType() == 1003) {
             viewBinding.role.setText("管理员");
+            viewBinding.myTeam.setVisibility(View.VISIBLE);
         } else {  //1002
             viewBinding.role.setText("会员");
         }
@@ -241,11 +243,11 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
         if (status.equals("success")) {
             signBean = JSON.parseObject(jsonObject.optString("data"), SignBean.class);
             if (signBean != null) {
-                if (signBean.getTeamType().equals("1")) {
-                    viewBinding.myTeam.setVisibility(View.VISIBLE);
-                } else {
-                    viewBinding.myTeam.setVisibility(View.GONE);
-                }
+//                if (signBean.getTeamType().equals("1")) {
+//                    viewBinding.myTeam.setVisibility(View.VISIBLE);
+//                } else {
+//                    viewBinding.myTeam.setVisibility(View.GONE);
+//                }
                 if (signBean.getSigninType().equals("0")) {//未签到
                     Glide.with(getActivity()).load(R.mipmap.sign_no).into(viewBinding.signImg);
                     viewBinding.signTxt.setText("签到有礼");
