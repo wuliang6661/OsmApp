@@ -2,10 +2,9 @@ package com.heloo.android.osmapp.ui.main.mine;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
-
-import android.view.View;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
@@ -31,7 +30,6 @@ import com.heloo.android.osmapp.ui.points.PointsActivity;
 import com.heloo.android.osmapp.ui.setting.SettingActivity;
 import com.heloo.android.osmapp.ui.team.TeamActivity;
 import com.heloo.android.osmapp.utils.ToastUtils;
-import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -90,12 +88,12 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
             viewBinding.name.setText(userInfo.getUsername());
         }
         viewBinding.coinNum.setText(userInfo.getIntegration());
-        viewBinding.myTeam.setVisibility(View.GONE);
+//        viewBinding.myTeam.setVisibility(View.GONE);
         if (userInfo.getSourceType() == 1001) {
             viewBinding.role.setText("员工");
         } else if (userInfo.getSourceType() == 1003) {
             viewBinding.role.setText("管理员");
-            viewBinding.myTeam.setVisibility(View.VISIBLE);
+//            viewBinding.myTeam.setVisibility(View.VISIBLE);
         } else {  //1002
             viewBinding.role.setText("会员");
         }
@@ -243,11 +241,11 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
         if (status.equals("success")) {
             signBean = JSON.parseObject(jsonObject.optString("data"), SignBean.class);
             if (signBean != null) {
-//                if (signBean.getTeamType().equals("1")) {
-//                    viewBinding.myTeam.setVisibility(View.VISIBLE);
-//                } else {
-//                    viewBinding.myTeam.setVisibility(View.GONE);
-//                }
+                if (signBean.getTeamType().equals("1")) {
+                    viewBinding.myTeam.setVisibility(View.VISIBLE);
+                } else {
+                    viewBinding.myTeam.setVisibility(View.GONE);
+                }
                 if (signBean.getSigninType().equals("0")) {//未签到
                     Glide.with(getActivity()).load(R.mipmap.sign_no).into(viewBinding.signImg);
                     viewBinding.signTxt.setText("签到有礼");
