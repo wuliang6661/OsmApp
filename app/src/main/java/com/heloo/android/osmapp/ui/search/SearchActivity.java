@@ -162,7 +162,7 @@ public class SearchActivity extends BaseActivity {
             protected void convert(ViewHolder holder, ArticleBean.ArticleInfoListBean.DataBean item, int position) {
                 TextView title = holder.getConvertView().findViewById(R.id.title);
                 ShapeableImageView imageView = holder.getConvertView().findViewById(R.id.image);
-                if (item.getIcon().startsWith("http")) {
+                if (!StringUtils.isEmpty(item.getIcon()) && item.getIcon().startsWith("http")) {
                     Glide.with(SearchActivity.this).load(item.getIcon()).into(imageView);
                 } else {
                     Glide.with(SearchActivity.this).load(HttpInterface.IMG_URL + item.getIcon()).into(imageView);
@@ -204,7 +204,7 @@ public class SearchActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         showProgress("");
-                        binding.searchView.setQuery(item,true);
+                        binding.searchView.setQuery(item, true);
                         saveHistory(item);
 //                        getData(item);
                     }
