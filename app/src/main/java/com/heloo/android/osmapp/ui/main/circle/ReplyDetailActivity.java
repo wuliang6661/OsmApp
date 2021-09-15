@@ -44,6 +44,7 @@ import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ReplyLayoutBinding;
 import com.heloo.android.osmapp.model.CommentDetailBean;
 import com.heloo.android.osmapp.ui.login.LoginActivity;
+import com.heloo.android.osmapp.utils.HttpImgUtils;
 import com.heloo.android.osmapp.utils.ScreenUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.zhy.adapter.abslistview.CommonAdapter;
@@ -93,7 +94,7 @@ public class ReplyDetailActivity extends BaseActivity {
         uid = LocalConfiguration.userInfo.getUid();
         setStatusBar();
         initView();
-        startProgressDialog("",ReplyDetailActivity.this);
+        startProgressDialog("", ReplyDetailActivity.this);
         getComment(getIntent().getStringExtra("commentId"));
     }
 
@@ -128,7 +129,7 @@ public class ReplyDetailActivity extends BaseActivity {
     }
 
 
-    private void initView(){
+    private void initView() {
         View view = LayoutInflater.from(this).inflate(R.layout.reply_detail_layout, null);
         headerImage = view.findViewById(R.id.headerImage);
         name = view.findViewById(R.id.name);
@@ -145,7 +146,7 @@ public class ReplyDetailActivity extends BaseActivity {
             public void onClick(View v) {
                 if (MyApplication.isLogin == ConditionEnum.LOGIN) {
                     deleteComment(commentDetailBean.getPostCommentModel().getId());
-                }else {
+                } else {
                     startActivity(new Intent(ReplyDetailActivity.this, LoginActivity.class));
                 }
             }
@@ -156,12 +157,12 @@ public class ReplyDetailActivity extends BaseActivity {
             public void onClick(View v) {
                 String name;
                 if (commentDetailBean.getPostCommentModel().getName() != null
-                        && !commentDetailBean.getPostCommentModel().getName().equals("")){
+                        && !commentDetailBean.getPostCommentModel().getName().equals("")) {
                     name = commentDetailBean.getPostCommentModel().getName();
-                }else {
-                    name = "欧诗漫会员"+commentDetailBean.getPostCommentModel().getUid() ;
+                } else {
+                    name = "欧诗漫会员" + commentDetailBean.getPostCommentModel().getUid();
                 }
-                showInputLayout(name,"2",
+                showInputLayout(name, "2",
                         commentDetailBean.getPostCommentModel().getId(),
                         commentDetailBean.getPostCommentModel().getUid(),
                         commentDetailBean.getPostCommentModel().getId(),
@@ -172,42 +173,42 @@ public class ReplyDetailActivity extends BaseActivity {
         binding.rlBack.setOnClickListener(v -> finish());
     }
 
-    private void setAdapter(){
-        adapter = new CommonAdapter<CommentDetailBean.PostCommentModelListBean>(this,R.layout.reply_item_layout,data) {
+    private void setAdapter() {
+        adapter = new CommonAdapter<CommentDetailBean.PostCommentModelListBean>(this, R.layout.reply_item_layout, data) {
             @Override
             protected void convert(ViewHolder viewHolder, final CommentDetailBean.PostCommentModelListBean item, int position) {
-                Glide.with(ReplyDetailActivity.this).load(item.getHeader()).placeholder(R.mipmap.header).error(R.mipmap.header).into((ImageView)viewHolder.getView(R.id.headerImage));
-                if (item.getUid().equals(uid)){
+                Glide.with(ReplyDetailActivity.this).load(item.getHeader()).placeholder(R.mipmap.header).error(R.mipmap.header).into((ImageView) viewHolder.getView(R.id.headerImage));
+                if (item.getUid().equals(uid)) {
                     viewHolder.getView(R.id.person).setVisibility(View.VISIBLE);
                     viewHolder.getView(R.id.deleteReply).setVisibility(View.VISIBLE);
-                    viewHolder.setText(R.id.name,"我");
-                }else {
+                    viewHolder.setText(R.id.name, "我");
+                } else {
                     viewHolder.getView(R.id.person).setVisibility(View.GONE);
                     viewHolder.getView(R.id.deleteReply).setVisibility(View.GONE);
                     if (item.getName() != null) {
                         viewHolder.setText(R.id.name, item.getName());
-                    }else {
-                        viewHolder.setText(R.id.name, String.format("%s%s","欧诗漫会员",item.getUid()));
+                    } else {
+                        viewHolder.setText(R.id.name, String.format("%s%s", "欧诗漫会员", item.getUid()));
                     }
                 }
-                if (item.getReplyUid() != null && item.getReplyUid().equals(uid)){
+                if (item.getReplyUid() != null && item.getReplyUid().equals(uid)) {
                     viewHolder.setText(R.id.replyName, String.format("@%s", "我"));
-                }else {
+                } else {
                     if (item.getReplyName() != null) {
                         viewHolder.setText(R.id.replyName, String.format("@%s", item.getReplyName()));
-                    }else {
-                        viewHolder.setText(R.id.replyName, String.format("@%s%s", "欧诗漫会员",item.getReplyUid()));
+                    } else {
+                        viewHolder.setText(R.id.replyName, String.format("@%s%s", "欧诗漫会员", item.getReplyUid()));
                     }
                 }
-                viewHolder.setText(R.id.replyContent,String.format(":%s",item.getWord()));
-                viewHolder.setText(R.id.time,item.getCreateTime());
+                viewHolder.setText(R.id.replyContent, String.format(":%s", item.getWord()));
+                viewHolder.setText(R.id.time, item.getCreateTime());
 
                 viewHolder.getView(R.id.deleteReply).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (MyApplication.isLogin == ConditionEnum.LOGIN) {
                             deleteComment(item.getId());
-                        }else {
+                        } else {
                             startActivity(new Intent(ReplyDetailActivity.this, LoginActivity.class));
                         }
                     }
@@ -219,10 +220,9 @@ public class ReplyDetailActivity extends BaseActivity {
 
     /**
      * 评论详情
-     *
      */
     private void getComment(final String commentId) {
-        HttpInterfaceIml.commentDetail(token,commentId).subscribe(new Subscriber<ResponseBody>() {
+        HttpInterfaceIml.commentDetail(token, commentId).subscribe(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
                 stopProgressDialog();
@@ -243,24 +243,24 @@ public class ReplyDetailActivity extends BaseActivity {
                         commentDetailBean = JSON.parseObject(jsonObject.optString("data"), CommentDetailBean.class);
                         data = commentDetailBean.getPostCommentModelList();
                         setAdapter();
-                        if (commentDetailBean.getPostInfoModel().getTopicName() != null){
-                            SpannableString spannableString = new SpannableString(String.format("#%s#%s",commentDetailBean.getPostInfoModel().getTopicName(),commentDetailBean.getPostInfoModel().getDescr()));
-                            spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#D5AC5A")), 0, commentDetailBean.getPostInfoModel().getTopicName().length()+2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        if (commentDetailBean.getPostInfoModel().getTopicName() != null) {
+                            SpannableString spannableString = new SpannableString(String.format("#%s#%s", commentDetailBean.getPostInfoModel().getTopicName(), commentDetailBean.getPostInfoModel().getDescr()));
+                            spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#D5AC5A")), 0, commentDetailBean.getPostInfoModel().getTopicName().length() + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                             topicText.setText(spannableString);
-                        }else {
+                        } else {
                             topicText.setText(commentDetailBean.getPostInfoModel().getDescr());
                         }
-                        if (commentDetailBean.getPostInfoModel().getPicList() != null && commentDetailBean.getPostInfoModel().getPicList().size()>0) {
-                            Glide.with(ReplyDetailActivity.this).load(commentDetailBean.getPostInfoModel().getPicList().get(0)).placeholder(R.mipmap.header).error(R.mipmap.header).into(topicImg);
+                        if (commentDetailBean.getPostInfoModel().getPicList() != null && commentDetailBean.getPostInfoModel().getPicList().size() > 0) {
+                            Glide.with(ReplyDetailActivity.this).load(HttpImgUtils.getImgUrl(commentDetailBean.getPostInfoModel().getPicList().get(0))).placeholder(R.mipmap.header).error(R.mipmap.header).into(topicImg);
                         }
                         time.setText(commentDetailBean.getPostInfoModel().getCreateTime());
                         //最新的评论回复
-                        Glide.with(ReplyDetailActivity.this).load(commentDetailBean.getPostCommentModel().getHeader()).placeholder(R.mipmap.header).error(R.mipmap.header).into(headerImage);
+                        Glide.with(ReplyDetailActivity.this).load(HttpImgUtils.getImgUrl(commentDetailBean.getPostCommentModel().getHeader())).placeholder(R.mipmap.header).error(R.mipmap.header).into(headerImage);
                         if (commentDetailBean.getPostCommentModel().getName() != null
-                                && !commentDetailBean.getPostCommentModel().getName().equals("")){
+                                && !commentDetailBean.getPostCommentModel().getName().equals("")) {
                             name.setText(commentDetailBean.getPostCommentModel().getName());
-                        }else {
-                            name.setText(String.format("%s%s","欧诗漫会员",commentDetailBean.getPostCommentModel().getUid()));
+                        } else {
+                            name.setText(String.format("%s%s", "欧诗漫会员", commentDetailBean.getPostCommentModel().getUid()));
                         }
                         time.setText(commentDetailBean.getPostCommentModel().getCreateTime());
                         replyContent.setText(commentDetailBean.getPostCommentModel().getWord());
@@ -286,8 +286,8 @@ public class ReplyDetailActivity extends BaseActivity {
     /**
      * 删除评论
      */
-    private void deleteComment(String id){
-        HttpInterfaceIml.deleteComment(token,id).subscribe(new Subscriber<ResponseBody>() {
+    private void deleteComment(String id) {
+        HttpInterfaceIml.deleteComment(token, id).subscribe(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
 
@@ -295,7 +295,7 @@ public class ReplyDetailActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(ReplyDetailActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(ReplyDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -304,10 +304,10 @@ public class ReplyDetailActivity extends BaseActivity {
                     String s = new String(responseBody.bytes());
                     JSONObject jsonObject = new JSONObject(s);
                     String code = jsonObject.optString("status");
-                    if (code.equals("success")){
+                    if (code.equals("success")) {
                         ToastUtils.showShortToast("删除成功");
                         getComment(getIntent().getStringExtra("commentId"));
-                    }else {
+                    } else {
                         ToastUtils.showShortToast("删除失败");
                     }
                 } catch (IOException e) {
@@ -326,7 +326,7 @@ public class ReplyDetailActivity extends BaseActivity {
     PopupWindow pop;
     EditText myInputEdit;
 
-    private void showInputLayout(String name,final String categoryId,
+    private void showInputLayout(String name, final String categoryId,
                                  final String pId, final String pUid, final String replyId, final String replyUid) {
         View layout = getLayoutInflater().inflate(R.layout.input_layout, null);
         myInputEdit = layout.findViewById(R.id.inputEdit);
@@ -393,7 +393,7 @@ public class ReplyDetailActivity extends BaseActivity {
     /**
      * 关闭键盘
      */
-    private void hideSoft(){
+    private void hideSoft() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(
                 InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
@@ -423,7 +423,7 @@ public class ReplyDetailActivity extends BaseActivity {
                     JSONObject jsonObject = new JSONObject(s);
                     String code = jsonObject.optString("status");
                     if (code.equals("success")) {
-                        ToastUtils.showShortToast( "评论成功");
+                        ToastUtils.showShortToast("评论成功");
                         getComment(getIntent().getStringExtra("commentId"));
                     }
 

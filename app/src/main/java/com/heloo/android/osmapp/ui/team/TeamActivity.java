@@ -4,18 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.tabs.TabLayout;
 import com.heloo.android.osmapp.R;
-import com.heloo.android.osmapp.base.MyApplication;
 import com.heloo.android.osmapp.databinding.ActivityTeamBinding;
 import com.heloo.android.osmapp.model.TeamBean;
 import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.TeamContract;
 import com.heloo.android.osmapp.mvp.presenter.TeamPresenter;
 import com.heloo.android.osmapp.utils.BubbleUtils;
+import com.heloo.android.osmapp.utils.HttpImgUtils;
 import com.heloo.android.osmapp.utils.StringUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -27,7 +29,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
 import okhttp3.ResponseBody;
 
 /**
@@ -121,7 +122,7 @@ public class TeamActivity extends MVPBaseActivity<TeamContract.View, TeamPresent
             @Override
             protected void convert(ViewHolder holder, TeamBean.UserlistBean item, int position) {
                 ShapeableImageView headerImg = holder.getConvertView().findViewById(R.id.headerImg);
-                Glide.with(TeamActivity.this).load(item.getIcon()).error(R.drawable.default_head).into(headerImg);
+                Glide.with(TeamActivity.this).load(HttpImgUtils.getImgUrl(item.getIcon())).error(R.drawable.default_head).into(headerImg);
                 holder.setText(R.id.teamName, item.getRealName());
                 holder.setText(R.id.teamInfo, String.format("转发%s次/浏览%s次", item.getForwardNumber(), item.getReadNumber()));
                 holder.getView(R.id.personNum).setVisibility(View.GONE);
@@ -150,7 +151,7 @@ public class TeamActivity extends MVPBaseActivity<TeamContract.View, TeamPresent
             @Override
             protected void convert(ViewHolder holder, TeamBean.DeptlistBean item, int position) {
                 ShapeableImageView headerImg = holder.getConvertView().findViewById(R.id.headerImg);
-                Glide.with(TeamActivity.this).load(item.getIcon()).error(R.drawable.default_group).into(headerImg);
+                Glide.with(TeamActivity.this).load(HttpImgUtils.getImgUrl(item.getIcon())).error(R.drawable.default_group).into(headerImg);
                 holder.setText(R.id.teamName, item.getName());
                 holder.setText(R.id.teamInfo, String.format("转发%s次/浏览%s次", item.getForwardnumber(), item.getReadnumber()));
                 holder.getView(R.id.personNum).setVisibility(View.VISIBLE);

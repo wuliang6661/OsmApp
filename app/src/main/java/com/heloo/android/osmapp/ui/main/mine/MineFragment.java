@@ -29,6 +29,7 @@ import com.heloo.android.osmapp.ui.person.PersonActivity;
 import com.heloo.android.osmapp.ui.points.PointsActivity;
 import com.heloo.android.osmapp.ui.setting.SettingActivity;
 import com.heloo.android.osmapp.ui.team.TeamActivity;
+import com.heloo.android.osmapp.utils.HttpImgUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -80,7 +81,7 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
      */
     private void setUserInfo() {
         viewBinding.role.setVisibility(View.VISIBLE);
-        Glide.with(getActivity()).asBitmap().load(userInfo.getIcon())
+        Glide.with(getActivity()).asBitmap().load(HttpImgUtils.getImgUrl(userInfo.getIcon()))
                 .placeholder(R.drawable.default_head).error(R.drawable.default_head).into(viewBinding.headerImg);
         if (userInfo.getNickname() != null && !userInfo.getNickname().equals("")) {
             viewBinding.name.setText(userInfo.getNickname());
