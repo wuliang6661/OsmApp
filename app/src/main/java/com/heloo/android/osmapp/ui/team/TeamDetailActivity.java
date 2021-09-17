@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.heloo.android.osmapp.R;
 import com.heloo.android.osmapp.api.HttpInterface;
-import com.heloo.android.osmapp.base.MyApplication;
-import com.heloo.android.osmapp.config.ConditionEnum;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityTeamDetailBinding;
 import com.heloo.android.osmapp.model.TeamDetailBean;
@@ -18,12 +19,10 @@ import com.heloo.android.osmapp.mvp.contract.TeamDetailContract;
 import com.heloo.android.osmapp.mvp.presenter.TeamDetailPresenter;
 import com.heloo.android.osmapp.ui.WebViewActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
+import com.heloo.android.osmapp.utils.HttpImgUtils;
 import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.widget.lgrecycleadapter.LGRecycleViewAdapter;
 import com.heloo.android.osmapp.widget.lgrecycleadapter.LGViewHolder;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Description : 团队详情
@@ -92,7 +91,7 @@ public class TeamDetailActivity extends MVPBaseActivity<TeamDetailContract.View,
     @Override
     public void getData(TeamDetailBean body) {
         teamDetailBean = body;
-        Glide.with(this).load(body.user.getIcon())
+        Glide.with(this).load(HttpImgUtils.getImgUrl(body.user.getIcon()))
                 .placeholder(R.drawable.default_head)
                 .error(R.drawable.default_head).into(viewBinding.image);
         viewBinding.teamName.setText(body.user.getRealName());

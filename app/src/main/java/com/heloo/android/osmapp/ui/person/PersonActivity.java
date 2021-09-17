@@ -36,6 +36,7 @@ import com.heloo.android.osmapp.mvp.contract.PersonContract;
 import com.heloo.android.osmapp.mvp.presenter.PersonPresenter;
 import com.heloo.android.osmapp.utils.BubbleUtils;
 import com.heloo.android.osmapp.utils.Glide4Engine;
+import com.heloo.android.osmapp.utils.HttpImgUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
@@ -80,7 +81,7 @@ public class PersonActivity extends MVPBaseActivity<PersonContract.View, PersonP
         goBack();
         viewBinding.headLayout.post(() -> viewBinding.headLayout.setPadding(0, BubbleUtils.getStatusBarHeight(this), 0, 0));
         viewBinding.headerImg.setOnClickListener(this);
-        Glide.with(this).asBitmap().load(userInfo.getIcon())
+        Glide.with(this).asBitmap().load(HttpImgUtils.getImgUrl(userInfo.getIcon()))
                 .placeholder(R.drawable.default_head).error(R.drawable.default_head).into(viewBinding.headerImg);
         if (userInfo.getNickname() != null && !userInfo.getNickname().equals("")){
             viewBinding.name.setText(userInfo.getNickname());
