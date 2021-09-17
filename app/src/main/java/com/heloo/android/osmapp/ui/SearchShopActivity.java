@@ -8,10 +8,12 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.heloo.android.osmapp.R;
-import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.api.HttpInterfaceIml;
 import com.heloo.android.osmapp.api.HttpResultSubscriber;
 import com.heloo.android.osmapp.base.BaseActivity;
@@ -19,6 +21,7 @@ import com.heloo.android.osmapp.base.MyApplication;
 import com.heloo.android.osmapp.databinding.ActivitySearchBinding;
 import com.heloo.android.osmapp.model.SearchShopBO;
 import com.heloo.android.osmapp.ui.main.store.StoreDetailActivity;
+import com.heloo.android.osmapp.utils.HttpImgUtils;
 import com.heloo.android.osmapp.utils.StringUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.heloo.android.osmapp.widget.lgrecycleadapter.LGRecycleViewAdapter;
@@ -28,9 +31,6 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
  * 搜索商品界面
@@ -166,11 +166,7 @@ public class SearchShopActivity extends BaseActivity {
                     public void convert(LGViewHolder holder, SearchShopBO goodsMoelsBean, int position) {
                         holder.setText(R.id.tvName, goodsMoelsBean.name);
                         holder.setText(R.id.tvPrice, String.format("￥%s", goodsMoelsBean.preferentialPrice));
-                        if (goodsMoelsBean.icon.startsWith("http")) {
-                            holder.setImageUrl(SearchShopActivity.this, R.id.productImg, goodsMoelsBean.icon);
-                        } else {
-                            holder.setImageUrl(SearchShopActivity.this, R.id.productImg, HttpInterface.URL + goodsMoelsBean.icon);
-                        }
+                        holder.setImageUrl(SearchShopActivity.this, R.id.productImg, HttpImgUtils.getImgUrl(goodsMoelsBean.icon));
                     }
                 };
         adapter.setOnItemClickListener(R.id.item_layout, new LGRecycleViewAdapter.ItemClickListener() {

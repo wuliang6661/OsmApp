@@ -207,6 +207,7 @@ public class HotTopicActivity extends BaseActivity implements View.OnClickListen
                             intent.putExtra("topicName", item.getName());
                             intent.putExtra("pic", item.getIcon());
                             intent.putExtra("num", item.getPostNum());
+                            intent.putExtra("des", item.getIntroduce());
                             startActivity(intent);
                         }
                     }

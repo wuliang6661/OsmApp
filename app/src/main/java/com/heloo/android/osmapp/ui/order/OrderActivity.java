@@ -9,10 +9,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alipay.sdk.app.PayTask;
 import com.google.android.material.tabs.TabLayout;
 import com.heloo.android.osmapp.R;
-import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityOrderBinding;
 import com.heloo.android.osmapp.model.OrderBO;
@@ -23,6 +25,7 @@ import com.heloo.android.osmapp.mvp.contract.OrderContract;
 import com.heloo.android.osmapp.mvp.presenter.OrderPresenter;
 import com.heloo.android.osmapp.ui.confirm.PaySuccessActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
+import com.heloo.android.osmapp.utils.HttpImgUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.heloo.android.osmapp.widget.AlertDialog;
 import com.heloo.android.osmapp.widget.lgrecycleadapter.LGRecycleViewAdapter;
@@ -31,9 +34,6 @@ import com.heloo.android.osmapp.widget.lgrecycleadapter.LGViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * 全部订单
@@ -154,9 +154,7 @@ public class OrderActivity extends MVPBaseActivity<OrderContract.View, OrderPres
 
                     @Override
                     public void convert(LGViewHolder holder, OrderBO.OrderItemlistBean orderItemlistBean, int position) {
-                        if(!orderItemlistBean.icon.startsWith("http")){
-                            orderItemlistBean.icon = HttpInterface.IMG_URL + orderItemlistBean.icon;
-                        }
+                        orderItemlistBean.icon = HttpImgUtils.getImgUrl(orderItemlistBean.icon);
                         holder.setImageUrl(holder.itemView.getContext(), R.id.productImg, orderItemlistBean.icon);
                         holder.setText(R.id.productTitle, orderItemlistBean.name);
                         if (LocalConfiguration.userInfo.getSourceType() == 1002) {
