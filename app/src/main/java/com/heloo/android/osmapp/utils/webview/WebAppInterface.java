@@ -89,11 +89,22 @@ public class WebAppInterface implements UMShareListener {
     }
 
     /**
+     * 跳转到浏览器页面打开
+     */
+    @JavascriptInterface
+    public void browser(String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        mContext.startActivity(intent);
+    }
+
+
+    /**
      * 保存海报
      */
     @JavascriptInterface
     public void saveImg(String base64) {
-        LogUtils.d("wwwww",base64);
+        LogUtils.d("wwwww", base64);
         new AlertDialog(mContext).builder().setGone().setMsg("确认保存海报？")
                 .setNegativeButton("取消", null)
                 .setPositiveButton("确定", v -> {
@@ -124,7 +135,7 @@ public class WebAppInterface implements UMShareListener {
             return;
         OutputStream fos = null;
         try {
-            Bitmap bitmap = BitMapUtils.base64ToBitmap(base64.substring(base64.indexOf(",")+1));
+            Bitmap bitmap = BitMapUtils.base64ToBitmap(base64.substring(base64.indexOf(",") + 1));
             String path = Environment.getExternalStorageDirectory()
                     + File.separator + Environment.DIRECTORY_DCIM
                     + File.separator + "Camera" + File.separator;
