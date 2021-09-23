@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.View;
 
+import androidx.core.widget.ContentLoadingProgressBar;
+
 import com.tencent.smtt.export.external.interfaces.JsPromptResult;
 import com.tencent.smtt.export.external.interfaces.JsResult;
 import com.tencent.smtt.sdk.ValueCallback;
@@ -24,9 +26,15 @@ public class WebViewChromeClient extends WebChromeClient {
 
     public onReceivedMessage listener;
     private Activity mContext;
+    private ContentLoadingProgressBar mContentLoadingProgressBar;
 
     public WebViewChromeClient(Activity context) {
         mContext = context;
+    }
+
+
+    public void setProgress(ContentLoadingProgressBar mContentLoadingProgressBar) {
+        this.mContentLoadingProgressBar = mContentLoadingProgressBar;
     }
 
 
@@ -52,6 +60,7 @@ public class WebViewChromeClient extends WebChromeClient {
     @Override
     public void onProgressChanged(WebView view, int newProgress) {
         super.onProgressChanged(view, newProgress);
+        mContentLoadingProgressBar.setProgress(newProgress);
     }
 
 

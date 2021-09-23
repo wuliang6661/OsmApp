@@ -62,6 +62,13 @@
                 android:layout_height="match_parent"
                 android:background="@color/act_bg01" />
 
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/load_progressbar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="2dp" />
+
         </RelativeLayout>
 
 

@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.webkit.WebSettings;
 
 import androidx.annotation.Nullable;
+import androidx.core.widget.ContentLoadingProgressBar;
 
+import com.heloo.android.osmapp.R;
 import com.heloo.android.osmapp.utils.webview.WebAppInterface;
 import com.heloo.android.osmapp.utils.webview.WebClient;
 import com.heloo.android.osmapp.utils.webview.WebViewChromeClient;
@@ -22,10 +24,15 @@ import com.tencent.smtt.sdk.WebView;
 public abstract class BaseWebActivity extends BaseActivity {
 
 
+    private ContentLoadingProgressBar mContentLoadingProgressBar;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
+
 
     /**
      * 初始化webview的实例
@@ -41,8 +48,11 @@ public abstract class BaseWebActivity extends BaseActivity {
                 }
             }
         });
+        mContentLoadingProgressBar = findViewById(R.id.load_progressbar);
+        mContentLoadingProgressBar.setMax(100);
+        chromeClient.setProgress(mContentLoadingProgressBar);
         view.setWebChromeClient(chromeClient);
-        view.setWebViewClient(new WebClient(this));
+        view.setWebViewClient(new WebClient(this,mContentLoadingProgressBar));
         view.addJavascriptInterface(new WebAppInterface(this, view), "Android");
 //        view.setClickable(true);
         view.setHorizontalScrollBarEnabled(false);

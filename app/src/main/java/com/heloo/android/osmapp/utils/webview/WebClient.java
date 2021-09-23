@@ -2,10 +2,11 @@ package com.heloo.android.osmapp.utils.webview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.util.Log;
 import android.view.KeyEvent;
-import com.bigkoo.svprogresshud.SVProgressHUD;
+
+import androidx.core.widget.ContentLoadingProgressBar;
+
 import com.heloo.android.osmapp.base.MyApplication;
 import com.heloo.android.osmapp.utils.LogUtils;
 import com.heloo.android.osmapp.utils.StringUtils;
@@ -28,11 +29,13 @@ import com.tencent.smtt.sdk.WebViewClient;
 public class WebClient extends WebViewClient {
 
     private Context mContext;
-    private SVProgressHUD svProgressHUD;
+    //    private SVProgressHUD svProgressHUD;
+    private ContentLoadingProgressBar mContentLoadingProgressBar;
 
-    public WebClient(Context context) {
+    public WebClient(Context context, ContentLoadingProgressBar mContentLoadingProgressBar) {
         mContext = context;
-        svProgressHUD = new SVProgressHUD(context);
+//        svProgressHUD = new SVProgressHUD(context);
+        this.mContentLoadingProgressBar = mContentLoadingProgressBar;
     }
 
 
@@ -57,7 +60,7 @@ public class WebClient extends WebViewClient {
      */
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        svProgressHUD.showWithStatus("加载中...", SVProgressHUD.SVProgressHUDMaskType.BlackCancel);
+//        svProgressHUD.showWithStatus("加载中...", SVProgressHUD.SVProgressHUDMaskType.BlackCancel);
         super.onPageStarted(view, url, favicon);
     }
 
@@ -71,8 +74,11 @@ public class WebClient extends WebViewClient {
      */
     @Override
     public void onPageFinished(WebView view, String url) {
-        if (svProgressHUD.isShowing()) {
-            svProgressHUD.dismiss();
+//        if (svProgressHUD.isShowing()) {
+//            svProgressHUD.dismiss();
+//        }
+        if (mContentLoadingProgressBar != null) {
+            mContentLoadingProgressBar.hide();
         }
         super.onPageFinished(view, url);
     }
@@ -209,6 +215,7 @@ public class WebClient extends WebViewClient {
     public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
         return super.shouldOverrideKeyEvent(view, event);
     }
+
     private void syncCookie(String url) {
         if (StringUtils.isEmpty(MyApplication.SESSIONID)) {
             return;
@@ -222,7 +229,7 @@ public class WebClient extends WebViewClient {
             StringBuilder sbCookie = new StringBuilder();//创建一个拼接cookie的容器,为什么这么拼接，大家查阅一下http头Cookie的结构
             sbCookie.append("SESSION=" + MyApplication.SESSIONID);//拼接sessionId
             String cookieValue = sbCookie.toString();
-            Log.d("webviewwebviewwebview", "weweweeeeeeeeeeeeeeeeee: "+cookieValue);
+            Log.d("webviewwebviewwebview", "weweweeeeeeeeeeeeeeeeee: " + cookieValue);
             cookieManager.setCookie(url, cookieValue);//为url设置cookie
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 cookieManager.flush();

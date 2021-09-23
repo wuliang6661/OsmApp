@@ -10,10 +10,23 @@
         layout="@layout/header_layout" />
 
 
-    <com.tencent.smtt.sdk.WebView
-        android:id="@+id/web_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white" />
+        android:layout_height="match_parent">
+
+        <com.tencent.smtt.sdk.WebView
+            android:id="@+id/web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/load_progressbar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="2dp" />
+    </FrameLayout>
+
 
 </LinearLayout>

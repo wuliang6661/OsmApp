@@ -99,7 +99,7 @@ public class StoreDetailActivity extends MVPBaseActivity<StoreDetailContract.Vie
         initWebViewSettings(view);
         WebViewChromeClient chromeClient = new WebViewChromeClient(this);
         view.setWebChromeClient(chromeClient);
-        view.setWebViewClient(new WebClient(this));
+        view.setWebViewClient(new WebClient(this, null));
         view.addJavascriptInterface(new WebAppInterface(this, view), "Android");
         view.setClickable(true);
         view.setHorizontalScrollBarEnabled(false);
