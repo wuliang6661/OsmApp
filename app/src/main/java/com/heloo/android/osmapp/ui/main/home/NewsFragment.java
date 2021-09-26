@@ -179,6 +179,7 @@ public class NewsFragment extends MVPBaseFragment<NewsContract.View, NewsPresent
                     Glide.with(getActivity()).load(HttpInterface.IMG_URL + item.getIcon()).into(imageView);
                 }
                 holder.setText(R.id.hotTxt,"置顶");
+                holder.setBackgroundColor(R.id.hotTxt,Color.parseColor("#B99A49"));
                 if (item.getIsTop() != null && item.getIsTop().equals("1")) {
                     holder.getView(R.id.hotTxt).setVisibility(View.VISIBLE);
                     SpannableStringBuilder span = new SpannableStringBuilder("缩进啊" + item.getSubject());

@@ -195,12 +195,14 @@ public class SuggestFragment extends MVPBaseFragment<SuggestContract.View, Sugge
                     holder.getView(R.id.hotTxt).setVisibility(View.VISIBLE);
                     if (typeName != null && typeName.equals("五美党建")) {
                         holder.setText(R.id.hotTxt, "置顶");
+                        holder.setBackgroundColor(R.id.hotTxt,Color.parseColor("#B99A49"));
                         SpannableStringBuilder span = new SpannableStringBuilder("缩进啊" + item.getSubject());
                         span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, 3,
                                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                         title.setText(span);
                     } else {
                         holder.setText(R.id.hotTxt, "热");
+                        holder.setBackgroundColor(R.id.hotTxt,Color.parseColor("#FF5A5A"));
                         SpannableStringBuilder span = new SpannableStringBuilder("缩进" + item.getSubject());
                         span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, 2,
                                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
