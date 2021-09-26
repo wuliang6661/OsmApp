@@ -60,7 +60,9 @@ public class WebViewChromeClient extends WebChromeClient {
     @Override
     public void onProgressChanged(WebView view, int newProgress) {
         super.onProgressChanged(view, newProgress);
-        mContentLoadingProgressBar.setProgress(newProgress);
+        if (mContentLoadingProgressBar != null) {
+            mContentLoadingProgressBar.setProgress(newProgress);
+        }
     }
 
 
