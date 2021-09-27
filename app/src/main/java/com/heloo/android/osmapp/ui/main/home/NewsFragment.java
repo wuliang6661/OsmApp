@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
+
 /**
  * Description : 新闻资讯
  *
@@ -47,7 +48,7 @@ import okhttp3.ResponseBody;
  * @date 5/11/21
  */
 public class NewsFragment extends MVPBaseFragment<NewsContract.View, NewsPresenter, FragmentNewsBinding>
-        implements NewsContract.View{
+        implements NewsContract.View {
 
     private ArticleBean articleBean;
     private CommonAdapter<ArticleBean.ArticleInfoListBean.DataBean> adapter;
@@ -67,7 +68,7 @@ public class NewsFragment extends MVPBaseFragment<NewsContract.View, NewsPresent
     public static NewsFragment newInstance(String categoryId) {
         NewsFragment newsFragment = new NewsFragment();
         Bundle b = new Bundle();
-        b.putString("categoryId",categoryId);
+        b.putString("categoryId", categoryId);
         newsFragment.setArguments(b);
         return newsFragment;
     }
@@ -83,9 +84,9 @@ public class NewsFragment extends MVPBaseFragment<NewsContract.View, NewsPresent
     }
 
     private void initViews() {
-        for (int i=0;i< LocalConfiguration.titleBeanList.size();i++){
-            if (categoryId.equals(LocalConfiguration.titleBeanList.get(i).getCategoryId())){
-                if (LocalConfiguration.titleBeanList.get(i).getChildren().size() >= 2){
+        for (int i = 0; i < LocalConfiguration.titleBeanList.size(); i++) {
+            if (categoryId.equals(LocalConfiguration.titleBeanList.get(i).getCategoryId())) {
+                if (LocalConfiguration.titleBeanList.get(i).getChildren().size() >= 2) {
                     viewBinding.newsBtn.setText(LocalConfiguration.titleBeanList.get(i).getChildren().get(0).getName());
                     viewBinding.infoBtn.setText(LocalConfiguration.titleBeanList.get(i).getChildren().get(1).getName());
                     firstCategoryId = LocalConfiguration.titleBeanList.get(i).getChildren().get(0).getCategoryId();
@@ -94,7 +95,7 @@ public class NewsFragment extends MVPBaseFragment<NewsContract.View, NewsPresent
                 break;
             }
         }
-        mPresenter.getList(MyApplication.spUtils.getString("token", ""),firstPageNo,firstPageSize,firstCategoryId,"","");
+        mPresenter.getList(MyApplication.spUtils.getString("token", ""), firstPageNo, firstPageSize, firstCategoryId, "", "");
         initListener();
         setAdapter();
         setAdapter2();
@@ -102,33 +103,33 @@ public class NewsFragment extends MVPBaseFragment<NewsContract.View, NewsPresent
 
     private void initListener() {
         viewBinding.newsBtn.setOnClickListener(v -> {
-            viewBinding.newsBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.btn_left_select,null));
-            viewBinding.infoBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.btn_right_normal,null));
+            viewBinding.newsBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_left_select, null));
+            viewBinding.infoBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_right_normal, null));
             viewBinding.newsBtn.setTextColor(Color.parseColor("#FFFFFF"));
             viewBinding.infoBtn.setTextColor(Color.parseColor("#B0986F"));
             isFirst = true;
             viewBinding.listOne.setVisibility(View.VISIBLE);
             viewBinding.listTwo.setVisibility(View.GONE);
-            mPresenter.getList(MyApplication.spUtils.getString("token", ""),firstPageNo,firstPageSize,firstCategoryId,"","");
+            mPresenter.getList(MyApplication.spUtils.getString("token", ""), firstPageNo, firstPageSize, firstCategoryId, "", "");
         });
 
         viewBinding.infoBtn.setOnClickListener(v -> {
-            viewBinding.newsBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.btn_left_normal,null));
-            viewBinding.infoBtn.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.btn_right_select,null));
+            viewBinding.newsBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_left_normal, null));
+            viewBinding.infoBtn.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.btn_right_select, null));
             viewBinding.newsBtn.setTextColor(Color.parseColor("#B0986F"));
             viewBinding.infoBtn.setTextColor(Color.parseColor("#FFFFFF"));
             isFirst = false;
             viewBinding.listOne.setVisibility(View.GONE);
             viewBinding.listTwo.setVisibility(View.VISIBLE);
-            mPresenter.getList(MyApplication.spUtils.getString("token", ""),secondPageNo,secondPageSize,secondCategoryId,"","");
+            mPresenter.getList(MyApplication.spUtils.getString("token", ""), secondPageNo, secondPageSize, secondCategoryId, "", "");
         });
         viewBinding.refreshLayout.setOnRefreshListener(refreshLayout -> {
-            if (isFirst){
+            if (isFirst) {
                 firstPageNo = 1;
-                mPresenter.getList(MyApplication.spUtils.getString("token", ""),firstPageNo,firstPageSize,firstCategoryId,"","");
-            }else {
+                mPresenter.getList(MyApplication.spUtils.getString("token", ""), firstPageNo, firstPageSize, firstCategoryId, "", "");
+            } else {
                 secondPageNo = 1;
-                mPresenter.getList(MyApplication.spUtils.getString("token", ""),secondPageNo,secondPageSize,secondCategoryId,"","");
+                mPresenter.getList(MyApplication.spUtils.getString("token", ""), secondPageNo, secondPageSize, secondCategoryId, "", "");
             }
             refreshLayout.finishRefresh(100);
         });
@@ -136,8 +137,8 @@ public class NewsFragment extends MVPBaseFragment<NewsContract.View, NewsPresent
         setScrollListener(viewBinding.listTwo);
     }
 
-    
-    private void setScrollListener(ListView listView){
+
+    private void setScrollListener(ListView listView) {
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -146,13 +147,13 @@ public class NewsFragment extends MVPBaseFragment<NewsContract.View, NewsPresent
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if(firstVisibleItem + visibleItemCount == totalItemCount){
+                if (firstVisibleItem + visibleItemCount == totalItemCount) {
                     View last_view = listView.getChildAt(listView.getChildCount() - 1);
-                    if(last_view != null && last_view.getBottom() == listView.getHeight()){
-                        if (isFirst){
-                            firstPageNo ++;
-                            mPresenter.getList(MyApplication.spUtils.getString("token", ""),firstPageNo,firstPageSize,firstCategoryId,"","");
-                        }else {
+                    if (last_view != null && last_view.getBottom() == listView.getHeight()) {
+                        if (isFirst) {
+                            firstPageNo++;
+                            mPresenter.getList(MyApplication.spUtils.getString("token", ""), firstPageNo, firstPageSize, firstCategoryId, "", "");
+                        } else {
                             secondPageNo++;
                             mPresenter.getList(MyApplication.spUtils.getString("token", ""), secondPageNo, secondPageSize, secondCategoryId, "", "");
                         }
@@ -164,41 +165,41 @@ public class NewsFragment extends MVPBaseFragment<NewsContract.View, NewsPresent
 
 
     private void setAdapter() {
-        if (adapter != null){
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
             return;
         }
-        adapter = new CommonAdapter<ArticleBean.ArticleInfoListBean.DataBean>(getActivity(),R.layout.news_item_layout,firstNewsData) {
+        adapter = new CommonAdapter<ArticleBean.ArticleInfoListBean.DataBean>(getActivity(), R.layout.news_item_layout, firstNewsData) {
             @Override
             protected void convert(ViewHolder holder, ArticleBean.ArticleInfoListBean.DataBean item, int position) {
                 TextView title = holder.getConvertView().findViewById(R.id.title);
                 ShapeableImageView imageView = holder.getConvertView().findViewById(R.id.image);
-                if (item.getIcon().startsWith("http")){
+                if (item.getIcon().startsWith("http")) {
                     Glide.with(getActivity()).load(item.getIcon()).into(imageView);
-                }else {
+                } else {
                     Glide.with(getActivity()).load(HttpInterface.IMG_URL + item.getIcon()).into(imageView);
                 }
-                holder.setText(R.id.hotTxt,"置顶");
-                holder.setBackgroundColor(R.id.hotTxt,Color.parseColor("#B99A49"));
+                holder.setText(R.id.hotTxt, "置顶");
+                holder.setBackgroundColor(R.id.hotTxt, Color.parseColor("#B99A49"));
                 if (item.getIsTop() != null && item.getIsTop().equals("1")) {
                     holder.getView(R.id.hotTxt).setVisibility(View.VISIBLE);
                     SpannableStringBuilder span = new SpannableStringBuilder("缩进啊" + item.getSubject());
                     span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, 3,
                             Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                     title.setText(span);
-                }else {
+                } else {
                     holder.getView(R.id.hotTxt).setVisibility(View.GONE);
                     title.setText(item.getSubject());
                 }
-                holder.setText(R.id.time,item.getCreateDate());
-                holder.setText(R.id.glance,item.getViewNum());
+                holder.setText(R.id.time, item.getCreateDate());
+                holder.setText(R.id.glance, item.getViewNum());
                 holder.getView(R.id.newItemBtn).setOnClickListener(v -> {
                     Intent intent = new Intent(getActivity(), WebViewActivity.class);
                     if (MyApplication.isLogin == ConditionEnum.LOGIN) {
                         intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticleId()
-                                + "&uid=" + LocalConfiguration.userInfo.getUid()+ "&username=" + LocalConfiguration.userInfo.getUsername()+"&app=1");
-                    }else {
-                        intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticleId()+"&app=1");
+                                + "&uid=" + LocalConfiguration.userInfo.getUid() + "&username=" + LocalConfiguration.userInfo.getUsername() + "&app=1");
+                    } else {
+                        intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticleId() + "&app=1");
                     }
                     startActivity(intent);
                 });
@@ -210,41 +211,41 @@ public class NewsFragment extends MVPBaseFragment<NewsContract.View, NewsPresent
 
 
     private void setAdapter2() {
-        if (adapter2 != null){
+        if (adapter2 != null) {
             adapter2.notifyDataSetChanged();
             return;
         }
-        adapter2 = new CommonAdapter<ArticleBean.ArticleInfoListBean.DataBean>(getActivity(),R.layout.news_item_layout,secondNewsData) {
+        adapter2 = new CommonAdapter<ArticleBean.ArticleInfoListBean.DataBean>(getActivity(), R.layout.news_item_layout, secondNewsData) {
             @Override
             protected void convert(ViewHolder holder, ArticleBean.ArticleInfoListBean.DataBean item, int position) {
                 TextView title = holder.getConvertView().findViewById(R.id.title);
                 ShapeableImageView imageView = holder.getConvertView().findViewById(R.id.image);
-                if (item.getIcon().startsWith("http")){
+                if (item.getIcon().startsWith("http")) {
                     Glide.with(getActivity()).load(item.getIcon()).into(imageView);
-                }else {
+                } else {
                     Glide.with(getActivity()).load(HttpInterface.IMG_URL + item.getIcon()).into(imageView);
                 }
-                holder.setText(R.id.hotTxt,"置顶");
-                holder.setBackgroundColor(R.id.hotTxt,Color.parseColor("#B99A49"));
+                holder.setText(R.id.hotTxt, "置顶");
+                holder.setBackgroundColor(R.id.hotTxt, Color.parseColor("#B99A49"));
                 if (item.getIsTop() != null && item.getIsTop().equals("1")) {
                     holder.getView(R.id.hotTxt).setVisibility(View.VISIBLE);
                     SpannableStringBuilder span = new SpannableStringBuilder("缩进啊" + item.getSubject());
                     span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, 3,
                             Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                     title.setText(span);
-                }else {
+                } else {
                     holder.getView(R.id.hotTxt).setVisibility(View.GONE);
                     title.setText(item.getSubject());
                 }
-                holder.setText(R.id.time,item.getCreateDate());
-                holder.setText(R.id.glance,item.getViewNum());
+                holder.setText(R.id.time, item.getCreateDate());
+                holder.setText(R.id.glance, item.getViewNum());
                 holder.getView(R.id.newItemBtn).setOnClickListener(v -> {
                     Intent intent = new Intent(getActivity(), WebViewActivity.class);
                     if (MyApplication.isLogin == ConditionEnum.LOGIN) {
                         intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticleId()
-                                + "&uid=" + LocalConfiguration.userInfo.getUid()+ "&username=" + LocalConfiguration.userInfo.getUsername()+"&app=1");
-                    }else {
-                        intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticleId()+"&app=1");
+                                + "&uid=" + LocalConfiguration.userInfo.getUid() + "&username=" + LocalConfiguration.userInfo.getUsername() + "&app=1");
+                    } else {
+                        intent.putExtra("url", HttpInterface.URL + LocalConfiguration.newsDetailUrl + "?articleId=" + item.getArticleId() + "&app=1");
                     }
                     startActivity(intent);
                 });
@@ -268,16 +269,16 @@ public class NewsFragment extends MVPBaseFragment<NewsContract.View, NewsPresent
         String s = new String(data.bytes());
         JSONObject jsonObject = new JSONObject(s);
         String status = jsonObject.optString("status");
-        if (status.equals("success")){
-            articleBean = JSON.parseObject(jsonObject.optString("data"),ArticleBean.class);
-            if (isFirst){
-                if (firstPageNo == 1){
+        if (status.equals("success")) {
+            articleBean = JSON.parseObject(jsonObject.optString("data"), ArticleBean.class);
+            if (isFirst) {
+                if (firstPageNo == 1) {
                     firstNewsData.clear();
                 }
                 firstNewsData.addAll(articleBean.getArticleInfoList().getData());
                 setAdapter();
-            }else {
-                if (secondPageNo == 1){
+            } else {
+                if (secondPageNo == 1) {
                     secondNewsData.clear();
                 }
                 secondNewsData.addAll(articleBean.getArticleInfoList().getData());
