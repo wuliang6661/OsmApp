@@ -88,6 +88,7 @@ public class PersonActivity extends MVPBaseActivity<PersonContract.View, PersonP
         }else {
             viewBinding.name.setText(userInfo.getUsername());
         }
+        viewBinding.name.setEnabled(userInfo.getSourceType() != 1001);
         viewBinding.phone.setText(userInfo.getPhone());
         if (userInfo.getGender() != null && userInfo.getGender().equals("1")){
             gender = 1;
