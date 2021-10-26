@@ -15,6 +15,7 @@ import com.heloo.android.osmapp.model.ShopListBO;
 import com.heloo.android.osmapp.model.SignBO;
 import com.heloo.android.osmapp.model.TeamDetailBean;
 import com.heloo.android.osmapp.model.UserInfo;
+import com.heloo.android.osmapp.model.VersionBO;
 import com.heloo.android.osmapp.utils.rx.RxHelper;
 import com.heloo.android.osmapp.utils.rx.RxResultHelper;
 
@@ -75,7 +76,7 @@ public class HttpInterfaceIml {
     /**
      * 检测版本更新
      */
-    public static Observable<ResponseBody> VersionCheck() {
+    public static Observable<VersionBO> getVersionInfo() {
         return getService().loadVersion().compose(RxHelper.httpRusult());
     }
 

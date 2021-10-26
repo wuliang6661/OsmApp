@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
@@ -43,6 +44,7 @@ import com.heloo.android.osmapp.ui.main.store.StoreFragmentNew;
 import com.heloo.android.osmapp.utils.AppManager;
 import com.heloo.android.osmapp.utils.ScreenUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
+import com.heloo.android.osmapp.utils.UpdateUtils;
 
 import org.json.JSONException;
 
@@ -85,7 +87,24 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (!MyApplication.spUtils.getBoolean("isRead", false)) {
             infoDialog();
         }
+        checkUpdate();
     }
+
+
+    private void checkUpdate() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                new UpdateUtils().checkUpdate(MainActivity.this, new UpdateUtils.onUpdateListener() {
+                    @Override
+                    public void noUpdate() {
+
+                    }
+                });
+            }
+        }, 2000);
+    }
+
 
 
     @Override

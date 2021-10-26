@@ -14,6 +14,7 @@ import com.heloo.android.osmapp.model.ShopListBO;
 import com.heloo.android.osmapp.model.SignBO;
 import com.heloo.android.osmapp.model.TeamDetailBean;
 import com.heloo.android.osmapp.model.UserInfo;
+import com.heloo.android.osmapp.model.VersionBO;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public interface HttpInterface {
      * 版本检测更新
      */
     @POST("/version.json")
-    Observable<ResponseBody> loadVersion();
+    Observable<VersionBO> loadVersion();
 
     /**
      * 获取验证码
