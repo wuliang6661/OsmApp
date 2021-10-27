@@ -77,7 +77,7 @@ public class HttpInterfaceIml {
      * 检测版本更新
      */
     public static Observable<VersionBO> getVersionInfo() {
-        return getService().loadVersion().compose(RxHelper.httpRusult());
+        return getService().loadVersion().compose(RxResultHelper.httpRusult());
     }
 
     /**

@@ -55,9 +55,9 @@ public class UpdateUtils {
                     }
                     return;
                 }
-                if (Integer.parseInt(s.getLatestVersion()) > AppUtils.getAppVersionCode()) {
-                    if (s.getIsForceUpdate() == 1) { //强制更新
-                        checkPrission(s.getDownloadUrl());
+                if (s.android.versionCode > AppUtils.getAppVersionCode()) {
+                    if (s.android.minVersionCode > AppUtils.getAppVersionCode()) { //强制更新
+                        checkPrission(s.android.url);
                     } else {
                         createCustomDialogTwo(s);
                     }
@@ -106,11 +106,11 @@ public class UpdateUtils {
 
     private void createCustomDialogTwo(VersionBO versionBO) {
         new AlertDialog(context).builder().setGone().setTitle("有新版本更新？")
-                .setMsg(versionBO.getContent())
+                .setMsg(versionBO.android.updateMessage)
                 .setNegativeButton("取消", null)
                 .setPositiveButton("确定", v1 -> {
                     ToastUtils.showShortToast("开始下载新版本");
-                    checkPrission(versionBO.getDownloadUrl());
+                    checkPrission(versionBO.android.url);
                 }).show();
     }
 

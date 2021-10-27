@@ -52,7 +52,7 @@ public class BaseResult<T> {
     }
 
     public boolean surcess() {
-        return "success".equals(status);
+        return "success".equals(status) || "1".equals(status);
     }
 
 }

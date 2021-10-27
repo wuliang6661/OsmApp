@@ -46,8 +46,8 @@ public interface HttpInterface {
     /**
      * 版本检测更新
      */
-    @POST("/version.json")
-    Observable<VersionBO> loadVersion();
+    @GET("/json/version.json")
+    Observable<BaseResult<VersionBO>> loadVersion();
 
     /**
      * 获取验证码
