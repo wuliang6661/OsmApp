@@ -57,9 +57,9 @@ public class UpdateUtils {
                 }
                 if (s.android.versionCode > AppUtils.getAppVersionCode()) {
                     if (s.android.minVersionCode > AppUtils.getAppVersionCode()) { //强制更新
-                        checkPrission(s.android.url);
+                        createCustomDialogTwo(s,true);
                     } else {
-                        createCustomDialogTwo(s);
+                        createCustomDialogTwo(s,false);
                     }
                 } else {
                     if (listener != null) {
@@ -104,14 +104,19 @@ public class UpdateUtils {
     }
 
 
-    private void createCustomDialogTwo(VersionBO versionBO) {
-        new AlertDialog(context).builder().setGone().setTitle("有新版本更新？")
+    private void createCustomDialogTwo(VersionBO versionBO,boolean isNeed) {
+       AlertDialog dialog =  new AlertDialog(context).builder().setGone().setTitle("发现新版本" + versionBO.android.versionName)
                 .setMsg(versionBO.android.updateMessage)
-                .setNegativeButton("取消", null)
-                .setPositiveButton("确定", v1 -> {
+                .setPositiveButton("去更新", v1 -> {
                     ToastUtils.showShortToast("开始下载新版本");
                     checkPrission(versionBO.android.url);
-                }).show();
+                });
+       if(isNeed){
+           dialog.setCancelable(false);
+       }else{
+           dialog.setNegativeButton("取消", null);
+       }
+       dialog.show();
     }
 
 
