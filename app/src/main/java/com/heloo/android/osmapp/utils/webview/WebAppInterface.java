@@ -283,7 +283,6 @@ public class WebAppInterface implements UMShareListener {
 
             @Override
             public void onFiled(String message) {
-                ToastUtils.showShortToast(message);
             }
         });
     }
