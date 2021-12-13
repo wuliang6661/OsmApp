@@ -2,6 +2,7 @@ package com.heloo.android.osmapp.api;
 
 import com.heloo.android.osmapp.model.BaseResult;
 import com.heloo.android.osmapp.model.CreateOrderBo;
+import com.heloo.android.osmapp.model.MyAdressBean;
 import com.heloo.android.osmapp.model.OrderBO;
 import com.heloo.android.osmapp.model.OrderPriceBO;
 import com.heloo.android.osmapp.model.PayBean;
@@ -545,5 +546,12 @@ public interface HttpInterface {
             @Field("otpCode") String otpCode,
             @Field("password") String password,
             @Field("username") String username);
+
+
+    /**
+     * 获取自提地址
+     */
+    @GET("shopOrderItem/getsincePoint")
+    Observable<BaseResult<List<MyAdressBean>>> getSincePoint();
 }
 

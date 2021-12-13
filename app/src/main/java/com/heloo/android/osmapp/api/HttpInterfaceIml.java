@@ -3,6 +3,7 @@ package com.heloo.android.osmapp.api;
 
 import com.heloo.android.osmapp.model.BaseResult;
 import com.heloo.android.osmapp.model.CreateOrderBo;
+import com.heloo.android.osmapp.model.MyAdressBean;
 import com.heloo.android.osmapp.model.OrderBO;
 import com.heloo.android.osmapp.model.OrderPriceBO;
 import com.heloo.android.osmapp.model.PayBean;
@@ -487,5 +488,12 @@ public class HttpInterfaceIml {
      */
     public static Observable<Object> resetPassword(String otpCode, String password, String username) {
         return getService().resetPassword(otpCode, password, username).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 获取自提地址
+     */
+    public static Observable<List<MyAdressBean>> getSincePoint() {
+        return getService().getSincePoint().compose(RxResultHelper.httpRusult());
     }
 }

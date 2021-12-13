@@ -19,8 +19,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.alipay.sdk.app.PayTask;
 import com.bumptech.glide.Glide;
@@ -48,8 +51,6 @@ import com.zhy.adapter.abslistview.ViewHolder;
 import java.util.ArrayList;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
-
 /**
  * 订单确认
  */
@@ -62,7 +63,7 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
     private TextView selectAddress;
     private RelativeLayout addressLayout;
     private TextView name, phone, address, all_inter, edit_remark, zhifu;
-    private ImageView editAddress;
+    private LinearLayout editAddress;
     private CheckBox selectImg, zhifu_bao_check;
     private AddressBean addressBean;
     private OrderPriceBO priceBO;

@@ -1,16 +1,18 @@
 package com.heloo.android.osmapp.mvp.presenter;
 
-import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.api.HttpInterfaceIml;
 import com.heloo.android.osmapp.api.HttpResultSubscriber;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.model.CreateOrderBo;
+import com.heloo.android.osmapp.model.MyAdressBean;
 import com.heloo.android.osmapp.model.OrderPriceBO;
 import com.heloo.android.osmapp.model.PayBean;
 import com.heloo.android.osmapp.model.ShopAddressList;
 import com.heloo.android.osmapp.model.UserInfo;
 import com.heloo.android.osmapp.mvp.BasePresenterImpl;
 import com.heloo.android.osmapp.mvp.contract.ConfirmContract;
+
+import java.util.List;
 
 /**
  * Created by Witness on 3/30/21
@@ -117,5 +119,22 @@ public class ConfirmPresenter extends BasePresenterImpl<ConfirmContract.View>
     }
 
 
+    public void getSincePoint(){
+        HttpInterfaceIml.getSincePoint().subscribe(new HttpResultSubscriber<List<MyAdressBean>>() {
+            @Override
+            public void onSuccess(List<MyAdressBean> s) {
+                if (mView != null) {
+
+                }
+            }
+
+            @Override
+            public void onFiled(String message) {
+                if (mView != null) {
+                    mView.onRequestError(message);
+                }
+            }
+        });
+    }
 
 }
