@@ -99,13 +99,12 @@ public class ConfirmPresenter extends BasePresenterImpl<ConfirmContract.View>
     }
 
 
-
     public void pay(String orderId) {
         HttpInterfaceIml.pay(orderId).subscribe(new HttpResultSubscriber<PayBean>() {
             @Override
             public void onSuccess(PayBean s) {
                 if (mView != null) {
-                    mView.pay(s,orderId);
+                    mView.pay(s, orderId);
                 }
             }
 
@@ -119,12 +118,14 @@ public class ConfirmPresenter extends BasePresenterImpl<ConfirmContract.View>
     }
 
 
-    public void getSincePoint(){
+    public void getSincePoint() {
         HttpInterfaceIml.getSincePoint().subscribe(new HttpResultSubscriber<List<MyAdressBean>>() {
             @Override
             public void onSuccess(List<MyAdressBean> s) {
                 if (mView != null) {
-
+                    if (s.size() > 0) {
+                        mView.getZtAddress(s.get(0));
+                    }
                 }
             }
 

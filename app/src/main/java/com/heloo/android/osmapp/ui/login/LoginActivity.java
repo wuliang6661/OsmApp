@@ -65,8 +65,10 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         setHeader();
         goRegister();
         viewBinding.tabLayout.removeAllTabs();
-        viewBinding.tabLayout.addTab(viewBinding.tabLayout.newTab().setText("手机快捷登录"));
-        viewBinding.tabLayout.addTab(viewBinding.tabLayout.newTab().setText("账号密码登录"));
+        TabLayout.Tab tab1 = viewBinding.tabLayout.newTab().setText("员工登录");
+        TabLayout.Tab tab2 = viewBinding.tabLayout.newTab().setText("会员登录");
+        viewBinding.tabLayout.addTab(tab1);
+        viewBinding.tabLayout.addTab(tab2);
         viewBinding.codeBtn.setOnClickListener(this);
         viewBinding.forgetBtn.setOnClickListener(this);
         viewBinding.submitBtn.setOnClickListener(this);
@@ -75,31 +77,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         viewBinding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewBinding.passCodeInput.setText("");
-                viewBinding.setPasswordInput.setText("");
-                viewBinding.accountInput.setText("");
-                if (tab.getPosition() == 0) {//手机快捷登录
-                    loginWay = 1;
-                    viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_phone, null));
-                    viewBinding.accountInput.setHint("输入手机号码");
-                    viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_code, null));
-                    viewBinding.passCodeInput.setHint("输入验证码");
-                    viewBinding.passCodeInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    viewBinding.passCodeInput.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    viewBinding.codeBtn.setVisibility(View.VISIBLE);
-                    viewBinding.setPasswordLayout.setVisibility(View.GONE);
-                    viewBinding.forgetBtn.setVisibility(View.GONE);
-                } else {//账号密码登录
-                    loginWay = 2;
-                    viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_account, null));
-                    viewBinding.accountInput.setHint("输入账号");
-                    viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_password, null));
-                    viewBinding.passCodeInput.setHint("输入密码");
-                    viewBinding.passCodeInput.setTransformationMethod(PasswordTransformationMethod.getInstance()); //设置为密码输入框
-                    viewBinding.codeBtn.setVisibility(View.GONE);
-                    viewBinding.setPasswordLayout.setVisibility(View.GONE);
-                    viewBinding.forgetBtn.setVisibility(View.VISIBLE);
-                }
+                setTab(tab.getPosition());
             }
 
             @Override
@@ -121,6 +99,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             intent.putExtra("url", HttpInterface.URL + LocalConfiguration.xieyiUrl);
             startActivity(intent);
         });
+        setTab(0);
     }
 
     @Override
@@ -175,6 +154,36 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
                 break;
         }
     }
+
+
+    private void setTab(int position) {
+        viewBinding.passCodeInput.setText("");
+        viewBinding.setPasswordInput.setText("");
+        viewBinding.accountInput.setText("");
+        if (position == 0) {//员工登录
+            loginWay = 2;
+            viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_account, null));
+            viewBinding.accountInput.setHint("输入账号");
+            viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_password, null));
+            viewBinding.passCodeInput.setHint("输入密码");
+            viewBinding.passCodeInput.setTransformationMethod(PasswordTransformationMethod.getInstance()); //设置为密码输入框
+            viewBinding.codeBtn.setVisibility(View.GONE);
+            viewBinding.setPasswordLayout.setVisibility(View.GONE);
+            viewBinding.forgetBtn.setVisibility(View.VISIBLE);
+        } else {//会员登录
+            loginWay = 1;
+            viewBinding.accountImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_phone, null));
+            viewBinding.accountInput.setHint("输入手机号码");
+            viewBinding.passCodeImg.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.mipmap.login_code, null));
+            viewBinding.passCodeInput.setHint("输入验证码");
+            viewBinding.passCodeInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+            viewBinding.passCodeInput.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            viewBinding.codeBtn.setVisibility(View.VISIBLE);
+            viewBinding.setPasswordLayout.setVisibility(View.GONE);
+            viewBinding.forgetBtn.setVisibility(View.GONE);
+        }
+    }
+
 
     /**
      * 登录注册操作
@@ -234,7 +243,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
      * 返回
      */
     private void back() {
-            finish();
+        finish();
     }
 
     @Override

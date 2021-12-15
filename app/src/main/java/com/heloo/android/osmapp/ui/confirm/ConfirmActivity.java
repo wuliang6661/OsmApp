@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,6 +33,7 @@ import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityConfirmBinding;
 import com.heloo.android.osmapp.model.AddressBean;
+import com.heloo.android.osmapp.model.MyAdressBean;
 import com.heloo.android.osmapp.model.OrderPriceBO;
 import com.heloo.android.osmapp.model.PayBean;
 import com.heloo.android.osmapp.model.PayResult;
@@ -60,7 +62,7 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
     private CommonAdapter<OrderPriceBO.ShopOrderModelsBean> adapter;
     private ArrayList<ShopCarBO.ShopCarInfoDOSBean> data;
 
-    private TextView selectAddress;
+    //    private TextView selectAddress;
     private RelativeLayout addressLayout;
     private TextView name, phone, address, all_inter, edit_remark, zhifu;
     private LinearLayout editAddress;
@@ -68,6 +70,12 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
     private AddressBean addressBean;
     private OrderPriceBO priceBO;
     private RelativeLayout zhifuBao;
+
+    private TextView ztButton;
+    private TextView kdButton;
+    private LinearLayout ztLayout;
+    private TextView ztName;
+    private TextView ztAddress;
 
     StringBuilder shopIds;
     StringBuilder shopNums;
@@ -79,7 +87,6 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         super.onCreate(savedInstanceState);
         data = (ArrayList<ShopCarBO.ShopCarInfoDOSBean>) getIntent().getExtras().getSerializable("shops");
         initView();
-        mPresenter.getUserAdd();
         mPresenter.getUserIntegration();
         shopIds = new StringBuilder();
         shopNums = new StringBuilder();
@@ -90,13 +97,17 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         showProgress(null);
         mPresenter.getshopInter(shopIds.substring(0, shopIds.length() - 1), shopNums.substring(0, shopNums.length() - 1));
 
-        if (LocalConfiguration.userInfo.getSourceType() == 1002) {
+        if (LocalConfiguration.userInfo.getSourceType() == 1002) {   //会员
             selectImg.setChecked(true);
             selectImg.setEnabled(false);
             zhifu.setVisibility(View.GONE);
             zhifuBao.setVisibility(View.GONE);
             zhifu_bao_check.setChecked(false);
+            ztButton.setVisibility(View.GONE);
+            setSelectAddressType(1);
         } else {
+            ztButton.setVisibility(View.VISIBLE);
+            setSelectAddressType(0);
             selectImg.setEnabled(true);
         }
     }
@@ -107,8 +118,13 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         viewBinding.list.addFooterView(footView);
         viewBinding.submitBtn.setOnClickListener(this);
         viewBinding.backBtn.setOnClickListener(this);
-        selectAddress = footView.findViewById(R.id.select_address);
+//        selectAddress = footView.findViewById(R.id.select_address);
         addressLayout = footView.findViewById(R.id.address_layout);
+        ztButton = footView.findViewById(R.id.zt_button);
+        kdButton = footView.findViewById(R.id.kd_button);
+        ztLayout = footView.findViewById(R.id.zt_layout);
+        ztName = footView.findViewById(R.id.zt_name);
+        ztAddress = footView.findViewById(R.id.zt_address);
         all_inter = footView.findViewById(R.id.all_inter);
         edit_remark = footView.findViewById(R.id.edit_remark);
         name = footView.findViewById(R.id.name);
@@ -131,14 +147,14 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
                 startActivityForResult(intent, 0x11);
             }
         });
-        selectAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ConfirmActivity.this, AddressActivity.class);
-                intent.putExtra("type", true);
-                startActivityForResult(intent, 0x11);
-            }
-        });
+//        selectAddress.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(ConfirmActivity.this, AddressActivity.class);
+//                intent.putExtra("type", true);
+//                startActivityForResult(intent, 0x11);
+//            }
+//        });
         selectImg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -182,6 +198,27 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
             }
         };
         viewBinding.list.setAdapter(adapter);
+    }
+
+
+    private void setSelectAddressType(int type) {
+        if (type == 0) {   //选中自提
+            ztButton.setBackgroundResource(R.drawable.shape_slide_white_conner_10dp);
+            ztButton.setTextColor(Color.parseColor("#D4B467"));
+            kdButton.setBackground(null);
+            kdButton.setTextColor(Color.parseColor("#ffffff"));
+            addressLayout.setVisibility(View.GONE);
+            ztLayout.setVisibility(View.VISIBLE);
+            mPresenter.getSincePoint();
+        } else {
+            kdButton.setBackgroundResource(R.drawable.shape_slide_white_conner_10dp);
+            kdButton.setTextColor(Color.parseColor("#D4B467"));
+            ztButton.setBackground(null);
+            ztButton.setTextColor(Color.parseColor("#ffffff"));
+            addressLayout.setVisibility(View.VISIBLE);
+            ztLayout.setVisibility(View.GONE);
+            mPresenter.getUserAdd();
+        }
     }
 
 
@@ -269,8 +306,8 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         switch (resultCode) {
             case 0x11:
                 addressBean = (AddressBean) data.getSerializableExtra("address");
-                selectAddress.setVisibility(View.GONE);
-                addressLayout.setVisibility(View.VISIBLE);
+//                selectAddress.setVisibility(View.GONE);
+//                addressLayout.setVisibility(View.VISIBLE);
                 name.setText(addressBean.getName());
                 phone.setText(addressBean.getPhone());
                 this.address.setText(String.format("%s%s%s%s", addressBean.getProvince(), addressBean.getCity(), addressBean.getArea(), addressBean.getAddress()));
@@ -281,8 +318,8 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
     @Override
     public void getAddress(ShopAddressList address) {
         if (address.list.isEmpty()) {
-            selectAddress.setVisibility(View.VISIBLE);
-            addressLayout.setVisibility(View.GONE);
+//            selectAddress.setVisibility(View.VISIBLE);
+//            addressLayout.setVisibility(View.GONE);
             return;
         }
         for (AddressBean item : address.list) {
@@ -294,12 +331,12 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
             addressBean = address.list.get(0);
         }
         if (addressBean == null) {
-            selectAddress.setVisibility(View.VISIBLE);
-            addressLayout.setVisibility(View.GONE);
+//            selectAddress.setVisibility(View.VISIBLE);
+//            addressLayout.setVisibility(View.GONE);
             return;
         }
-        selectAddress.setVisibility(View.GONE);
-        addressLayout.setVisibility(View.VISIBLE);
+//        selectAddress.setVisibility(View.GONE);
+//        addressLayout.setVisibility(View.VISIBLE);
         name.setText(addressBean.getName());
         phone.setText(addressBean.getPhone());
         this.address.setText(String.format("%s%s%s%s", addressBean.getProvince(), addressBean.getCity(), addressBean.getArea(), addressBean.getAddress()));
@@ -356,6 +393,15 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         // 必须异步调用
         Thread payThread = new Thread(payRunnable);
         payThread.start();
+    }
+
+    /**
+     * 获取自提地址
+     */
+    @Override
+    public void getZtAddress(MyAdressBean myAdressBean) {
+        ztName.setText(myAdressBean.pointName);
+        ztAddress.setText(myAdressBean.address);
     }
 
 

@@ -1,5 +1,6 @@
 package com.heloo.android.osmapp.mvp.contract;
 
+import com.heloo.android.osmapp.model.MyAdressBean;
 import com.heloo.android.osmapp.model.OrderPriceBO;
 import com.heloo.android.osmapp.model.PayBean;
 import com.heloo.android.osmapp.model.ShopAddressList;
@@ -21,6 +22,8 @@ public class ConfirmContract {
         void getAllInter(UserInfo info);
 
         void pay(PayBean payBean, String orderId);
+
+        void getZtAddress(MyAdressBean myAdressBean);
     }
 
     public interface Presenter extends BasePresenter<View> {
