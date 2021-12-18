@@ -44,6 +44,7 @@ import com.heloo.android.osmapp.mvp.MVPBaseActivity;
 import com.heloo.android.osmapp.mvp.contract.ConfirmContract;
 import com.heloo.android.osmapp.mvp.presenter.ConfirmPresenter;
 import com.heloo.android.osmapp.ui.address.AddressActivity;
+import com.heloo.android.osmapp.ui.address.ZtAddressActivity;
 import com.heloo.android.osmapp.ui.order.OrderDetailActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
@@ -82,6 +83,10 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
 
     private String orderId;
 
+    private int addressType = 1;
+    //自提地址
+    private MyAdressBean ztAddressBean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,11 +109,13 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
             zhifuBao.setVisibility(View.GONE);
             zhifu_bao_check.setChecked(false);
             ztButton.setVisibility(View.GONE);
-            setSelectAddressType(1);
+            setSelectAddressType(2);
+            mPresenter.getUserAdd();
         } else {
             ztButton.setVisibility(View.VISIBLE);
-            setSelectAddressType(0);
+            setSelectAddressType(1);
             selectImg.setEnabled(true);
+            mPresenter.getSincePoint();
         }
     }
 
@@ -118,7 +125,6 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         viewBinding.list.addFooterView(footView);
         viewBinding.submitBtn.setOnClickListener(this);
         viewBinding.backBtn.setOnClickListener(this);
-//        selectAddress = footView.findViewById(R.id.select_address);
         addressLayout = footView.findViewById(R.id.address_layout);
         ztButton = footView.findViewById(R.id.zt_button);
         kdButton = footView.findViewById(R.id.kd_button);
@@ -135,38 +141,34 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         zhifuBao = footView.findViewById(R.id.zhifu_bao);
         zhifu_bao_check = footView.findViewById(R.id.zhifu_bao_check);
         selectImg = footView.findViewById(R.id.selectImg);
-        int price = 0;
-        for (ShopCarBO.ShopCarInfoDOSBean item : data) {
-            price += (item.goodsPrice * item.goodsNum);
-        }
-        editAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        editAddress.setOnClickListener(view -> {
+            if (addressType == 1) {
+                Intent intent = new Intent(ConfirmActivity.this, ZtAddressActivity.class);
+                intent.putExtra("id", ztAddressBean.id);
+                startActivityForResult(intent, 0x22);
+            } else {
                 Intent intent = new Intent(ConfirmActivity.this, AddressActivity.class);
                 intent.putExtra("type", true);
                 startActivityForResult(intent, 0x11);
             }
         });
-//        selectAddress.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(ConfirmActivity.this, AddressActivity.class);
-//                intent.putExtra("type", true);
-//                startActivityForResult(intent, 0x11);
-//            }
-//        });
-        selectImg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (priceBO == null) {
-                    return;
-                }
-                if (b) {
-                    viewBinding.price.setText("￥ " + priceBO.totalDiscountPrice + "  + " + priceBO.totalScore + "珍币");
-                } else {
-                    viewBinding.price.setText("￥ " + priceBO.totalPrice);
-                }
+        selectImg.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (priceBO == null) {
+                return;
             }
+            if (b) {
+                viewBinding.price.setText("￥ " + priceBO.totalDiscountPrice + "  + " + priceBO.totalScore + "珍币");
+            } else {
+                viewBinding.price.setText("￥ " + priceBO.totalPrice);
+            }
+        });
+        ztButton.setOnClickListener(view -> {
+            setSelectAddressType(1);
+            mPresenter.getSincePoint();
+        });
+        kdButton.setOnClickListener(view -> {
+            setSelectAddressType(2);
+            mPresenter.getUserAdd();
         });
     }
 
@@ -202,7 +204,8 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
 
 
     private void setSelectAddressType(int type) {
-        if (type == 0) {   //选中自提
+        addressType = type;
+        if (type == 1) {   //选中自提
             ztButton.setBackgroundResource(R.drawable.shape_slide_white_conner_10dp);
             ztButton.setTextColor(Color.parseColor("#D4B467"));
             kdButton.setBackground(null);
@@ -262,7 +265,13 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
                 return;
             }
         }
-        mPresenter.createOrder(addressBean == null ? null : addressBean.getId(), shopIds.substring(0, shopIds.length() - 1),
+        String addressId;
+        if (addressType == 1) {
+            addressId = ztAddressBean == null ? null : ztAddressBean.id + "";
+        } else {
+            addressId = (addressBean == null ? null : addressBean.getId());
+        }
+        mPresenter.createOrder(addressType, addressId, shopIds.substring(0, shopIds.length() - 1),
                 shopNums.substring(0, shopNums.length() - 1), remark, selectImg.isChecked() ? 1 : 0);
     }
 
@@ -306,20 +315,27 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
         switch (resultCode) {
             case 0x11:
                 addressBean = (AddressBean) data.getSerializableExtra("address");
-//                selectAddress.setVisibility(View.GONE);
-//                addressLayout.setVisibility(View.VISIBLE);
+                ztLayout.setVisibility(View.GONE);
+                addressLayout.setVisibility(View.VISIBLE);
                 name.setText(addressBean.getName());
                 phone.setText(addressBean.getPhone());
                 this.address.setText(String.format("%s%s%s%s", addressBean.getProvince(), addressBean.getCity(), addressBean.getArea(), addressBean.getAddress()));
+                break;
+            case 0x22:
+                ztAddressBean = data.getParcelableExtra("address");
+                ztLayout.setVisibility(View.VISIBLE);
+                addressLayout.setVisibility(View.GONE);
+                ztName.setText(ztAddressBean.pointName);
+                ztAddress.setText(ztAddressBean.address);
                 break;
         }
     }
 
     @Override
     public void getAddress(ShopAddressList address) {
+        addressLayout.setVisibility(View.VISIBLE);
+        ztLayout.setVisibility(View.GONE);
         if (address.list.isEmpty()) {
-//            selectAddress.setVisibility(View.VISIBLE);
-//            addressLayout.setVisibility(View.GONE);
             return;
         }
         for (AddressBean item : address.list) {
@@ -331,12 +347,8 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
             addressBean = address.list.get(0);
         }
         if (addressBean == null) {
-//            selectAddress.setVisibility(View.VISIBLE);
-//            addressLayout.setVisibility(View.GONE);
             return;
         }
-//        selectAddress.setVisibility(View.GONE);
-//        addressLayout.setVisibility(View.VISIBLE);
         name.setText(addressBean.getName());
         phone.setText(addressBean.getPhone());
         this.address.setText(String.format("%s%s%s%s", addressBean.getProvince(), addressBean.getCity(), addressBean.getArea(), addressBean.getAddress()));
@@ -400,6 +412,12 @@ public class ConfirmActivity extends MVPBaseActivity<ConfirmContract.View, Confi
      */
     @Override
     public void getZtAddress(MyAdressBean myAdressBean) {
+        ztLayout.setVisibility(View.VISIBLE);
+        addressLayout.setVisibility(View.GONE);
+        if (myAdressBean == null) {
+            return;
+        }
+        ztAddressBean = myAdressBean;
         ztName.setText(myAdressBean.pointName);
         ztAddress.setText(myAdressBean.address);
     }

@@ -196,7 +196,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
                                 android:drawablePadding="4dp"
-                                android:text="已付款"
+                                android:text="待发货"
                                 android:textColor="#2B2B2B"
                                 android:textSize="11sp"
                                 app:drawableTopCompat="@mipmap/have_paid" />

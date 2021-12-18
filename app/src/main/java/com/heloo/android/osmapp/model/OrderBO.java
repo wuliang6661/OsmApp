@@ -19,6 +19,11 @@ public class OrderBO {
     public Integer integralPrice;
 
     public List<OrderItemlistBean> orderItemlist;
+    public Integer discounttotalFee;
+    public AddressBean umsUserAddressDO;
+    public MyAdressBean sincePointDO;
+    public Integer distribution;
+    public String addressId;
 
     public static class OrderItemlistBean {
         public Integer prodNum;
@@ -32,4 +37,5 @@ public class OrderBO {
         public Integer integralPrice;
         public Integer discountnumber;
     }
+
 }

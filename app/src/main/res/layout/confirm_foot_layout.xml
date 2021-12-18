@@ -58,7 +58,7 @@
             <LinearLayout
                 android:id="@+id/editAddress"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical">
@@ -67,8 +67,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginRight="7dp"
                     android:text="更换地址"
                     android:textColor="#aaaaaa"
@@ -78,8 +76,6 @@
                 <ImageView
                     android:layout_width="6dp"
                     android:layout_height="10dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/white_right" />
@@ -94,8 +90,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/top_layout"
-            android:minHeight="60dp"
             android:layout_marginBottom="23dp"
+            android:minHeight="60dp"
             android:visibility="gone">
 
 
@@ -169,19 +165,19 @@
     </RelativeLayout>
 
 
-   <!-- <TextView
-        android:id="@+id/select_address"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:text="请选择收货地址"
-        android:textColor="#333333"
-        android:textSize="14sp"
-        android:visibility="gone" />-->
+    <!-- <TextView
+         android:id="@+id/select_address"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:layout_marginTop="15dp"
+         android:layout_marginBottom="15dp"
+         android:background="@color/white"
+         android:gravity="center_vertical"
+         android:paddingLeft="10dp"
+         android:text="请选择收货地址"
+         android:textColor="#333333"
+         android:textSize="14sp"
+         android:visibility="gone" />-->
 
 
     <LinearLayout

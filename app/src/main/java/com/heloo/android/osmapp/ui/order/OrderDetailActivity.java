@@ -9,9 +9,10 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.alipay.sdk.app.PayTask;
 import com.heloo.android.osmapp.R;
-import com.heloo.android.osmapp.api.HttpInterface;
 import com.heloo.android.osmapp.config.LocalConfiguration;
 import com.heloo.android.osmapp.databinding.ActivityOrderDetailBinding;
 import com.heloo.android.osmapp.model.OrderBO;
@@ -22,6 +23,7 @@ import com.heloo.android.osmapp.mvp.contract.OrderContract;
 import com.heloo.android.osmapp.mvp.presenter.OrderPresenter;
 import com.heloo.android.osmapp.ui.confirm.PaySuccessActivity;
 import com.heloo.android.osmapp.utils.BubbleUtils;
+import com.heloo.android.osmapp.utils.HttpImgUtils;
 import com.heloo.android.osmapp.utils.ToastUtils;
 import com.heloo.android.osmapp.widget.AlertDialog;
 import com.heloo.android.osmapp.widget.lgrecycleadapter.LGRecycleViewAdapter;
@@ -29,8 +31,6 @@ import com.heloo.android.osmapp.widget.lgrecycleadapter.LGViewHolder;
 
 import java.util.List;
 import java.util.Map;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
  * 订单详情
@@ -72,14 +72,11 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderContract.View, Ord
 
             @Override
             public void convert(LGViewHolder holder, OrderBO.OrderItemlistBean orderItemlistBean, int position) {
-                if(!orderItemlistBean.icon.startsWith("http")){
-                    orderItemlistBean.icon = HttpInterface.IMG_URL + orderItemlistBean.icon;
-                }
-                holder.setImageUrl(holder.itemView.getContext(), R.id.productImg, orderItemlistBean.icon);
+                holder.setImageUrl(holder.itemView.getContext(), R.id.productImg, HttpImgUtils.getImgUrl(orderItemlistBean.icon));
                 holder.setText(R.id.productTitle, orderItemlistBean.name);
                 if (LocalConfiguration.userInfo.getSourceType() == 1002) {
                     holder.getView(R.id.score).setVisibility(View.VISIBLE);
-                    holder.setText(R.id.price,  orderItemlistBean.discountnumber + "");
+                    holder.setText(R.id.price, orderItemlistBean.discountnumber + "");
                 } else {
                     holder.setText(R.id.price, "¥ " + orderItemlistBean.prize);
                     holder.getView(R.id.score).setVisibility(View.GONE);
@@ -141,6 +138,17 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderContract.View, Ord
         }
         viewBinding.orderNum2.setText("订单编号：" + orderBO.orderNo);
         viewBinding.orderTime.setText("提交时间：" + orderBO.createDate);
+        if (orderBO.distribution == 1) {   //自提
+            viewBinding.takeGoods.setText("自提");
+            viewBinding.pointName.setText(orderBO.sincePointDO.pointName);
+            viewBinding.userPhone.setText("");
+            viewBinding.addressName.setText("地址：" + orderBO.sincePointDO.address + "\n取货时间：" + orderBO.sincePointDO.pointTime);
+        } else {
+            viewBinding.takeGoods.setText("快递");
+            viewBinding.pointName.setText(orderBO.umsUserAddressDO.getName());
+            viewBinding.userPhone.setText(orderBO.umsUserAddressDO.getPhone());
+            viewBinding.addressName.setText(orderBO.umsUserAddressDO.getAddress());
+        }
         switch (orderBO.status) {
             case "create":  //待支付
                 viewBinding.orderStatus.setText("待支付");
@@ -177,7 +185,7 @@ public class OrderDetailActivity extends MVPBaseActivity<OrderContract.View, Ord
                 viewBinding.buttomLayout.setVisibility(View.GONE);
                 break;
             case "pay":    //已支付
-                viewBinding.orderStatus.setText("已付款");
+                viewBinding.orderStatus.setText("待收货");
                 viewBinding.orderStatus.setTextColor(Color.parseColor("#FF5A5A"));
                 viewBinding.btn1.setVisibility(View.VISIBLE);
                 viewBinding.btn2.setVisibility(View.GONE);

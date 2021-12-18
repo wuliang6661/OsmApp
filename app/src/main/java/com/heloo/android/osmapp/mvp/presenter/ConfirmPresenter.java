@@ -80,9 +80,9 @@ public class ConfirmPresenter extends BasePresenterImpl<ConfirmContract.View>
     }
 
 
-    public void createOrder(String addressId, String shopIds, String shopNums,
+    public void createOrder(int distribution,String addressId, String shopIds, String shopNums,
                             String remarks, Integer scoreflag) {
-        HttpInterfaceIml.createOrder(addressId, shopIds, shopNums, remarks, scoreflag)
+        HttpInterfaceIml.createOrder(distribution,addressId, shopIds, shopNums, remarks, scoreflag)
                 .subscribe(new HttpResultSubscriber<CreateOrderBo>() {
                     @Override
                     public void onSuccess(CreateOrderBo s) {

@@ -249,9 +249,9 @@ public class HttpInterfaceIml {
     /**
      * 生成订单
      */
-    public static Observable<CreateOrderBo> createOrder(String addressId, String shopIds, String shopNums,
+    public static Observable<CreateOrderBo> createOrder(int distribution, String addressId, String shopIds, String shopNums,
                                                         String remarks, Integer scoreflag) {
-        return getService().createOrder(addressId, shopIds, shopNums, 1, remarks, scoreflag).compose(RxResultHelper.httpRusult());
+        return getService().createOrder(distribution, addressId, shopIds, shopNums, 1, remarks, scoreflag).compose(RxResultHelper.httpRusult());
     }
 
     /**

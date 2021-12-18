@@ -69,7 +69,7 @@ public class OrderActivity extends MVPBaseActivity<OrderContract.View, OrderPres
         viewBinding.headLayout.post(() -> viewBinding.headLayout.setPadding(0, BubbleUtils.getStatusBarHeight(this), 0, 0));
         viewBinding.tabLayout.addTab(viewBinding.tabLayout.newTab().setText("全部订单"));
         viewBinding.tabLayout.addTab(viewBinding.tabLayout.newTab().setText("待付款"));
-        viewBinding.tabLayout.addTab(viewBinding.tabLayout.newTab().setText("已付款"));
+        viewBinding.tabLayout.addTab(viewBinding.tabLayout.newTab().setText("待发货"));
         viewBinding.tabLayout.addTab(viewBinding.tabLayout.newTab().setText("待确认"));
         viewBinding.tabLayout.addTab(viewBinding.tabLayout.newTab().setText("已完成"));
         viewBinding.backBtn.setOnClickListener(this);

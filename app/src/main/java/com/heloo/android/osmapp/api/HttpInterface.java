@@ -284,7 +284,8 @@ public interface HttpInterface {
      * 生成订单
      */
     @POST("/shopOrderItem/createOrderItem")
-    Observable<BaseResult<CreateOrderBo>> createOrder(@Query("addressId") String addressId, @Query("shopIds") String shopIds,
+    Observable<BaseResult<CreateOrderBo>> createOrder(@Query("distribution") int distribution,
+                                                      @Query("addressId") String addressId, @Query("shopIds") String shopIds,
                                                       @Query("shopNums") String shopNums, @Query("app") int app,
                                                       @Query("remarks") String remarks, @Query("scoreflag") Integer scoreflag);
 
