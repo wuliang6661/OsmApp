@@ -42,7 +42,7 @@ public interface HttpInterface {
     String URL = "https://appnews.osm.cn";
     String URLS = "https://appnews.osm.cn";
     String IMG_URL = "https://app.osm.cn/appfile";
-//    String URL = "http://192.168.1.115:8090";
+//    String URL = "http://114.55.125.173:8090";
 
     /**
      * 版本检测更新
